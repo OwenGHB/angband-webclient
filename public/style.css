@@ -1,0 +1,25 @@
+body {
+	font: sans-serif;
+	color: lightgray;
+	background-image: url("/background.png");
+	background-color: black;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#registrationfield{
+	display:none;
+}
+
+#terminal-container {
+    width: 1020px;
+    height: 640px;
+}
+
+.terminal {
+    background-color: #111;
+    color: #fafafa;
+    padding: 8px;
+}

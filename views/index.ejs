@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GwaRL.xyz</title>
+	<link rel="stylesheet" href="/xterm.css" />
+	<link rel='stylesheet' href='/style.css' />
+	<script src="/xterm.js" ></script>
+	<script src="/addons/fit/fit.js" ></script>
+    <script src="/addons/attach/attach.js" ></script>
+ </head>
+  <body>
+	<% if (typeof(user) == 'undefined') { %>
+	You are currently not logged in.
+	<form id="login-form" action="/" method="post">
+		<label>Username:</label>
+		<input type="text" name="username"/>
+		<label>Password:</label>
+		<input id="passwordinput" type="password" name="password"/>
+	</form>
+	<div id="registrationfield">
+		<label>Confirm:</label>
+		<input id="passwordrepeat" type="password"/>
+	</div>
+	<div>
+		<button id="loginbutton" onclick="submitLogin()">Log in</button>
+		<button id="registerbutton" onclick="submitRegister()">Register new account</button>
+	</div>
+	
+	<script>
+		var loginform = document.getElementById("login-form");
+		var registrationfield = document.getElementById("registrationfield");
+		var pass1 = document.getElementById("passwordinput");
+		var pass2 = document.getElementById("passwordrepeat");
+		function submitLogin(){
+			loginform.action = "/login";
+			loginform.submit();
+		}
+		function submitRegister(){
+			if (pass1.value==pass2.value){
+				loginform.action = "/register";
+				loginform.submit();
+			} else {
+				document.getElementById("registrationfield").style.display = "inline";
+			}
+		}
+	</script>
+	<% } else { %>
+		<div id="controls">
+		<button id="newgame-angband">Angband</button>
+		<button id="newgame-poschengband">Poschengband</button>
+		<button id="newgame-faangband">FAangband</button>
+		<span>Logged in as <%= user.username%></span>
+		<a href="/logout"> Log Out </a>	
+		</div>
+		<div id="terminal-container"></div>
+		<script src="/main.js" defer></script>
+	<% } %>
+  </body>
+</html>

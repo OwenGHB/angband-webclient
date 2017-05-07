@@ -1,0 +1,127 @@
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=# begin Dump window settings
+# *Warning!*  The lines below are an automatic dump.
+# Don't edit them; changes will be deleted and replaced automatically.
+
+# Options
+
+# Window 'Term-1', Flag 'Display inven/equip'
+window:1:0:0
+
+# Window 'Term-1', Flag 'Display equip/inven'
+window:1:1:0
+
+# Window 'Term-1', Flag 'Display player (basic)'
+window:1:2:0
+
+# Window 'Term-1', Flag 'Display player (extra)'
+window:1:3:0
+
+# Window 'Term-1', Flag 'Display player (compact)'
+window:1:4:0
+
+# Window 'Term-1', Flag 'Display map view'
+window:1:5:0
+
+# Window 'Term-1', Flag 'Display messages'
+window:1:6:1
+
+# Window 'Term-1', Flag 'Display overhead view'
+window:1:7:0
+
+# Window 'Term-1', Flag 'Display monster recall'
+window:1:8:0
+
+# Window 'Term-1', Flag 'Display object recall'
+window:1:9:0
+
+# Window 'Term-1', Flag 'Display monster list'
+window:1:10:0
+
+# Window 'Term-1', Flag 'Display status'
+window:1:11:0
+
+# Window 'Term-1', Flag 'Display item list'
+window:1:12:0
+
+# Window 'Term-2', Flag 'Display inven/equip'
+window:2:0:1
+
+# Window 'Term-2', Flag 'Display equip/inven'
+window:2:1:0
+
+# Window 'Term-2', Flag 'Display player (basic)'
+window:2:2:0
+
+# Window 'Term-2', Flag 'Display player (extra)'
+window:2:3:0
+
+# Window 'Term-2', Flag 'Display player (compact)'
+window:2:4:0
+
+# Window 'Term-2', Flag 'Display map view'
+window:2:5:0
+
+# Window 'Term-2', Flag 'Display messages'
+window:2:6:0
+
+# Window 'Term-2', Flag 'Display overhead view'
+window:2:7:0
+
+# Window 'Term-2', Flag 'Display monster recall'
+window:2:8:0
+
+# Window 'Term-2', Flag 'Display object recall'
+window:2:9:0
+
+# Window 'Term-2', Flag 'Display monster list'
+window:2:10:0
+
+# Window 'Term-2', Flag 'Display status'
+window:2:11:0
+
+# Window 'Term-2', Flag 'Display item list'
+window:2:12:0
+
+# Window 'Term-3', Flag 'Display inven/equip'
+window:3:0:0
+
+# Window 'Term-3', Flag 'Display equip/inven'
+window:3:1:0
+
+# Window 'Term-3', Flag 'Display player (basic)'
+window:3:2:0
+
+# Window 'Term-3', Flag 'Display player (extra)'
+window:3:3:0
+
+# Window 'Term-3', Flag 'Display player (compact)'
+window:3:4:0
+
+# Window 'Term-3', Flag 'Display map view'
+window:3:5:0
+
+# Window 'Term-3', Flag 'Display messages'
+window:3:6:0
+
+# Window 'Term-3', Flag 'Display overhead view'
+window:3:7:0
+
+# Window 'Term-3', Flag 'Display monster recall'
+window:3:8:1
+
+# Window 'Term-3', Flag 'Display object recall'
+window:3:9:0
+
+# Window 'Term-3', Flag 'Display monster list'
+window:3:10:0
+
+# Window 'Term-3', Flag 'Display status'
+window:3:11:0
+
+# Window 'Term-3', Flag 'Display item list'
+window:3:12:0
+
+
+# *Warning!*  The lines above are an automatic dump.
+# Don't edit them; changes will be deleted and replaced automatically.
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=# end Dump window settings
