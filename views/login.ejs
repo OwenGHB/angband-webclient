@@ -1,0 +1,33 @@
+<form id="login-form" method="post">
+	<label>Username:</label>
+	<input type="text" name="username"/>
+	<label>Password:</label>
+	<input id="passwordinput" type="password" name="password"/>
+</form>
+<div id="registrationfield">
+	<label>Confirm:</label>
+	<input id="passwordrepeat" type="password"/>
+</div>
+<div>
+	<button id="loginbutton" onclick="submitLogin()">Log in</button>
+	<button id="registerbutton" onclick="submitRegister()">Register new account</button>
+</div>
+
+<script>
+	var loginform = document.getElementById("login-form");
+	var registrationfield = document.getElementById("registrationfield");
+	var pass1 = document.getElementById("passwordinput");
+	var pass2 = document.getElementById("passwordrepeat");
+	function submitLogin(){
+		loginform.action = "/users/login";
+		loginform.submit();
+	}
+	function submitRegister(){
+		if (pass1.value==pass2.value){
+			loginform.action = "/users/register";
+			loginform.submit();
+		} else {
+			document.getElementById("registrationfield").style.display = "inline";
+		}
+	}
+</script>

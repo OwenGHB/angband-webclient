@@ -23,19 +23,18 @@ function newGame(game) {
   }
   term = new Terminal();
 
-  socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/games/';
+  socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/play';
 
   term.open(terminalContainer);
   term.fit();
   
   var initialGeometry = term.proposeGeometry();
   
-  fetch('/games?game='+game, {credentials: 'include', method: 'POST'}).then(function (res) {
+  fetch('/play?game='+game, {credentials: 'include', method: 'POST'}).then(function (res) {
 	charWidth = Math.ceil(term.element.offsetWidth / 120);
     charHeight = Math.ceil(term.element.offsetHeight / 40);
     res.text().then(function (pid) {
       window.pid = pid;
-      socketURL += pid;
       socket = new WebSocket(socketURL);
       socket.onopen = term.attach(socket);
     });
