@@ -6,7 +6,7 @@ body {
 }
 
 a {
-  color: #00B7FF;
+	color: #00B7FF;
 }
 
 #registrationfield{
@@ -14,12 +14,16 @@ a {
 }
 
 #terminal-container {
+	background-color: black;
     width: 1020px;
     height: 640px;
 }
 
-.terminal {
-    background-color: #111;
-    color: #fafafa;
-    padding: 8px;
+.watchmenu {
+	background-color: black;
+	border: 2px inset darkgray;
+}
+
+.livematch {
+	border: 1px solid darkgray;
 }

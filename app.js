@@ -45,7 +45,7 @@ mongoose.connect('mongodb://localhost/bandit', function(err) {
 
 // Register routes
 app.use('/', require('./routes/index'));
-app.use('/play', require('./routes/play'));
+app.use('/games', require('./routes/games'));
 app.use('/users', require('./routes/users'));
 
 

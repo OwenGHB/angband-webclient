@@ -5,8 +5,8 @@ var router = require('express').Router();
 var fs = require('fs-extra');
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
-  console.log('Session user '+JSON.stringify(req.session.passport.user));
-  res.redirect('/');
+	console.log('Session user '+JSON.stringify(req.session.passport.user));
+	res.redirect('/');
 });
 
 router.post('/register', 

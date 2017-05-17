@@ -1,0 +1,11 @@
+<div class="watchmenu">
+	Live games:
+	<ul>
+	<% for (i in livematches) { %>
+		<li class="livematch">
+			<a href="#watch" class="player" onclick='spectateGame("<%= livematches[i].player %>")'><%= livematches[i].player %></a>
+			<span class="game"> is playing <%= livematches[i].game %></span>
+		</li>
+	<% } %>
+	</ul>
+</div>
