@@ -122,6 +122,9 @@ router.ws('/play', function (ws, req) {
 router.ws('/watch', function (ws, req) {
 	var player = req.query.player;
 	var term = matches[player];
+	ws.on('open', function() {
+		term.write('^R');
+	});
 	term.on('data', function(data) {
 		try {
 			ws.send(data);
@@ -129,7 +132,6 @@ router.ws('/watch', function (ws, req) {
 			// The WebSocket is not open, ignore
 		}
 	});
-	term.write('^R');
 });
 
 module.exports = router;
