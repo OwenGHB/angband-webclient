@@ -4,25 +4,39 @@ var Account = require('../models/account');
 var router = require('express').Router();
 var fs = require('fs-extra');
 
-router.post('/login', passport.authenticate('local'), function(req, res) {
-	console.log('Session user '+JSON.stringify(req.session.passport.user));
-	res.redirect('/');
-});
-
-router.post('/register', 
+router.post('/signin', 
 	function(req, res, next) {
-		console.log('registering user');
-		if (req.body.username!='default') Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
-			if (err) {
-				console.log('error while user register!', err);
-				return next(err);
+		Account.find({username:req.body.username},function(err, result){
+			if (result.length>0){
+				next();
+			} else {
+				Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
+					if (err) {
+						console.log('error while user register!', err);
+						return next(err);
+					}
+					console.log('user registered!');
+					var defaultpath = "/home/bandit/public/user/default";
+					var userpath = "/home/bandit/public/user/"+req.body.username;
+					var subdirs = {};
+					var games = fs.readdirSync(defaultpath);
+					for (var i=0; i<games.length; i++) {
+						var game = games[i];
+						subdirs[game]=fs.readdirSync(defaultpath+'/'+game);
+						for (var j=0;j <subdirs[game].length; j++){
+							if (subdirs[game][j]=='customize'||subdirs[game][j]=='pref') {
+								var pathfrom=defaultpath+'/'+game+'/'+subdirs[game][j];
+								var pathto=userpath+'/'+game+'/'+subdirs[game][j];
+								fs.copy(pathfrom, pathto, err => {
+									if (err) return console.error(err);
+									console.log('copied default pref files');
+								});
+							}
+						}
+					}
+					next();
+				});
 			}
-			console.log('user registered!');
-			fs.copy('/home/bandit/webclient/var/default', '/home/bandit/webclient/var/'+req.body.username, err => {
-				if (err) return console.error(err);
-				console.log('copied default pref files');
-			});
-			next();
 		});
 	},
 	passport.authenticate('local'),

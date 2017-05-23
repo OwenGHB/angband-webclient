@@ -4,8 +4,6 @@ var mongoose = require('mongoose'),
 
 var Account = new Schema({
   nickname: String,
-  playing: String,
-  watching: String
 });
 
 Account.plugin(passportLocalMongoose);

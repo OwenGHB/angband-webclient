@@ -1,29 +1,48 @@
-body {
-	font: sans-serif;
-	color: lightgray;
-	background-image: url("/background.png");
-	background-color: black;
-}
-
 a {
 	color: #00B7FF;
 }
-
-#registrationfield{
-	display:none;
+body{
+    background-image: url("background.png");
+	font-family: sans-serif;
+	font-family: 0.75em sans-serif;
+	color: lightgray;
 }
-
+button{
+	background-color: #000000;
+	color: lightgray;
+}
+#logo{
+	float:left;
+}
+#headertoggle{
+	float:right;
+}
+#userinfo{
+	float:right;
+}
+#container{
+	width:96%;
+	height:39em;
+	margin: auto;
+}
+header{
+	height:6em; 
+	background-color: #000000;
+	outline: 0.25em ridge #555555;
+}
 #terminal-container {
 	background-color: black;
-    width: 1020px;
-    height: 640px;
+	outline: 0.25em ridge #555555;
+	margin: 1em 1% 1em 0;
+    width: 78%;
+    height: 32em;
+	float: left;
 }
-
-.watchmenu {
+#menu {
 	background-color: black;
-	border: 2px inset darkgray;
-}
-
-.livematch {
-	border: 1px solid darkgray;
+	outline: 0.25em ridge #555555;
+	margin: 1em 0 1em 1%;
+    width: 20%;
+    height: 32em;
+	float: left;
 }

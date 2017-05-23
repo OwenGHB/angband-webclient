@@ -7,52 +7,64 @@ var pty = require('node-pty');
 var ps = require('ps-node');
 
 var matches = {};
+var home = '/home/bandit';
 
 router.post('/newgame', function(req, res) {
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	var user = req.user.username;
-	var games = {
-		angband: {
-			path: '/home/bandit/games/angband',
-			args: [
-				'-u'+user,
-				'-dscores=/home/bandit/webclient/var/default/angband/score',
-				'-dinfo=/home/bandit/webclient/var/default/angband/info',
-				'-duser=/home/bandit/webclient/var/'+user+'/angband',
-				'-dsave=/home/bandit/webclient/var/'+user+'/angband/save',
-				'-dpref=/home/bandit/webclient/var/'+user+'/angband/pref',
-				'-mgcu'
-			],
-		},
-		poschengband: {
-			path: '/home/bandit/games/poschengband',
-			args: [
-				'-u'+user,
-				'-dapex=/home/bandit/webclient/var/default/poschengband/score',
-				'-dinfo=/home/bandit/webclient/var/default/poschengband/info',
-				'-duser=/home/bandit/webclient/var/'+user+'/poschengband',
-				'-dsave=/home/bandit/webclient/var/'+user+'/poschengband/save',
-				'-dpref=/home/bandit/webclient/var/'+user+'/poschengband/pref',
-				'-mgcu'
-			],
-		},
-		faangband: {
-			path: '/home/bandit/games/faangband',
-			args: [
-				'-u'+user,
-				'-dapex=/home/bandit/webclient/var/default/faangband/score',
-				'-dinfo=/home/bandit/webclient/var/default/faangband/info',
-				'-duser=/home/bandit/webclient/var/'+user+'/faangband',
-				'-dsave=/home/bandit/webclient/var/'+user+'/faangband/save',
-				'-dpref=/home/bandit/webclient/var/'+user+'/faangband/pref',
-				'-mgcu'
-			],
-		},
-	};
 	var game = req.query.game;
-	var term = pty.spawn(games[game].path, games[game].args, {
+	var path = home+'/games/'+game;
+	if (game == 'nppmoria') path = home+'/games/nppangband';
+	var args = [];
+	console.log(user+' wants to play '+game);
+	switch (game) {
+		case 'angband':
+		case 'master':
+			args = [
+				'-u'+user,
+				'-duser='+home+'/public/user/'+user+'/'+game,
+				'-dpref='+home+'/public/user/'+user+'/'+game+'/customize',
+				'-dgamedata='+home+'/public/user/default/'+game+'/gamedata',
+				'-dscreens='+home+'/share/'+game+'/screens'
+			];
+		break;
+		case 'poschengband':
+		case 'faangband':
+			args = [
+				'-u'+user,
+				'-duser='+home+'/public/user/'+user+'/'+game,
+				'-dpref='+home+'/public/user/'+user+'/'+game+'/pref',
+				'-dedit='+home+'/public/user/default/'+game+'/edit'
+			];
+		break;
+		case 'nppangband':
+			args = [
+				'-u'+user,
+				'-d'+home+'/public/user/'+user+'/'+game,
+				'-sang'
+			];
+		break;
+		case 'nppmoria':
+			args = [
+				'-u'+user,
+				'-d'+home+'/public/user/'+user+'/'+game,
+				'-smor'
+			];
+		break;
+		case 'borg':
+			args = [
+				'-u'+user,
+				'-d'+home+'/public/user/'+user
+			];
+		break;
+		default:
+		break;
+	}
+	console.log('path:'+path);
+	console.log('args:'+args);
+	var term = pty.spawn(path, args, {
 		name: 'xterm-color',
-		cols: 120,
+		cols: 125,
 		rows: 40,
 		cwd: process.env.PWD,
 		env: process.env
@@ -81,39 +93,41 @@ router.ws('/play', function (ws, req) {
 		term.write(msg);
 	});
 	ws.on('close', function () {
-		term.write('^X  ');
-		term.kill();
-		//kill the process if it hasn't already
-		ps.lookup({ pid: term.pid }, function(err, resultList ) {
-			if (err) {
-				throw new Error( err );
-			}
-			var process = resultList[ 0 ];
-			if( process ){
-				ps.kill( term.pid, function( err ) {
-					if (err) {
-						throw new Error( err );
-					}
-					else {
-						console.log( 'Process %s did not exit and has been forcibly killed!', term.pid );
-					}
-				});				
-			}
-			else {
-				console.log( 'No such process found!' );
-			}
-		});
-		console.log('Closed terminal ' + term.pid);
-		// Clean things up
-		Match.remove({ player: player }, function (err) {
-			if (err) {
-				return handleError(err);
-			}
-			else {
-				console.log( 'Removed match from database' );
-			}
-		});
-		delete matches[player];
+		if (player!='borg'){
+			term.write('^X  ');
+			term.kill();
+			//kill the process if it hasn't already
+			ps.lookup({ pid: term.pid }, function(err, resultList ) {
+				if (err) {
+					throw new Error( err );
+				}
+				var process = resultList[ 0 ];
+				if( process ){
+					ps.kill( term.pid, function( err ) {
+						if (err) {
+							throw new Error( err );
+						}
+						else {
+							console.log( 'Process %s did not exit and has been forcibly killed!', term.pid );
+						}
+					});				
+				}
+				else {
+					console.log( 'No such process found!' );
+				}
+			});
+			console.log('Closed terminal ' + term.pid);
+			// Clean things up
+			Match.remove({ player: player }, function (err) {
+				if (err) {
+					return handleError(err);
+				}
+				else {
+					console.log( 'Removed match from database' );
+				}
+			});
+			delete matches[player];
+		}
 	});
 	term.write(' ');
 	console.log('Connected to terminal ' + term.pid);
@@ -122,9 +136,6 @@ router.ws('/play', function (ws, req) {
 router.ws('/watch', function (ws, req) {
 	var player = req.query.player;
 	var term = matches[player];
-	ws.on('open', function() {
-		term.write('^R');
-	});
 	term.on('data', function(data) {
 		try {
 			ws.send(data);

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>GwaRL.xyz</title>
+    <title>Angband Live</title>
+	<meta name="description" content="Web based client for playing Angband and select variants remotely. Supports recording and live spectating.">
 	<link rel="stylesheet" href="/xterm.css" />
 	<link rel='stylesheet' href='/style.css' />
 	<script src="/xterm.js" ></script>
@@ -10,17 +11,40 @@
 	<script src="/main.js" defer></script>
  </head>
   <body>
-	<% if (typeof(user) == 'undefined') { %>
-		<% include login %>
-	<% } else { %>
-		<div id="controls">
-		<button id="newgame-angband">Angband</button>
-		<button id="newgame-poschengband">Poschengband</button>
-		<button id="newgame-faangband">FAangband</button>
-		<span>Logged in as <%= user.username%></span>
-		<a href="/users/logout"> Log Out </a>	
+	<div id="container">
+		<header>
+			<img id="logo" src="logo.png"></img>
+			<div id="userinfo">
+				<% if (typeof(user) == 'undefined') { %>
+					<% include login %>
+				<% } else { %>
+					<span>Logged in as <%= user.username%><a href="/users/logout"> Log Out </a></span>
+				<% } %>
+			</div>
+		</header>
+		<div id="terminal-container">
+			<% include watchmenu %>
 		</div>
-	<% } %>
-	<% include watchmenu %>
+		<div id="menu">
+			<% if (typeof(user) != 'undefined') { %>
+			<div id="playmenu">
+			<ul>
+			<% if (user.username == 'borg') { %>
+				<li><button id="newgame-borg">Launch borg</button></li>
+				<li><button id="resume-borg">Command borg</button></li>
+			<% } else { %>
+				<li><button id="newgame-angband">Angband</button></li>
+				<li><button id="newgame-master">Angband nightly build</button></li>
+				<li><button id="newgame-poschengband">Poschengband</button></li>
+				<li><button id="newgame-faangband">FAangband</button></li>
+				<li><button id="newgame-nppangband">NPPAngband</button></li>
+				<li><button id="newgame-nppmoria">NPPMoria</button></li>
+			<% } %>
+			</ul>
+			</div>
+			<% } %>
+			<div id="chat"></div>
+		</div>
+	</div>
   </body>
 </html>
