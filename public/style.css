@@ -33,16 +33,16 @@ header{
 #terminal-container {
 	background-color: black;
 	outline: 0.25em ridge #555555;
-	margin: 1em 1% 1em 0;
-    width: 78%;
-    height: 32em;
+	margin: 0.5em 0 0.5em 0;
+    width: 80%;
+    height: 33em;
 	float: left;
 }
 #menu {
 	background-color: black;
 	outline: 0.25em ridge #555555;
-	margin: 1em 0 1em 1%;
-    width: 20%;
-    height: 32em;
+	margin: 0.5em 0 0.5em 1%;
+    width: 19%;
+    height: 33em;
 	float: left;
 }

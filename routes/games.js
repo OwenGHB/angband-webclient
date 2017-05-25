@@ -7,14 +7,13 @@ var pty = require('node-pty');
 var ps = require('ps-node');
 
 var matches = {};
-var home = '/home/bandit';
+var home = '/home/angbandlive';
 
 router.post('/newgame', function(req, res) {
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	var user = req.user.username;
 	var game = req.query.game;
 	var path = home+'/games/'+game;
-	if (game == 'nppmoria') path = home+'/games/nppangband';
 	var args = [];
 	console.log(user+' wants to play '+game);
 	switch (game) {
@@ -23,9 +22,6 @@ router.post('/newgame', function(req, res) {
 			args = [
 				'-u'+user,
 				'-duser='+home+'/public/user/'+user+'/'+game,
-				'-dpref='+home+'/public/user/'+user+'/'+game+'/customize',
-				'-dgamedata='+home+'/public/user/default/'+game+'/gamedata',
-				'-dscreens='+home+'/share/'+game+'/screens'
 			];
 		break;
 		case 'poschengband':
@@ -33,22 +29,6 @@ router.post('/newgame', function(req, res) {
 			args = [
 				'-u'+user,
 				'-duser='+home+'/public/user/'+user+'/'+game,
-				'-dpref='+home+'/public/user/'+user+'/'+game+'/pref',
-				'-dedit='+home+'/public/user/default/'+game+'/edit'
-			];
-		break;
-		case 'nppangband':
-			args = [
-				'-u'+user,
-				'-d'+home+'/public/user/'+user+'/'+game,
-				'-sang'
-			];
-		break;
-		case 'nppmoria':
-			args = [
-				'-u'+user,
-				'-d'+home+'/public/user/'+user+'/'+game,
-				'-smor'
 			];
 		break;
 		case 'borg':
