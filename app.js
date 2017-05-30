@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var session = require('cookie-session');
 var bodyParser = require('body-parser');
+var terminal = require('term.js');
 var app = express();
 var expressWs = require('express-ws')(app);
 var mongoose = require('mongoose');
@@ -29,6 +30,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Terminal middleware
+app.use(terminal.middleware());
+
 // Configure passport-local to use account model for authentication
 var Account = require('./models/account');
 passport.use(new LocalStrategy(Account.authenticate()));
@@ -44,10 +48,7 @@ mongoose.connect('mongodb://localhost/bandit', function(err) {
 });
 
 // Register routes
-app.use('/', require('./routes/index'));
-app.use('/games', require('./routes/games'));
-app.use('/users', require('./routes/users'));
-
+app.use('/', require('./routes'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

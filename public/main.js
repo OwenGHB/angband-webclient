@@ -19,51 +19,51 @@ var resumeborg=document.getElementById('resume-borg');
 if (resumeborg) resumeborg.setAttribute('onClick','resumeGame()');
 
 function newGame(game) {
-	document.getElementById("menu").innerHTML='';
+	document.getElementById("playmenu").innerHTML='';
 	var terminalContainer=document.getElementById("terminal-container");
 	terminalContainer.innerHTML='';
-	term = new Terminal();
+	term = new Terminal({
+		cols: 150,
+		rows: 40,
+		useStyle: true,
+		screenKeys: true,
+		cursorBlink: false
+	});
 	term.open(terminalContainer);
-	term.fit();
-	var initialGeometry = term.proposeGeometry();
-	var charWidth = Math.ceil(term.element.offsetWidth / 125);
-	var charHeight = Math.ceil(term.element.offsetHeight / 40);
-	var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/games/play';
-	fetch('/games/newgame?game='+game, {credentials: 'include', method: 'POST'}).then(function (res) {
-		res.text().then(function (pid) {
-			window.pid = pid;
-			socket = new WebSocket(socketURL);
-			socket.onopen = term.attach(socket);
+	var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/play';
+	fetch('/newgame?game='+game, {credentials: 'include', method: 'POST'}).then(function () {
+		socket = new WebSocket(socketURL);
+		term.on('data', function(data) {
+			//hack for arrow keys
+			data=data.replace("[A","OA");
+			data=data.replace("[B","OB");
+			data=data.replace("[C","OC");
+			data=data.replace("[D","OD");
+			socket.send(data);
+		});
+		socket.addEventListener('message', function (ev) {
+			term.write(ev.data);
 		});
 	});  
 }
 
-function resumeGame() {
-	var terminalContainer=document.getElementById("terminal-container");
-	terminalContainer.innerHTML='';
-	term = new Terminal();
-	term.open(terminalContainer);
-	term.fit();
-	var initialGeometry = term.proposeGeometry();
-	var charWidth = Math.ceil(term.element.offsetWidth / 125);
-	var charHeight = Math.ceil(term.element.offsetHeight / 40);
-	var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/games/play';
-	socket = new WebSocket(socketURL);
-	socket.onopen = term.attach(socket);
-}
 
 function spectateGame(player) {
 	var terminalContainer=document.getElementById("terminal-container");
 	terminalContainer.innerHTML='';
-	term = new Terminal();
+	term = new Terminal({
+		cols: 150,
+		rows: 40,
+		useStyle: true,
+		screenKeys: true,
+		cursorBlink: false
+	});
 	term.open(terminalContainer);
-	term.fit();
-	var initialGeometry = term.proposeGeometry();
-	var charWidth = Math.ceil(term.element.offsetWidth / 125);
-	var charHeight = Math.ceil(term.element.offsetHeight / 40);
-	var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/games/watch?player='+player;
+	var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/watch?player='+player;
 	socket = new WebSocket(socketURL);
-	socket.onopen = term.attach(socket);
+	socket.addEventListener('message', function (ev) {
+		term.write(ev.data);
+	});
 }
 
 function closeGame() {

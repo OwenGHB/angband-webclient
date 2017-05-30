@@ -2,9 +2,9 @@ a {
 	color: #00B7FF;
 }
 body{
-    background-image: url("background.png");
+    background: black;
 	font-family: sans-serif;
-	font-family: 0.75em sans-serif;
+	font-family: 0.875em sans-serif;
 	color: lightgray;
 }
 button{
@@ -21,28 +21,26 @@ button{
 	float:right;
 }
 #container{
-	width:96%;
-	height:39em;
+	width:100%;
+	height:40em;
 	margin: auto;
+	outline: 0.25em ridge #555555;
 }
 header{
-	height:6em; 
+	height:5em; 
 	background-color: #000000;
 	outline: 0.25em ridge #555555;
 }
 #terminal-container {
 	background-color: black;
-	outline: 0.25em ridge #555555;
-	margin: 0.5em 0 0.5em 0;
     width: 80%;
-    height: 33em;
+    height: 35em;
 	float: left;
 }
 #menu {
 	background-color: black;
-	outline: 0.25em ridge #555555;
-	margin: 0.5em 0 0.5em 1%;
-    width: 19%;
-    height: 33em;
+    width: 20%;
+    height: 35em;
 	float: left;
+	outline: 0.25em ridge #555555;
 }

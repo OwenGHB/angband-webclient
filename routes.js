@@ -1,13 +1,24 @@
 var passport = require('passport');
 var session = require('cookie-session');
-var Account = require('../models/account');
-var Match = require('../models/match');
+var Account = require('./models/account');
+var Match = require('./models/match');
 var router = require('express').Router();
-var pty = require('node-pty');
+var pty = require('pty.js');
 var ps = require('ps-node');
 
 var matches = {};
 var home = '/home/angbandlive';
+
+router.get('/', function(req, res) {
+	Match.find(function (err, result) {  
+		if (err) {
+			return handleError(err);
+		} else {
+			livematches = result;
+			res.render('index', {title:'GwaRL.xyz', user: req.user, livematches: livematches});
+		}
+	});	
+});
 
 router.post('/newgame', function(req, res) {
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -40,22 +51,19 @@ router.post('/newgame', function(req, res) {
 		default:
 		break;
 	}
-	console.log('path:'+path);
-	console.log('args:'+args);
-	var term = pty.spawn(path, args, {
-		name: 'xterm-color',
-		cols: 125,
+	var term = pty.fork(path, args, {
+		name: 'xterm',
+		cols: 150,
 		rows: 40,
-		cwd: process.env.PWD,
-		env: process.env
+		cwd: process.env.HOME
 	});
+	console.log(term.name);
 	matches[user] = term;
 	var match = new Match({player: user, game: game});
 	match.save(function (err) {
 		if (err) return handleError(err);
 	});
 	console.log('Created terminal with PID: ' + term.pid);
-	res.send(term.pid.toString());
 	res.end();
 });
 
@@ -123,6 +131,34 @@ router.ws('/watch', function (ws, req) {
 			// The WebSocket is not open, ignore
 		}
 	});
+});
+
+router.post('/signin', 
+	function(req, res, next) {
+		Account.find({username:req.body.username},function(err, result){
+			if (result.length>0){
+				next();
+			} else {
+				Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
+					if (err) {
+						console.log('error while user register!', err);
+						return next(err);
+					}
+					console.log('user registered!');
+					next();
+				});
+			}
+		});
+	},
+	passport.authenticate('local'),
+	function(req, res) {
+		res.redirect('/');
+	}
+);
+
+router.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
 });
 
 module.exports = router;
