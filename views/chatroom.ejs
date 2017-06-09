@@ -1,0 +1,25 @@
+<div id="chat">
+	<div id="chatlog"></div>
+	<input type="text" id="chatmessage"></textarea>
+	<button id="sendchat">Send</button>
+</div>
+<script defer>
+var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/chat';
+var chatsocket = new WebSocket(chatURL);
+chatsocket.addEventListener('message', function (ev) {
+	document.getElementById("chatlog").innerHTML+=ev.data+'<br>';
+	document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+});
+document.getElementById("sendchat").setAttribute('onClick','chat()');
+document.getElementById("chatmessage").onkeypress = function(e){
+    if (!e) e = window.event;
+    var keyCode = e.keyCode || e.which;
+    if (keyCode == '13'){
+		chat();
+    }
+}
+function chat(){
+	chatsocket.send(document.getElementById("chatmessage").value);
+	document.getElementById("chatmessage").value='';
+}
+</script>

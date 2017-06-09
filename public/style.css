@@ -11,6 +11,10 @@ button{
 	background-color: #000000;
 	color: lightgray;
 }
+img, div{
+	margin:0;
+	padding:0;
+}
 #logo{
 	float:left;
 }
@@ -24,12 +28,12 @@ button{
 	width:100%;
 	height:40em;
 	margin: auto;
-	outline: 0.25em ridge #555555;
+	outline: 0.125em groove #555555;
 }
 header{
 	height:5em; 
 	background-color: #000000;
-	outline: 0.25em ridge #555555;
+	outline: 0.125em groove #555555;
 }
 #terminal-container {
 	background-color: black;
@@ -42,5 +46,14 @@ header{
     width: 20%;
     height: 35em;
 	float: left;
-	outline: 0.25em ridge #555555;
+	outline: 0.125em groove #555555;
+}
+#chatlog {
+	overflow-y: scroll;
+	height: 15em;
+	width:100%;
+}
+#chatmessage {
+	background: black;
+	color: lightgray;
 }

@@ -5,8 +5,11 @@ var Match = require('./models/match');
 var router = require('express').Router();
 var pty = require('pty.js');
 var ps = require('ps-node');
+var factory = require('irc-factory');
+var api = new factory.Api();
 
 var matches = {};
+var rooms = {};
 var home = '/home/angbandlive';
 
 router.get('/', function(req, res) {
@@ -29,17 +32,24 @@ router.post('/newgame', function(req, res) {
 	console.log(user+' wants to play '+game);
 	switch (game) {
 		case 'angband':
-		case 'master':
-			args = [
-				'-u'+user,
-				'-duser='+home+'/public/user/'+user+'/'+game,
-			];
-		break;
 		case 'poschengband':
 		case 'faangband':
 			args = [
 				'-u'+user,
 				'-duser='+home+'/public/user/'+user+'/'+game,
+				'-mgcu',
+				'--',
+				'-b'
+			];
+		break;
+		case 'sil':
+			args = [
+				'-dapex='+home+'/var/games/'+game+'/apex',
+				'-duser='+home+'/public/user/'+user+'/'+game,
+				'-dsave='+home+'/public/user/'+user+'/'+game+'/save',
+				'-mgcu',
+				'--',
+				'-b'
 			];
 		break;
 		case 'borg':
@@ -59,6 +69,7 @@ router.post('/newgame', function(req, res) {
 	});
 	console.log(term.name);
 	matches[user] = term;
+	rooms[user] = '';
 	var match = new Match({player: user, game: game});
 	match.save(function (err) {
 		if (err) return handleError(err);
@@ -78,6 +89,11 @@ router.ws('/play', function (ws, req) {
 		}
 	});
 	ws.on('message', function(msg) {
+		//hack for arrow keys
+		msg=msg.replace("[A","OA");
+		msg=msg.replace("[B","OB");
+		msg=msg.replace("[C","OC");
+		msg=msg.replace("[D","OD");
 		term.write(msg);
 	});
 	ws.on('close', function () {
@@ -130,6 +146,29 @@ router.ws('/watch', function (ws, req) {
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		}
+	});
+});
+
+router.ws('/chat', function (ws, req) {
+	var ircclient = api.createClient(req.user.username, {
+		nick : req.user.username,
+		user : req.user.username,
+		server : 'localhost',
+		realname: 'justabot',
+		port: 6667,
+		secure: false
+	});
+	api.hookEvent(req.user.username, 'registered', function(message) {
+		ircclient.irc.join('#lobby');
+	});
+	api.hookEvent(req.user.username, '*', function(message) {
+		if (typeof(message.nickname)!='undefined'&&typeof(message.message)!='undefined') {
+			ws.send(message.nickname+': '+message.message);
+		}
+	});
+	ws.on('message', function(msg) {
+		ircclient.irc.privmsg('#lobby', msg);
+		ws.send(req.user.username+': '+msg);
 	});
 });
 

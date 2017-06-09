@@ -20,25 +20,24 @@
 			</div>
 		</header>
 		<div id="terminal-container">
+		<% if (typeof(user) != 'undefined') { %>
+			<div id="playmenu">
+			<% if (user.username == 'borg') { %>
+				<button id="newgame-borg">Launch borg</button>
+				<button id="resume-borg">Command borg</button>
+			<% } else { %>
+				<button id="newgame-angband">Angband</button>
+				<button id="newgame-poschengband">Poschengband</button>
+				<button id="newgame-faangband">FAangband</button>
+			<% } %>
+			</div>
+			<% } %>
 			<% include watchmenu %>
 		</div>
 		<div id="menu">
-			<% if (typeof(user) != 'undefined') { %>
-			<div id="playmenu">
-			<ul>
-			<% if (user.username == 'borg') { %>
-				<li><button id="newgame-borg">Launch borg</button></li>
-				<li><button id="resume-borg">Command borg</button></li>
-			<% } else { %>
-				<li><button id="newgame-angband">Angband</button></li>
-				<li><button id="newgame-master">Angband nightly build</button></li>
-				<li><button id="newgame-poschengband">Poschengband</button></li>
-				<li><button id="newgame-faangband">FAangband</button></li>
-			<% } %>
-			</ul>
-			</div>
-			<% } %>
-			<div id="chat"></div>
+		<% if (typeof(user) != 'undefined') { %>
+			<% include chatroom %>
+		<% } %>
 		</div>
 	</div>
   </body>
