@@ -3,7 +3,7 @@
 	<input type="text" id="chatmessage"></textarea>
 	<button id="sendchat">Send</button>
 </div>
-<script defer>
+<script>
 var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/chat';
 var chatsocket = new WebSocket(chatURL);
 chatsocket.addEventListener('message', function (ev) {

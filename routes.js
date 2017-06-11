@@ -5,11 +5,9 @@ var Match = require('./models/match');
 var router = require('express').Router();
 var pty = require('pty.js');
 var ps = require('ps-node');
-var factory = require('irc-factory');
-var api = new factory.Api();
 
 var matches = {};
-var rooms = {};
+var chatsockets = {};
 var home = '/home/angbandlive';
 
 router.get('/', function(req, res) {
@@ -69,7 +67,6 @@ router.post('/newgame', function(req, res) {
 	});
 	console.log(term.name);
 	matches[user] = term;
-	rooms[user] = '';
 	var match = new Match({player: user, game: game});
 	match.save(function (err) {
 		if (err) return handleError(err);
@@ -81,6 +78,7 @@ router.post('/newgame', function(req, res) {
 router.ws('/play', function (ws, req) {
 	var player = req.user.username;
 	var term = matches[player];
+	var keepalive = setInterval(function(){ws.ping();},30000);
 	term.on('data', function(data) {
 		try {
 			ws.send(data);
@@ -97,6 +95,7 @@ router.ws('/play', function (ws, req) {
 		term.write(msg);
 	});
 	ws.on('close', function () {
+		clearInterval(keepalive);
 		if (player!='borg'){
 			term.write('^X  ');
 			term.kill();
@@ -150,26 +149,19 @@ router.ws('/watch', function (ws, req) {
 });
 
 router.ws('/chat', function (ws, req) {
-	var ircclient = api.createClient(req.user.username, {
-		nick : req.user.username,
-		user : req.user.username,
-		server : 'localhost',
-		realname: 'justabot',
-		port: 6667,
-		secure: false
-	});
-	api.hookEvent(req.user.username, 'registered', function(message) {
-		ircclient.irc.join('#lobby');
-	});
-	api.hookEvent(req.user.username, '*', function(message) {
-		if (typeof(message.nickname)!='undefined'&&typeof(message.message)!='undefined') {
-			ws.send(message.nickname+': '+message.message);
-		}
-	});
-	ws.on('message', function(msg) {
-		ircclient.irc.privmsg('#lobby', msg);
-		ws.send(req.user.username+': '+msg);
-	});
+	if (typeof(req.user.username)!='undefined'){
+		var keepalive=setInterval(function(){ws.ping();},30000);
+		chatsockets[req.user.username] = ws;
+		ws.on('message', function(msg) {
+			for (i in chatsockets){
+				chatsockets[i].send(req.user.username+': '+msg);
+			}
+		});
+		ws.on('close', function() {
+			clearInterval(keepalive);
+			delete chatsockets[req.user.username];
+		});
+	}
 });
 
 router.post('/signin', 
