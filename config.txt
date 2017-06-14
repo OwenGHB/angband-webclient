@@ -1,51 +1,9 @@
-4.x
+mkdir src
+cd src
+git clone https://github.com/angband/angband
+git clone https://github.com/poschengband/poschengband
+git clone https://github.com/NickMcConnell/FAangband
+for dir in `ls`; do cd $dir && ./autogen.sh && ./configure --prefix=$HOME --with-setgid=angbandlive --disable-x11 --disable-sdl-mixer && make && make install && make clean && cd ../; done;
 
--udefault -duser=/home/bandit/public/user/default/master -dpref=/home/bandit/public/user/default/master/customize
-
--duser=/home/bandit/public/user/default/master 
--dpref=/home/bandit/public/user/default/master/customize
-
-borg
--uBorg -d/home/bandit/public/user/borg  
-
-npp
-
--udefault -d/home/bandit/public/user/default/nppangband
-
-faangband
--udefault -duser=/home/bandit/public/user/default/faangband -dedit=/home/bandit/public/user/default/faangband/edit -dpref=/home/bandit/public/user/default/faangband/pref
-
-poschengband
--udefault -dapex=/home/bandit/var/games/poschengband/apex -dsave=/home/bandit/var/games/poschengband/save -duser=/home/bandit/public/user/default/poschengband -dedit=/home/bandit/public/user/default/poschengband/edit -dpref=/home/bandit/public/user/default/poschengband/pref
-
--udefault 
--dapex=/home/bandit/var/games/poschengband/apex
--dsave=/home/bandit/var/games/poschengband/save
--duser=/home/bandit/public/user/default/poschengband 
--dedit=/home/bandit/public/user/default/poschengband/edit 
--dpref=/home/bandit/public/user/default/poschengband/pref
-
-varpath = home+vardir+game+opt
-usrpath = home+usrdir+username+opt
-
-
---localstatedir=/home/bandit/webclient/var/
-
---bindir=DIR            user executables [EPREFIX/bin]
---sbindir=DIR           system admin executables [EPREFIX/sbin]
---libexecdir=DIR        program executables [EPREFIX/libexec]
---sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
---sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
---localstatedir=DIR     modifiable single-machine data [PREFIX/var]
---datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
---datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
-
-if test "x$wsetgid" = "x" && test "x$with_no_install" = "x"; then
-        with_private_dirs="yes"
-fi
-
-./configure --prefix=$HOME --with-setgid=bandit --disable-x11 --disable-sdl-mixer --sysconfdir=$HOME/public/user/default
-
-./configure --prefix=$HOME --with-setgid=bandit --with-configpath=$HOME/public/user/default/NPPAngband --disable-x11 --disable-sdl-mixer
 
 

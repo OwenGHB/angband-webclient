@@ -89,13 +89,6 @@ router.ws('/play', function (ws, req) {
 		}
 	});
 	ws.on('message', function(msg) {
-		//hack for arrow keys
-		if (false) {
-			msg=msg.replace("[A","OA");
-			msg=msg.replace("[B","OB");
-			msg=msg.replace("[C","OC");
-			msg=msg.replace("[D","OD");
-		}
 		term.write(msg);
 	});
 	ws.on('close', function () {
@@ -158,8 +151,8 @@ router.ws('/spectate', function (ws, req) {
 
 router.ws('/chat', function (ws, req) {
 	if (typeof(req.user.username)!='undefined'){
-		var keepalive=setInterval(function(){ws.ping();},30000);
 		chatsockets[req.user.username] = ws;
+		var keepalive=setInterval(function(){chatsockets[req.user.username].ping();},30000);
 		ws.on('message', function(msg) {
 			for (i in chatsockets){
 				chatsockets[i].send(req.user.username+': '+msg);

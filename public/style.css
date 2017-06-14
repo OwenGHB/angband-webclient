@@ -43,7 +43,7 @@ header{
 }
 #menu {
 	background-color: black;
-    width: 20%;
+	width: 20%;
     height: 40em;
 	float: left;
 	outline: 0.125em groove #555555;
