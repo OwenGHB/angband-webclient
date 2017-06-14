@@ -3,7 +3,7 @@
 	<ul>
 	<% for (i in livematches) { %>
 		<li class="livematch">
-			<a href="#watch" class="player" onclick='spectateGame("<%= livematches[i].player %>")'><%= livematches[i].player %></a>
+			<a href="#watch" class="player" onclick='applyTerminal("spectate","<%= livematches[i].player %>")'><%= livematches[i].player %></a>
 		</li>
 	<% } %>
 	</ul>

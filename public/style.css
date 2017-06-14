@@ -3,8 +3,8 @@ a {
 }
 body{
     background: black;
-	font-family: sans-serif;
-	font-family: 0.875em sans-serif;
+    font-family: "Fixedsys", Terminal, monospace;
+	font-size:0.875em;
 	color: lightgray;
 }
 button{
@@ -38,13 +38,13 @@ header{
 #terminal-container {
 	background-color: black;
     width: 80%;
-    height: 35em;
+    height: 40em;
 	float: left;
 }
 #menu {
 	background-color: black;
     width: 20%;
-    height: 35em;
+    height: 40em;
 	float: left;
 	outline: 0.125em groove #555555;
 }

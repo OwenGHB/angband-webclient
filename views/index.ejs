@@ -4,6 +4,7 @@
     <title>Angband Live</title>
 	<meta name="description" content="Web based client for playing Angband and select variants remotely. Supports recording and live spectating.">
 	<link rel='stylesheet' href='/style.css' />
+	<link rel='stylesheet' href='/term.css' />
 	<script src="term.js" ></script>
 	<script src="/main.js" defer></script>
  </head>
@@ -20,17 +21,16 @@
 			</div>
 		</header>
 		<div id="terminal-container">
-		<% if (typeof(user) != 'undefined') { %>
-			<div id="playmenu">
-			<% if (user.username == 'borg') { %>
-				<button id="newgame-borg">Launch borg</button>
-				<button id="resume-borg">Command borg</button>
-			<% } else { %>
-				<button id="newgame-angband">Angband</button>
-				<button id="newgame-poschengband">Poschengband</button>
-				<button id="newgame-faangband">FAangband</button>
-			<% } %>
-			</div>
+			<% if (typeof(user) != 'undefined') { %>
+				<div id="playmenu">
+				<% if (user.username == 'borg') { %>
+					<button id="newgame-borg">Launch borg</button>
+				<% } else { %>
+					<button id="newgame-angband">Angband</button>
+					<button id="newgame-poschengband">Poschengband</button>
+					<button id="newgame-faangband">FAangband</button>
+				<% } %>
+				</div>
 			<% } %>
 			<% include watchmenu %>
 		</div>

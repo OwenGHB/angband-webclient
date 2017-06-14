@@ -27,10 +27,12 @@ router.post('/newgame', function(req, res) {
 	var game = req.query.game;
 	var path = home+'/games/'+game;
 	var args = [];
+	var terminfo='xterm-256color';
 	console.log(user+' wants to play '+game);
 	switch (game) {
-		case 'angband':
 		case 'poschengband':
+		terminfo='rxvt-unicode-256color';
+		case 'angband':
 		case 'faangband':
 			args = [
 				'-u'+user,
@@ -60,7 +62,7 @@ router.post('/newgame', function(req, res) {
 		break;
 	}
 	var term = pty.fork(path, args, {
-		name: 'xterm',
+		name: terminfo,
 		cols: 150,
 		rows: 40,
 		cwd: process.env.HOME
@@ -88,10 +90,12 @@ router.ws('/play', function (ws, req) {
 	});
 	ws.on('message', function(msg) {
 		//hack for arrow keys
-		msg=msg.replace("[A","OA");
-		msg=msg.replace("[B","OB");
-		msg=msg.replace("[C","OC");
-		msg=msg.replace("[D","OD");
+		if (false) {
+			msg=msg.replace("[A","OA");
+			msg=msg.replace("[B","OB");
+			msg=msg.replace("[C","OC");
+			msg=msg.replace("[D","OD");
+		}
 		term.write(msg);
 	});
 	ws.on('close', function () {
@@ -136,15 +140,19 @@ router.ws('/play', function (ws, req) {
 	console.log('Connected to terminal ' + term.pid);
 });
 
-router.ws('/watch', function (ws, req) {
-	var player = req.query.player;
+router.ws('/spectate', function (ws, req) {
+	var player = req.query.watch;
 	var term = matches[player];
+	var keepalive=setInterval(function(){ws.ping();},30000);
 	term.on('data', function(data) {
 		try {
 			ws.send(data);
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		}
+	});
+	ws.on('close', function() {
+		clearInterval(keepalive);
 	});
 });
 
@@ -170,14 +178,18 @@ router.post('/signin',
 			if (result.length>0){
 				next();
 			} else {
-				Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
-					if (err) {
-						console.log('error while user register!', err);
-						return next(err);
-					}
-					console.log('user registered!');
+				if (req.body.username.match(/^[a-zA-Z0-9_]+$/).length>0) {
+					Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
+						if (err) {
+							console.log('error while user register!', err);
+							return next(err);
+						}
+						console.log('user registered!');
+						next();
+					});
+				} else {
 					next();
-				});
+				}
 			}
 		});
 	},
