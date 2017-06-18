@@ -1,0 +1,19 @@
+<div id="playmenu">
+	<div id="gamelist">
+	<% if (user.username == 'borg') { %>
+		<button id="newgame-borg">Launch borg</button>
+	<% } else { %>
+		<button id="newgame-angband">Angband</button>
+		<button id="newgame-poschengband">Poschengband</button>
+		<button id="newgame-faangband">FAangband</button>
+	<% } %>
+	</div>
+</div>
+<script>
+var games = ['angband','sil','poschengband','faangband','nppangband','nppmoria','borg'];
+
+for (i in games) {
+	var playbutton = document.getElementById('newgame-'+games[i]);
+	if (playbutton) playbutton.setAttribute('onClick','applyTerminal("play","'+games[i]+'",{rows:'+50+',cols:'+150+'})');
+}
+</script>

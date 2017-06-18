@@ -1,7 +1,6 @@
 var passport = require('passport');
 var session = require('cookie-session');
 var Account = require('./models/account');
-var Match = require('./models/match');
 var router = require('express').Router();
 var pty = require('pty.js');
 var ps = require('ps-node');
@@ -11,19 +10,14 @@ var chatsockets = {};
 var home = '/home/angbandlive';
 
 router.get('/', function(req, res) {
-	Match.find(function (err, result) {  
-		if (err) {
-			return handleError(err);
-		} else {
-			livematches = result;
-			res.render('index', {title:'GwaRL.xyz', user: req.user, livematches: livematches});
-		}
-	});	
+	livematches = Object.keys(matches);
+	res.render('index', {title:'GwaRL.xyz', user: req.user, livematches: livematches});
 });
 
 router.post('/newgame', function(req, res) {
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	var user = req.user.username;
+	console.log(JSON.stringify(req.query));
 	var game = req.query.game;
 	var path = home+'/games/'+game;
 	var args = [];
@@ -31,7 +25,7 @@ router.post('/newgame', function(req, res) {
 	console.log(user+' wants to play '+game);
 	switch (game) {
 		case 'poschengband':
-		terminfo='rxvt-unicode-256color';
+			terminfo='rxvt-unicode-256color';
 		case 'angband':
 		case 'faangband':
 			args = [
@@ -61,18 +55,15 @@ router.post('/newgame', function(req, res) {
 		default:
 		break;
 	}
+	console.log('Creating terminal');
 	var term = pty.fork(path, args, {
 		name: terminfo,
 		cols: 150,
-		rows: 40,
+		rows: 50,
 		cwd: process.env.HOME
 	});
 	console.log(term.name);
 	matches[user] = term;
-	var match = new Match({player: user, game: game});
-	match.save(function (err) {
-		if (err) return handleError(err);
-	});
 	console.log('Created terminal with PID: ' + term.pid);
 	res.end();
 });
@@ -105,9 +96,8 @@ router.ws('/play', function (ws, req) {
 				if( process ){
 					ps.kill( term.pid, function( err ) {
 						if (err) {
-							throw new Error( err );
-						}
-						else {
+							console.log( err );
+						} else {
 							console.log( 'Process %s did not exit and has been forcibly killed!', term.pid );
 						}
 					});				
@@ -118,14 +108,6 @@ router.ws('/play', function (ws, req) {
 			});
 			console.log('Closed terminal ' + term.pid);
 			// Clean things up
-			Match.remove({ player: player }, function (err) {
-				if (err) {
-					return handleError(err);
-				}
-				else {
-					console.log( 'Removed match from database' );
-				}
-			});
 			delete matches[player];
 		}
 	});
@@ -136,23 +118,25 @@ router.ws('/play', function (ws, req) {
 router.ws('/spectate', function (ws, req) {
 	var player = req.query.watch;
 	var term = matches[player];
-	var keepalive=setInterval(function(){ws.ping();},30000);
-	term.on('data', function(data) {
-		try {
-			ws.send(data);
-		} catch (ex) {
-			// The WebSocket is not open, ignore
-		}
-	});
-	ws.on('close', function() {
-		clearInterval(keepalive);
-	});
+	if (typeof(term)!='undefined'){
+		var keepalive=setInterval(function(){ws.ping();},30000);
+		term.on('data', function(data) {
+			try {
+				ws.send(data);
+			} catch (ex) {
+				// The WebSocket is not open, ignore
+			}
+		});
+		ws.on('close', function() {
+			clearInterval(keepalive);
+		});
+	}
 });
 
 router.ws('/chat', function (ws, req) {
 	if (typeof(req.user.username)!='undefined'){
 		chatsockets[req.user.username] = ws;
-		var keepalive=setInterval(function(){chatsockets[req.user.username].ping();},30000);
+		var keepalive=setInterval(function(){if (typeof(chatsockets[req.user.username])!='undefined') chatsockets[req.user.username].ping();},30000);
 		ws.on('message', function(msg) {
 			for (i in chatsockets){
 				chatsockets[i].send(req.user.username+': '+msg);

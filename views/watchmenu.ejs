@@ -1,9 +1,9 @@
 <div class="watchmenu">
-	Playing live:
+	<h1>Playing live:</h1>
 	<ul>
 	<% for (i in livematches) { %>
 		<li class="livematch">
-			<a href="#watch" class="player" onclick='applyTerminal("spectate","<%= livematches[i].player %>")'><%= livematches[i].player %></a>
+			<a href="#watch" class="player" onclick='applyTerminal("spectate","<%= livematches[i] %>",{rows:50,cols:150})'><%= livematches[i] %></a>
 		</li>
 	<% } %>
 	</ul>

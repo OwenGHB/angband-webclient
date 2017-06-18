@@ -1,13 +1,17 @@
 var term;
-var socket;
-var games = ['angband','sil','poschengband','faangband','nppangband','nppmoria','borg'];
+var socket; 
 
-for (i in games) {
-	var playbutton = document.getElementById('newgame-'+games[i]);
-	if (playbutton) playbutton.setAttribute('onClick','applyTerminal("play","'+games[i]+'")');
+function adjustsize(dimensions){
+	var fontSize=Math.min(Math.floor((window.innerWidth/dimensions.cols)/0.6),Math.floor(window.innerHeight/dimensions.rows));
+	document.getElementById("container").style.width=window.innerWidth+'px';
+	document.getElementById("container").style.height=window.innerHeight+'px';
+	document.getElementById("terminal-container").style.fontSize=fontSize.toString()+'px';
+	document.getElementById("terminal-container").style.width=Math.ceil(0.6*dimensions.cols*fontSize).toString()+'px';
+	document.getElementById("terminal-container").style.height=Math.ceil(dimensions.rows*fontSize).toString()+'px';
+	document.getElementById("menu").style.width=(window.innerWidth-Math.ceil(0.6*dimensions.cols*Math.floor(window.innerHeight/dimensions.rows))-2).toString()+'px';
 }
 
-function applyTerminal(mode, qualifier) {
+function applyTerminal(mode, qualifier, dimensions) {
 	var terminalContainer=document.getElementById("terminal-container");
 	terminalContainer.innerHTML='';
 	var terminfo = '';
@@ -22,15 +26,15 @@ function applyTerminal(mode, qualifier) {
 	term = new Terminal({
 		termName: terminfo,
 		colors: Terminal.xtermColors,
-		cols: 150,
-		rows: 40,
-		screenKeys: true,
+		cols: dimensions.cols,
+		rows: dimensions.rows,
 		cursorBlink: false
 	});
 	term.open(terminalContainer);
 	var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/'+mode;
 	if (mode=='play') {
-		fetch('/newgame?game='+qualifier, {credentials: 'include', method: 'POST'}).then(function () {
+		term.applicationCursor=true;
+		fetch('/newgame?game='+qualifier+'&rows='+dimensions.rows+'&cols='+dimensions.cols, {credentials: 'include', method: 'POST'}).then(function () {
 			socket = new WebSocket(socketURL);
 			term.on('data', function(data) {
 				socket.send(data);

@@ -4,41 +4,36 @@
     <title>Angband Live</title>
 	<meta name="description" content="Web based client for playing Angband and select variants remotely. Supports recording and live spectating.">
 	<link rel='stylesheet' href='/style.css' />
-	<link rel='stylesheet' href='/term.css' />
 	<script src="term.js" ></script>
-	<script src="/main.js" defer></script>
- </head>
+	<script src="/main.js"></script>
+  </head>
   <body>
 	<div id="container">
-		<header>
-			<img id="logo" src="logo.png"></img>
-			<div id="userinfo">
-				<% if (typeof(user) == 'undefined') { %>
-					<% include login %>
-				<% } else { %>
-					<span>Logged in as <%= user.username%><a href="/logout"> Log Out </a></span>
-				<% } %>
-			</div>
-		</header>
 		<div id="terminal-container">
+			<img id="logo" src="logo.png"></img>
 			<% if (typeof(user) != 'undefined') { %>
-				<div id="playmenu">
-				<% if (user.username == 'borg') { %>
-					<button id="newgame-borg">Launch borg</button>
-				<% } else { %>
-					<button id="newgame-angband">Angband</button>
-					<button id="newgame-poschengband">Poschengband</button>
-					<button id="newgame-faangband">FAangband</button>
-				<% } %>
-				</div>
+				<% include playmenu %>
 			<% } %>
 			<% include watchmenu %>
 		</div>
 		<div id="menu">
+		<div id="userinfo">
+			<% if (typeof(user) == 'undefined') { %>
+				<% include login %>
+			<% } else { %>
+				<span>Logged in as <%= user.username%> <a href="/logout">Log Out</a></span>
+			<% } %>
+		</div>
 		<% if (typeof(user) != 'undefined') { %>
+			<% if (user.username=='Gwarl') { %>
+				<% include debug %>
+			<% } %>
 			<% include chatroom %>
 		<% } %>
 		</div>
 	</div>
+	<script>
+	adjustsize({cols:150,rows:50});
+	</script>
   </body>
 </html>
