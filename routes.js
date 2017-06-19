@@ -7,6 +7,16 @@ var ps = require('ps-node');
 
 var matches = {};
 var chatsockets = {};
+var keepalive=setInterval(function(){
+	for (var i in matches) {
+		if (typeof(matches[i].socket!='undefined')) {
+			matches[i].socket.ping();
+		}
+	}
+	for (var i in chatsockets) {
+		chatsockets[i].ping();
+	}
+},30000);
 var home = '/home/angbandlive';
 
 router.get('/', function(req, res) {
@@ -17,7 +27,6 @@ router.get('/', function(req, res) {
 router.post('/newgame', function(req, res) {
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	var user = req.user.username;
-	console.log(JSON.stringify(req.query));
 	var game = req.query.game;
 	var path = home+'/games/'+game;
 	var args = [];
@@ -25,7 +34,6 @@ router.post('/newgame', function(req, res) {
 	console.log(user+' wants to play '+game);
 	switch (game) {
 		case 'poschengband':
-			terminfo='rxvt-unicode-256color';
 		case 'angband':
 		case 'faangband':
 			args = [
@@ -62,16 +70,18 @@ router.post('/newgame', function(req, res) {
 		rows: 50,
 		cwd: process.env.HOME
 	});
-	console.log(term.name);
-	matches[user] = term;
+	var match = {
+		term: term
+	}
+	matches[user] = match;
 	console.log('Created terminal with PID: ' + term.pid);
 	res.end();
 });
 
 router.ws('/play', function (ws, req) {
 	var player = req.user.username;
-	var term = matches[player];
-	var keepalive = setInterval(function(){ws.ping();},30000);
+	matches[player].socket=ws;
+	var term = matches[player].term;
 	term.on('data', function(data) {
 		try {
 			ws.send(data);
@@ -83,9 +93,7 @@ router.ws('/play', function (ws, req) {
 		term.write(msg);
 	});
 	ws.on('close', function () {
-		clearInterval(keepalive);
 		if (player!='borg'){
-			term.write('^X  ');
 			term.kill();
 			//kill the process if it hasn't already
 			ps.lookup({ pid: term.pid }, function(err, resultList ) {
@@ -117,9 +125,8 @@ router.ws('/play', function (ws, req) {
 
 router.ws('/spectate', function (ws, req) {
 	var player = req.query.watch;
-	var term = matches[player];
+	var term = matches[player].term;
 	if (typeof(term)!='undefined'){
-		var keepalive=setInterval(function(){ws.ping();},30000);
 		term.on('data', function(data) {
 			try {
 				ws.send(data);
@@ -127,23 +134,18 @@ router.ws('/spectate', function (ws, req) {
 				// The WebSocket is not open, ignore
 			}
 		});
-		ws.on('close', function() {
-			clearInterval(keepalive);
-		});
 	}
 });
 
 router.ws('/chat', function (ws, req) {
 	if (typeof(req.user.username)!='undefined'){
 		chatsockets[req.user.username] = ws;
-		var keepalive=setInterval(function(){if (typeof(chatsockets[req.user.username])!='undefined') chatsockets[req.user.username].ping();},30000);
-		ws.on('message', function(msg) {
-			for (i in chatsockets){
+		chatsockets[req.user.username].on('message', function(msg) {
+			for (var i in chatsockets){
 				chatsockets[i].send(req.user.username+': '+msg);
 			}
 		});
-		ws.on('close', function() {
-			clearInterval(keepalive);
+		chatsockets[req.user.username].on('close', function() {
 			delete chatsockets[req.user.username];
 		});
 	}

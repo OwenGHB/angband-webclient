@@ -26,7 +26,7 @@ body {
   background: white;
 }
 #userinfo {
-	float:right;
+
 }
 #terminal-container {
 	background-color: black;
@@ -34,14 +34,11 @@ body {
 }
 #menu {
 	background-color: black;
-    height: inherit;
 	float:left;
 	outline: 2px groove #555555;
 }
 #chatlog {
 	overflow-y: scroll;
-	height: 15em;
-	width:100%;
 }
 #chatmessage {
 	background: black;
