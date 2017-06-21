@@ -28,6 +28,9 @@ router.post('/newgame', function(req, res) {
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	var user = req.user.username;
 	var game = req.query.game;
+	var panels = req.query.panels;
+	var silwindows = '-b';
+	if (panels>1) silwindows = '-n'+panels;
 	var path = home+'/games/'+game;
 	var args = [];
 	var terminfo='xterm-256color';
@@ -41,17 +44,18 @@ router.post('/newgame', function(req, res) {
 				'-duser='+home+'/public/user/'+user+'/'+game,
 				'-mgcu',
 				'--',
-				'-b'
+				'-n'+panels
 			];
 		break;
 		case 'sil':
 			args = [
+				'-u'+user,
 				'-dapex='+home+'/var/games/'+game+'/apex',
 				'-duser='+home+'/public/user/'+user+'/'+game,
 				'-dsave='+home+'/public/user/'+user+'/'+game+'/save',
 				'-mgcu',
 				'--',
-				'-b'
+				silwindows
 			];
 		break;
 		case 'borg':

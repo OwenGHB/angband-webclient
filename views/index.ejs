@@ -17,12 +17,14 @@
 			<% include watchmenu %>
 		</div>
 		<div id="menu">
-		<div id="userinfo">
-			<% if (typeof(user) == 'undefined') { %>
-				<% include login %>
-			<% } else { %>
-				<span>Logged in as <%= user.username%> <a href="/logout">Log Out</a></span>
-			<% } %>
+		<div id="settings">
+			<div id="userinfo">
+				<% if (typeof(user) == 'undefined') { %>
+					<% include login %>
+				<% } else { %>
+					<span>Logged in as <%= user.username%> <a href="/logout">Log Out</a></span>
+				<% } %>
+			</div>
 		</div>
 		<% if (typeof(user) != 'undefined') { %>
 			<% if (user.username=='Gwarl') { %>

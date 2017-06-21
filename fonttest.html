@@ -1,0 +1,41 @@
+<style>
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+	font-family: "Fixedsys", Terminal, monospace;
+	font-kerning: none;
+}
+span {
+	outline:1px solid red;
+	outline-offset:-1px;
+}
+</style>
+<script>
+function testfontwidth(lineHeight,dimensions) {
+	var span = document.createElement("span");
+	var cols = dimensions.cols;
+	var rows = dimensions.rows;
+	span.style.lineHeight=lineHeight+'px';
+	span.style.fontSize=lineHeight-1+'px';
+	for (var j=0;j<rows;j++){
+		var text = "";
+		for (var k=0;k<cols;k++) {
+			text+='l';
+		}
+		var node = document.createTextNode(text);
+		span.appendChild(node);
+		span.innerHTML+='</br>';
+	}
+	document.body.appendChild(span);
+	var results = {x:span.offsetHeight/rows,y:span.offsetWidth/cols,ratio:(span.offsetWidth/cols)/(span.offsetHeight/rows)};
+	document.body.removeChild(span);
+	return results.ratio;
+}
+document.write("hello world</br>")
+for (var i = 8; i < 37; i++){
+	document.write("size: "+i+" ratio: "+testfontwidth(i,{rows:50,cols:150})+"</br>");
+}
+
+</script>

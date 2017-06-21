@@ -3,23 +3,21 @@ a {
 }
 * {	
     font-family: "Fixedsys", Terminal, monospace;
-	background-color: #000000;
-	color: lightgray;
-}
-body {
 	margin: 0;
 	padding: 0;
 }
+input,button {
+	background-color: #000000;
+	color: lightgray;
+}
 #container {
     background: black;
-	line-height: 100%;
 	color: lightgray;
 }
 .terminal {
   float: left;
   color: white;
   background: black;
-  line-height: 100%;
 }
 .terminal-cursor {
   color: black;
@@ -34,8 +32,13 @@ body {
 }
 #menu {
 	background-color: black;
-	float:left;
-	outline: 2px groove #555555;
+	float: left;
+}
+#settings {
+	float: left;
+}
+#chat {
+	float: left;
 }
 #chatlog {
 	overflow-y: scroll;

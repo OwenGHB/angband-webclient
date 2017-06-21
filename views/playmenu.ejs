@@ -9,12 +9,20 @@
 		<button id="newgame-sil">Sil</button>
 	<% } %>
 	</div>
+	<label>subwindows</label><input id="panels" type="number" min="1" max="6" value="1">
 </div>
 <script>
-var games = ['angband','sil','poschengband','faangband','nppangband','nppmoria','borg'];
+var games = ['angband','sil','poschengband','faangband','borg'];
 
 for (i in games) {
 	var playbutton = document.getElementById('newgame-'+games[i]);
-	if (playbutton) playbutton.setAttribute('onClick','applyTerminal("play","'+games[i]+'",{rows:'+50+',cols:'+150+'})');
+	if (playbutton) playbutton.setAttribute('onClick','applyTerminal("play","'+games[i]+'",{rows:'+50+',cols:'+150+'},'+document.getElementById("panels").value+')');
 }
+
+document.getElementById("panels").oninput = function(){
+	for (i in games) {
+		var playbutton = document.getElementById('newgame-'+games[i]);
+		if (playbutton) playbutton.setAttribute('onClick','applyTerminal("play","'+games[i]+'",{rows:'+50+',cols:'+150+'},'+document.getElementById("panels").value+')');
+	}
+};
 </script>
