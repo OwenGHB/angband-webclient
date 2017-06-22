@@ -149,7 +149,11 @@ router.ws('/spectate', function (ws, req) {
 router.ws('/chat', function (ws, req) {
 	if (typeof(req.user.username)!='undefined'){
 		for (var i in chatlog){
-			ws.send(chatlog[chatlog.length-i-1]);
+			try {
+				ws.send(chatlog[chatlog.length-i-1]);
+			} catch (ex) {
+				// The WebSocket is not open, ignore
+			}
 		}
 		chatsockets[req.user.username] = ws;
 		chatsockets[req.user.username].on('message', function(msg) {
@@ -158,7 +162,11 @@ router.ws('/chat', function (ws, req) {
 				chatlog.pop();
 			}
 			for (var i in chatsockets){
-				chatsockets[i].send(req.user.username+': '+msg);
+				try {
+					chatsockets[i].send(req.user.username+': '+msg);
+				} catch (ex) {
+					// The WebSocket is not open, ignore
+				}
 			}
 		});
 		chatsockets[req.user.username].on('close', function() {
