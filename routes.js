@@ -10,7 +10,7 @@ var chatsockets = {};
 var chatlog = [];
 var keepalive=setInterval(function(){
 	for (var i in matches) {
-		if (typeof(matches[i].socket!='undefined')) {
+		if (typeof(matches[i].socket)!='undefined') {
 			matches[i].socket.ping();
 		}
 	}
