@@ -1,12 +1,21 @@
 a {
 	color: #00B7FF;
 }
-* {	
-    font-family: "Fixedsys", Terminal, monospace;
+@font-face {
+    font-family: customFontA;
+    src: url(Px437_IBM_VGA8.ttf);
+}
+@font-face {
+    font-family: customFontB;
+    src: url(YOzFontOTWD.ttf);
+}
+body {	
+    font-family: monospace;
 	margin: 0;
 	padding: 0;
 }
-input,button {
+input,button,select {
+	font-family: monospace;
 	background-color: #000000;
 	color: lightgray;
 }

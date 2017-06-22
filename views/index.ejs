@@ -25,6 +25,13 @@
 					<span>Logged in as <%= user.username%> <a href="/logout">Log Out</a></span>
 				<% } %>
 			</div>
+			<label>Font:</label>
+			<select id="fontselect">
+				<option value='"Consolas", monospace'>Consolas</option>
+				<option value='"Courier", monospace'>Courier</option>
+				<option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
+				<option value='"Lucida Console", monospace'>Lucida Console</option>
+			</select> 
 		</div>
 		<% if (typeof(user) != 'undefined') { %>
 			<% if (user.username=='Gwarl') { %>
@@ -35,7 +42,12 @@
 		</div>
 	</div>
 	<script>
-	adjustsize({cols:150,rows:50});
+	document.getElementById('fontselect').onchange = function(){
+		document.body.style.fontFamily=document.getElementById('fontselect').value;
+		adjustsize();
+	};
+	document.body.style.fontFamily=document.getElementById('fontselect').value;
+	adjustsize();
 	</script>
   </body>
 </html>

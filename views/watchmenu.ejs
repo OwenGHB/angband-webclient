@@ -1,10 +1,24 @@
-<div class="watchmenu">
-	Playing live:
-	<ul>
-	<% for (i in livematches) { %>
-		<li class="livematch">
-			<a href="#watch" class="player" onclick='applyTerminal("spectate","<%= livematches[i] %>",{rows:50,cols:150})'><%= livematches[i] %></a>
-		</li>
-	<% } %>
-	</ul>
+<div id="watchmenu">
+	<%= JSON.stringify(livematches) %>
 </div>
+<script>
+var watchmenu=document.getElementById("watchmenu");
+var livematches = JSON.parse(watchmenu.innerHTML);
+watchmenu.innerHTML = 'Live games: ';
+listmatches(livematches);
+function listmatches(livematches){
+	var watchlist = document.createElement("ul");
+	watchmenu.appendChild(watchlist);
+	for (var i in livematches) {
+		var livematch = document.createElement("li");
+		livematch.className = "livematch";
+		var livelink = document.createElement("button");
+		livelink.className = "player";
+		var playername = document.createTextNode(livematches[i]);
+		livelink.appendChild(playername);
+		livelink.setAttribute('onclick','applyTerminal("spectate","'+livematches[i]+'")');
+		watchlist.appendChild(livematch);
+		livematch.appendChild(livelink);
+	}
+}
+</script>

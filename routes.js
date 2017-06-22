@@ -7,6 +7,7 @@ var ps = require('ps-node');
 
 var matches = {};
 var chatsockets = {};
+var chatlog = [];
 var keepalive=setInterval(function(){
 	for (var i in matches) {
 		if (typeof(matches[i].socket!='undefined')) {
@@ -16,10 +17,11 @@ var keepalive=setInterval(function(){
 	for (var i in chatsockets) {
 		chatsockets[i].ping();
 	}
-},30000);
+},10000);
 var home = '/home/angbandlive';
 
 router.get('/', function(req, res) {
+	var livematchinfo;
 	livematches = Object.keys(matches);
 	res.render('index', {title:'GwaRL.xyz', user: req.user, livematches: livematches});
 });
@@ -27,8 +29,11 @@ router.get('/', function(req, res) {
 router.post('/newgame', function(req, res) {
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	var user = req.user.username;
+	console.log(req.query);
 	var game = req.query.game;
 	var panels = req.query.panels;
+	var cols = parseInt(req.query.cols);
+	var rows = parseInt(req.query.rows);
 	var silwindows = '-b';
 	if (panels>1) silwindows = '-n'+panels;
 	var path = home+'/games/'+game;
@@ -70,8 +75,8 @@ router.post('/newgame', function(req, res) {
 	console.log('Creating terminal');
 	var term = pty.fork(path, args, {
 		name: terminfo,
-		cols: 150,
-		rows: 50,
+		cols: cols,
+		rows: rows,
 		cwd: process.env.HOME
 	});
 	var match = {
@@ -143,8 +148,15 @@ router.ws('/spectate', function (ws, req) {
 
 router.ws('/chat', function (ws, req) {
 	if (typeof(req.user.username)!='undefined'){
+		for (var i in chatlog){
+			ws.send(chatlog[chatlog.length-i-1]);
+		}
 		chatsockets[req.user.username] = ws;
 		chatsockets[req.user.username].on('message', function(msg) {
+			chatlog.unshift(req.user.username+': '+msg);
+			while (chatlog.length>20) {
+				chatlog.pop();
+			}
 			for (var i in chatsockets){
 				chatsockets[i].send(req.user.username+': '+msg);
 			}

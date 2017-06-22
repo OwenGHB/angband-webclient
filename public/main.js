@@ -1,7 +1,9 @@
 var term;
 var socket;
+var dimensions={rows:50,cols:150};
+var games = ['angband','poschengband','faangband','borg'];
 
-function adjustsize(dimensions){
+function adjustsize(){
 	var needsize = {wide:{},narrow:{}};
 	needsize.wide.cols = dimensions.cols+35;
 	needsize.wide.rows = dimensions.rows;
@@ -9,13 +11,13 @@ function adjustsize(dimensions){
 	needsize.narrow.rows = dimensions.rows+10;
 	for (var i in needsize) {
 		var optheight = Math.floor(window.innerHeight/needsize[i].rows);
-		var optwidth = Math.floor((window.innerWidth/needsize[i].cols)/testfont(optheight,dimensions).ratio);
+		var optwidth = Math.floor((window.innerWidth/needsize[i].cols)/testfont(optheight,dimensions,document.body.style.fontFamily).ratio);
 		needsize[i].lineHeight = Math.min(optwidth,optheight);
 	}
 	var lineHeight=Math.max(needsize.narrow.lineHeight,needsize.wide.lineHeight);
 	var fontSize=lineHeight;
-	var results = testfont(lineHeight,dimensions);
-	var widescreen=(needsize.narrow.lineHeight<needsize.wide.lineHeight);
+	var results = testfont(lineHeight,dimensions,document.body.style.fontFamily);
+	var widescreen=(needsize.narrow.lineHeight<=needsize.wide.lineHeight);
 	document.getElementById("container").style.width=window.innerWidth+'px';
 	document.getElementById("container").style.height=window.innerHeight+'px';
 	document.getElementById("container").style.fontSize=fontSize+'px';
@@ -25,27 +27,28 @@ function adjustsize(dimensions){
 	if (widescreen) {
 		document.getElementById("menu").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
 		document.getElementById("menu").style.height=Math.ceil(results.y)+'px';
-		document.getElementById("settings").style.height='65%';
-		document.getElementById("settings").style.width='100%';
-		document.getElementById("chat").style.height='35%';
-		document.getElementById("chat").style.width='100%';
+		document.getElementById("settings").style.height=(13*window.innerHeight/20)+'px';
+		document.getElementById("settings").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
+		document.getElementById("chat").style.height=(7*window.innerHeight/20)+'px';
+		document.getElementById("chat").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
 		document.getElementById("chatlog").style.height=((7*window.innerHeight/20)-Math.max(document.getElementById("chatmessage").offsetHeight,document.getElementById("sendchat").offsetHeight)-1)+'px';
 	} else {
-		document.getElementById("menu").style.width='100%';
+		document.getElementById("menu").style.width=window.innerWidth+'px';
 		document.getElementById("menu").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
-		document.getElementById("settings").style.height='100%';
-		document.getElementById("settings").style.width='65%';
-		document.getElementById("chat").style.height='100%';
-		document.getElementById("chat").style.width='35%';
+		document.getElementById("settings").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
+		document.getElementById("settings").style.width=(13*window.innerWidth/20)+'px';
+		document.getElementById("chat").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
+		document.getElementById("chat").style.width=(7*window.innerWidth/20)+'px';
 		document.getElementById("chatlog").style.height=(window.innerHeight-Math.ceil(results.y)-Math.max(document.getElementById("chatmessage").offsetHeight,document.getElementById("sendchat").offsetHeight)-1)+'px';
 	}
 }
-function testfont(lineHeight,dimensions) {
+function testfont(lineHeight,dimensions,fontFamily) {
 	var span = document.createElement("span");
 	var cols = dimensions.cols;
 	var rows = dimensions.rows;
 	span.style.lineHeight=lineHeight+'px';
 	span.style.fontSize=lineHeight+'px';
+	span.style.fontFamily=fontFamily;
 	span.style.position="fixed";
 	for (var j=0;j<rows;j++){
 		var text = "";
@@ -61,7 +64,7 @@ function testfont(lineHeight,dimensions) {
 	document.body.removeChild(span);
 	return results;
 }
-function applyTerminal(mode, qualifier, dimensions, panels) {
+function applyTerminal(mode, qualifier, panels) {
 	var terminalContainer=document.getElementById("terminal-container");
 	terminalContainer.innerHTML='';
 	var terminfo = 'xterm-256color';
