@@ -1,3 +1,7 @@
+/* global require setInterval process */
+
+var config = require('./config');
+var path = require('path');
 var passport = require('passport');
 var session = require('cookie-session');
 var Account = require('./models/account');
@@ -18,7 +22,8 @@ var keepalive=setInterval(function(){
 		chatsockets[i].ping();
 	}
 },10000);
-var home = '/home/angbandlive';
+
+var home = config.home;
 
 router.get('/', function(req, res) {
 	var livematchinfo;
@@ -31,12 +36,12 @@ router.post('/newgame', function(req, res) {
 	var user = req.user.username;
 	console.log(req.query);
 	var game = req.query.game;
+	var gameConfig = config.games[game];
 	var panels = req.query.panels;
 	var cols = parseInt(req.query.cols);
 	var rows = parseInt(req.query.rows);
 	var silwindows = '-b';
 	if (panels>1) silwindows = '-n'+panels;
-	var path = home+'/games/'+game;
 	var args = [];
 	var terminfo='xterm-256color';
 	console.log(user+' wants to play '+game);
@@ -45,19 +50,19 @@ router.post('/newgame', function(req, res) {
 		case 'angband':
 		case 'faangband':
 			args = [
-				'-u'+user,
-				'-duser='+home+'/public/user/'+user+'/'+game,
+				'-u' + user,
+				'-duser=' + path.join(gameConfig.savePath, 'user', game),
 				'-mgcu',
 				'--',
-				'-n'+panels
+				'-n' + panels
 			];
 		break;
 		case 'sil':
 			args = [
-				'-u'+user,
-				'-dapex='+home+'/var/games/'+game+'/apex',
-				'-duser='+home+'/public/user/'+user+'/'+game,
-				'-dsave='+home+'/public/user/'+user+'/'+game+'/save',
+				'-u' + user,
+				'-dapex=' + gameConfig.apexPath,
+				'-duser=' + path.join(gameConfig.savePath, user, game),
+				'-dsave=' +path.join(gameConfig.savePath, user, game, 'save'),
 				'-mgcu',
 				'--',
 				silwindows
@@ -65,15 +70,15 @@ router.post('/newgame', function(req, res) {
 		break;
 		case 'borg':
 			args = [
-				'-u'+user,
-				'-d'+home+'/public/user/'+user
+				'-u' + user,
+				'-d' + path.join(gameConfig.savePath, user)
 			];
 		break;
 		default:
 		break;
 	}
 	console.log('Creating terminal');
-	var term = pty.fork(path, args, {
+	var term = pty.fork(gameConfig.binPath, args, {
 		name: terminfo,
 		cols: cols,
 		rows: rows,
@@ -81,7 +86,7 @@ router.post('/newgame', function(req, res) {
 	});
 	var match = {
 		term: term
-	}
+	};
 	matches[user] = match;
 	console.log('Created terminal with PID: ' + term.pid);
 	res.end();
