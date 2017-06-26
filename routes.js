@@ -4,26 +4,55 @@ var Account = require('./models/account');
 var router = require('express').Router();
 var pty = require('pty.js');
 var ps = require('ps-node');
+var fs = require('fs');
 
 var matches = {};
 var chatsockets = {};
+var spectatorsockets = [];
 var chatlog = [];
 var keepalive=setInterval(function(){
 	for (var i in matches) {
 		if (typeof(matches[i].socket)!='undefined') {
-			matches[i].socket.ping();
+			try {
+				matches[i].socket.ping();
+			} catch (ex) {
+				
+			}
 		}
 	}
 	for (var i in chatsockets) {
 		chatsockets[i].ping();
 	}
+	for (var i in spectatorsockets) {
+		
+	}
 },10000);
 var home = '/home/angbandlive';
 
 router.get('/', function(req, res) {
-	var livematchinfo;
-	livematches = Object.keys(matches);
-	res.render('index', {title:'GwaRL.xyz', user: req.user, livematches: livematches});
+	var livematches = {};
+	for (var i in matches){
+		livematches[i] = {
+			game: matches[i].game
+		};
+	}
+	var files = {};
+	if (typeof(req.user)!='undefined'){
+		var users = fs.readdirSync(home+'/public/user/');
+		if (users.includes(req.user.username)){
+			var path = home+'/public/user/'+req.user.username+'/';
+			var ls = fs.readdirSync(path);
+			for (var i in ls){
+					var dumps = [];
+					var varfiles = fs.readdirSync(path+ls[i]);
+					for (var j in varfiles){
+							if (varfiles[j].match(/\.(html|txt)/)) dumps.push(varfiles[j]);
+					}
+					files[ls[i]]=dumps;
+			}
+		}
+	}
+	res.render('index', {title:'GwaRL.xyz', user: req.user, livematches: livematches, files: files});
 });
 
 router.post('/newgame', function(req, res) {
@@ -57,7 +86,7 @@ router.post('/newgame', function(req, res) {
 				'-u'+user,
 				'-dapex='+home+'/var/games/'+game+'/apex',
 				'-duser='+home+'/public/user/'+user+'/'+game,
-				'-dsave='+home+'/public/user/'+user+'/'+game+'/save',
+				'-dsave='+home+'/var/games/'+game+'/save',
 				'-mgcu',
 				'--',
 				silwindows
@@ -72,18 +101,31 @@ router.post('/newgame', function(req, res) {
 		default:
 		break;
 	}
-	console.log('Creating terminal');
-	var term = pty.fork(path, args, {
-		name: terminfo,
-		cols: cols,
-		rows: rows,
-		cwd: process.env.HOME
-	});
-	var match = {
-		term: term
+	if (game=='sil'){
+		var savegames = fs.readdirSync(home+'/var/games/'+game+'/save');
+		for (i in savegames){
+			savegames[i]=savegames[i].slice(5);
+		}
+		if (!savegames.includes(user)){
+			args.unshift('-n');
+		}
 	}
-	matches[user] = match;
-	console.log('Created terminal with PID: ' + term.pid);
+	if (typeof(matches[user])=='undefined'){
+		var term = pty.fork(path, args, {
+			name: terminfo,
+			cols: cols,
+			rows: rows,
+			cwd: process.env.HOME
+		});
+		var match = {
+			term: term,
+			game: game
+		}
+		matches[user] = match;
+		console.log('Created terminal with PID: ' + term.pid);
+	} else {
+		console.log('Using existing process with PID: ' + matches[user].term.pid);
+	}
 	res.end();
 });
 
@@ -136,6 +178,7 @@ router.ws('/spectate', function (ws, req) {
 	var player = req.query.watch;
 	var term = matches[player].term;
 	if (typeof(term)!='undefined'){
+		spectatorsockets.push(ws);
 		term.on('data', function(data) {
 			try {
 				ws.send(data);
@@ -181,7 +224,7 @@ router.post('/signin',
 			if (result.length>0){
 				next();
 			} else {
-				if (req.body.username.match(/^[a-zA-Z0-9_]+$/).length>0) {
+				if (req.body.username.match(/^[a-zA-Z0-9_]+$/)!=null) {
 					Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
 						if (err) {
 							console.log('error while user register!', err);

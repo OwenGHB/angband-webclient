@@ -22,7 +22,7 @@
 				<% if (typeof(user) == 'undefined') { %>
 					<% include login %>
 				<% } else { %>
-					<span>Logged in as <%= user.username%> <a href="/logout">Log Out</a></span>
+					Logged in as <span id="username"><%= user.username%></span> <a href="/logout">Log Out</a>
 				<% } %>
 			</div>
 			<label>Font:</label>
@@ -37,6 +37,7 @@
 			<% if (user.username=='Gwarl') { %>
 				<% include debug %>
 			<% } %>
+			<% include dumplinks %>
 			<% include chatroom %>
 		<% } %>
 		</div>

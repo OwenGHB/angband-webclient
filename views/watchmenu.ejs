@@ -14,9 +14,9 @@ function listmatches(livematches){
 		livematch.className = "livematch";
 		var livelink = document.createElement("button");
 		livelink.className = "player";
-		var playername = document.createTextNode(livematches[i]);
+		var playername = document.createTextNode(i+" ("+livematches[i].game+")");
 		livelink.appendChild(playername);
-		livelink.setAttribute('onclick','applyTerminal("spectate","'+livematches[i]+'")');
+		livelink.setAttribute('onclick','applyTerminal("spectate","'+i+'")');
 		watchlist.appendChild(livematch);
 		livematch.appendChild(livelink);
 	}

@@ -1,7 +1,7 @@
 var term;
 var socket;
 var dimensions={rows:50,cols:150};
-var games = ['angband','poschengband','faangband','borg'];
+var games = ['angband','poschengband','faangband','sil','borg'];
 
 function adjustsize(){
 	var needsize = {wide:{},narrow:{}};
@@ -27,18 +27,22 @@ function adjustsize(){
 	if (widescreen) {
 		document.getElementById("menu").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
 		document.getElementById("menu").style.height=Math.ceil(results.y)+'px';
-		document.getElementById("settings").style.height=(13*window.innerHeight/20)+'px';
+		document.getElementById("settings").style.height=Math.floor(6*window.innerHeight/20)+'px';
 		document.getElementById("settings").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
-		document.getElementById("chat").style.height=(7*window.innerHeight/20)+'px';
+		document.getElementById("files").style.height=Math.floor(7*window.innerHeight/20)+'px';
+		document.getElementById("files").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
+		document.getElementById("chat").style.height=Math.floor(7*window.innerHeight/20)+'px';
 		document.getElementById("chat").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
-		document.getElementById("chatlog").style.height=((7*window.innerHeight/20)-Math.max(document.getElementById("chatmessage").offsetHeight,document.getElementById("sendchat").offsetHeight)-1)+'px';
+		document.getElementById("chatlog").style.height=(Math.ceil(7*window.innerHeight/20)-Math.max(document.getElementById("chatmessage").offsetHeight,document.getElementById("sendchat").offsetHeight)-1)+'px';
 	} else {
 		document.getElementById("menu").style.width=window.innerWidth+'px';
 		document.getElementById("menu").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
 		document.getElementById("settings").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
-		document.getElementById("settings").style.width=(13*window.innerWidth/20)+'px';
+		document.getElementById("settings").style.width=Math.floor(6*window.innerWidth/20)+'px';
+		document.getElementById("files").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
+		document.getElementById("files").style.width=Math.floor(7*window.innerWidth/20)+'px';
 		document.getElementById("chat").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
-		document.getElementById("chat").style.width=(7*window.innerWidth/20)+'px';
+		document.getElementById("chat").style.width=Math.floor(7*window.innerWidth/20)+'px';
 		document.getElementById("chatlog").style.height=(window.innerHeight-Math.ceil(results.y)-Math.max(document.getElementById("chatmessage").offsetHeight,document.getElementById("sendchat").offsetHeight)-1)+'px';
 	}
 }

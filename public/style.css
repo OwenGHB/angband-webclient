@@ -46,6 +46,10 @@ input,button,select {
 #settings {
 	float: left;
 }
+#files {
+	float: left;
+	overflow-y: scroll;
+}
 #chat {
 	float: left;
 }
