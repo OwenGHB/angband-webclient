@@ -18,13 +18,17 @@ var keepalive=setInterval(function(){
 			} catch (ex) {
 				
 			}
+			for (var j in matches[i].spectators) {
+				try {
+					matches[i].spectators[j].ping();
+				} catch (ex) {
+					
+				}
+			}
 		}
 	}
 	for (var i in chatsockets) {
 		chatsockets[i].ping();
-	}
-	for (var i in spectatorsockets) {
-		
 	}
 },10000);
 var home = '/home/angbandlive';
@@ -119,7 +123,8 @@ router.post('/newgame', function(req, res) {
 		});
 		var match = {
 			term: term,
-			game: game
+			game: game,
+			spectators: {}
 		}
 		matches[user] = match;
 		console.log('Created terminal with PID: ' + term.pid);
@@ -131,7 +136,7 @@ router.post('/newgame', function(req, res) {
 
 router.ws('/play', function (ws, req) {
 	var player = req.user.username;
-	matches[player].socket=ws;
+	if (typeof(matches[player].socket)!='undefined') matches[player].socket=ws;
 	var term = matches[player].term;
 	term.on('data', function(data) {
 		try {
@@ -177,8 +182,7 @@ router.ws('/play', function (ws, req) {
 router.ws('/spectate', function (ws, req) {
 	var player = req.query.watch;
 	var term = matches[player].term;
-	if (typeof(term)!='undefined'){
-		spectatorsockets.push(ws);
+	if (typeof(term)!='undefined') {
 		term.on('data', function(data) {
 			try {
 				ws.send(data);
@@ -186,6 +190,13 @@ router.ws('/spectate', function (ws, req) {
 				// The WebSocket is not open, ignore
 			}
 		});
+		if (typeof(req.user)!='undefined') {
+			var spectator = req.user.username;
+			matches[player].spectators[spectator]=ws;
+			ws.on('close', function() {
+				if (typeof(matches[player])!='undefined') delete matches[player].spectators[spectator];
+			});
+		}
 	}
 });
 
