@@ -8,7 +8,6 @@ var fs = require('fs');
 
 var matches = {};
 var chatsockets = {};
-var spectatorsockets = [];
 var chatlog = [];
 var keepalive=setInterval(function(){
 	for (var i in matches) {
@@ -136,7 +135,7 @@ router.post('/newgame', function(req, res) {
 
 router.ws('/play', function (ws, req) {
 	var player = req.user.username;
-	if (typeof(matches[player].socket)!='undefined') matches[player].socket=ws;
+	matches[player].socket=ws;
 	var term = matches[player].term;
 	term.on('data', function(data) {
 		try {
@@ -150,6 +149,7 @@ router.ws('/play', function (ws, req) {
 	});
 	ws.on('close', function () {
 		if (player!='borg'){
+			console.log('Closing terminal ' + term.pid);
 			term.kill();
 			//kill the process if it hasn't already
 			ps.lookup({ pid: term.pid }, function(err, resultList ) {
@@ -167,10 +167,9 @@ router.ws('/play', function (ws, req) {
 					});				
 				}
 				else {
-					console.log( 'No such process found!' );
+					console.log( 'Process %s was not found, expect user exited cleanly.',term.pid );
 				}
 			});
-			console.log('Closed terminal ' + term.pid);
 			// Clean things up
 			delete matches[player];
 		}
@@ -191,9 +190,11 @@ router.ws('/spectate', function (ws, req) {
 			}
 		});
 		if (typeof(req.user)!='undefined') {
+			console.log(req.user.username+' is watching '+player);
 			var spectator = req.user.username;
 			matches[player].spectators[spectator]=ws;
 			ws.on('close', function() {
+				console.log(req.user.username+' is no longer watching '+player);
 				if (typeof(matches[player])!='undefined') delete matches[player].spectators[spectator];
 			});
 		}
