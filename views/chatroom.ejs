@@ -1,17 +1,27 @@
 <div id="chat">
+	<div id="usercount">Users online:</div>
 	<div id="chatlog"></div>
 	<input type="text" id="chatmessage"></textarea>
 	<button id="sendchat">Send</button>
 </div>
 <script>
-var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/chat';
+var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
 var chatsocket = new WebSocket(chatURL);
 chatsocket.addEventListener('message', function (ev) {
-	document.getElementById("chatlog").innerHTML+=ev.data+'<br>';
-	document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+	var data = JSON.parse(ev.data);
+	if (data.eventtype=='chat'||data.eventtype=='userstatus') {
+		document.getElementById("chatlog").innerHTML+=data.content+'<br>';
+		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+	} else if (data.eventtype=='usercount') {
+		document.getElementById("usercount").innerHTML=data.content;
+	}
 });
 chatsocket.addEventListener('close', function () {
 	document.getElementById("chatlog").innerHTML+='***Disconnected***<br>';
+	document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+});
+chatsocket.addEventListener('open', function () {
+	document.getElementById("chatlog").innerHTML+='Connected <br>';
 	document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
 });
 document.getElementById("sendchat").setAttribute('onClick','chat()');

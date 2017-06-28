@@ -7,7 +7,7 @@ var ps = require('ps-node');
 var fs = require('fs');
 
 var matches = {};
-var chatsockets = {};
+var metasockets = {};
 var chatlog = [];
 var keepalive=setInterval(function(){
 	for (var i in matches) {
@@ -26,8 +26,8 @@ var keepalive=setInterval(function(){
 			}
 		}
 	}
-	for (var i in chatsockets) {
-		chatsockets[i].ping();
+	for (var i in metasockets) {
+		metasockets[i].ping();
 	}
 },10000);
 var home = '/home/angbandlive';
@@ -130,6 +130,13 @@ router.post('/newgame', function(req, res) {
 	} else {
 		console.log('Using existing process with PID: ' + matches[user].term.pid);
 	}
+	for (var i in metasockets){
+		try {
+			metasockets[i].send(JSON.stringify({eventtype: 'userstatus', content: req.user.username+' started playing '+game}));
+		} catch (ex) {
+			// The WebSocket is not open, ignore
+		}
+	}
 	res.end();
 });
 
@@ -143,11 +150,18 @@ router.ws('/play', function (ws, req) {
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		}
+		if (typeof(matches[player])!='undefined') for (var i in matches[player].spectators) {
+			try {
+				matches[player].spectators[i].send(data);
+			} catch (ex) {
+				// The WebSocket is not open, ignore
+			}
+		}
 	});
 	ws.on('message', function(msg) {
 		term.write(msg);
 	});
-	ws.on('close', function () {
+	ws.once('close', function () {
 		if (player!='borg'){
 			console.log('Closing terminal ' + term.pid);
 			term.kill();
@@ -182,26 +196,27 @@ router.ws('/spectate', function (ws, req) {
 	var player = req.query.watch;
 	var term = matches[player].term;
 	if (typeof(term)!='undefined') {
-		term.on('data', function(data) {
-			try {
-				ws.send(data);
-			} catch (ex) {
-				// The WebSocket is not open, ignore
-			}
-		});
 		if (typeof(req.user)!='undefined') {
 			console.log(req.user.username+' is watching '+player);
 			var spectator = req.user.username;
 			matches[player].spectators[spectator]=ws;
-			ws.on('close', function() {
+			ws.once('close', function() {
 				console.log(req.user.username+' is no longer watching '+player);
 				if (typeof(matches[player])!='undefined') delete matches[player].spectators[spectator];
+			});
+		} else {
+			term.on('data', function(data) {
+				try {
+					ws.send(data);
+				} catch (ex) {
+					// The WebSocket is not open, ignore
+				}
 			});
 		}
 	}
 });
 
-router.ws('/chat', function (ws, req) {
+router.ws('/meta', function (ws, req) {
 	if (typeof(req.user.username)!='undefined'){
 		for (var i in chatlog){
 			try {
@@ -210,22 +225,40 @@ router.ws('/chat', function (ws, req) {
 				// The WebSocket is not open, ignore
 			}
 		}
-		chatsockets[req.user.username] = ws;
-		chatsockets[req.user.username].on('message', function(msg) {
-			chatlog.unshift(req.user.username+': '+msg);
+		ws.send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+metasockets.length}));
+		metasockets[req.user.username] = ws;
+		for (var i in metasockets){
+			try {
+				metasockets[i].send(JSON.stringify({eventtype: 'userstatus', content: req.user.username+' is now online'}));
+				metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length}));
+			} catch (ex) {
+				// The WebSocket is not open, ignore
+			}
+		}
+		metasockets[req.user.username].on('message', function(msg) {
+			var message = JSON.stringify({eventtype: 'chat', content: req.user.username+': '+msg})
+			chatlog.unshift(message);
 			while (chatlog.length>20) {
 				chatlog.pop();
 			}
-			for (var i in chatsockets){
+			for (var i in metasockets){
 				try {
-					chatsockets[i].send(req.user.username+': '+msg);
+					metasockets[i].send(message);
 				} catch (ex) {
 					// The WebSocket is not open, ignore
 				}
 			}
 		});
-		chatsockets[req.user.username].on('close', function() {
-			delete chatsockets[req.user.username];
+		metasockets[req.user.username].once('close', function() {
+			delete metasockets[req.user.username];
+			for (var i in metasockets){
+				try {
+					metasockets[i].send(JSON.stringify({eventtype: 'userstatus', content: req.user.username+' is now offline'}));
+					metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length}));
+				} catch (ex) {
+					// The WebSocket is not open, ignore
+				}
+			}
 		});
 	}
 });
