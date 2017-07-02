@@ -9,7 +9,10 @@ var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.p
 var chatsocket = new WebSocket(chatURL);
 chatsocket.addEventListener('message', function (ev) {
 	var data = JSON.parse(ev.data);
-	if (data.eventtype=='chat'||data.eventtype=='userstatus') {
+	if (data.eventtype=='chat') {
+		document.getElementById("chatlog").innerHTML+=data.content+'<br>';
+		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+	} else if (data.eventtype=='userstatus') {
 		document.getElementById("chatlog").innerHTML+=data.content+'<br>';
 		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
 	} else if (data.eventtype=='usercount') {

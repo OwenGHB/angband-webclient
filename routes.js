@@ -31,6 +31,11 @@ var keepalive=setInterval(function(){
 	}
 },10000);
 var home = '/home/angbandlive';
+//lazy hack because I promised Lina a purple name if she won
+var winners = [
+	'LinaButterfly',
+	'Ingwe_Ingweron'
+];
 
 router.get('/', function(req, res) {
 	var livematches = {};
@@ -229,14 +234,33 @@ router.ws('/meta', function (ws, req) {
 		metasockets[req.user.username] = ws;
 		for (var i in metasockets){
 			try {
-				metasockets[i].send(JSON.stringify({eventtype: 'userstatus', content: req.user.username+' is now online'}));
-				metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length}));
+				//should be if (req.user.winner)
+				if (winners.includes(req.user.username)){
+					metasockets[i].send(JSON.stringify({
+						eventtype: 'userstatus', content: '<span class="playername winner">'+req.user.username+'</span> is now online'
+					}));
+				} else {
+					metasockets[i].send(JSON.stringify({
+						eventtype: 'userstatus', content: '<span class="playername">'+req.user.username+'</span> is now online'
+					}));
+				}
+				metasockets[i].send(JSON.stringify({
+					eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length
+				}));
 			} catch (ex) {
 				// The WebSocket is not open, ignore
 			}
 		}
 		metasockets[req.user.username].on('message', function(msg) {
-			var message = JSON.stringify({eventtype: 'chat', content: req.user.username+': '+msg})
+			if (winners.includes(req.user.username)){
+				var message = JSON.stringify({
+					eventtype: 'chat', content: '<span class="playername winner">'+req.user.username+'</span>: '+msg
+				});
+			} else {
+				var message = JSON.stringify({
+					eventtype: 'chat', content: '<span class="playername">'+req.user.username+'</span>: '+msg
+				});
+			}
 			chatlog.unshift(message);
 			while (chatlog.length>20) {
 				chatlog.pop();

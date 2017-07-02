@@ -23,6 +23,9 @@ input,button,select {
     background: black;
 	color: lightgray;
 }
+.winner{
+	color: #BB22BB
+}
 .terminal {
   float: left;
   color: white;
