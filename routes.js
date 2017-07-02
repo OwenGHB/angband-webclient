@@ -200,24 +200,14 @@ router.ws('/play', function (ws, req) {
 router.ws('/spectate', function (ws, req) {
 	var player = req.query.watch;
 	var term = matches[player].term;
-	if (typeof(term)!='undefined') {
-		if (typeof(req.user)!='undefined') {
-			console.log(req.user.username+' is watching '+player);
-			var spectator = req.user.username;
-			matches[player].spectators[spectator]=ws;
-			ws.once('close', function() {
-				console.log(req.user.username+' is no longer watching '+player);
-				if (typeof(matches[player])!='undefined') delete matches[player].spectators[spectator];
-			});
-		} else {
-			term.on('data', function(data) {
-				try {
-					ws.send(data);
-				} catch (ex) {
-					// The WebSocket is not open, ignore
-				}
-			});
-		}
+	if (typeof(term)!='undefined'&&typeof(req.user)!='undefined') {
+		console.log(req.user.username+' is watching '+player);
+		var spectator = req.user.username;
+		matches[player].spectators[spectator]=ws;
+		ws.once('close', function() {
+			console.log(req.user.username+' is no longer watching '+player);
+			if (typeof(matches[player])!='undefined') delete matches[player].spectators[spectator];
+		});
 	}
 });
 
@@ -234,16 +224,6 @@ router.ws('/meta', function (ws, req) {
 		metasockets[req.user.username] = ws;
 		for (var i in metasockets){
 			try {
-				//should be if (req.user.winner)
-				if (winners.includes(req.user.username)){
-					metasockets[i].send(JSON.stringify({
-						eventtype: 'userstatus', content: '<span class="playername winner">'+req.user.username+'</span> is now online'
-					}));
-				} else {
-					metasockets[i].send(JSON.stringify({
-						eventtype: 'userstatus', content: '<span class="playername">'+req.user.username+'</span> is now online'
-					}));
-				}
 				metasockets[i].send(JSON.stringify({
 					eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length
 				}));
@@ -252,6 +232,7 @@ router.ws('/meta', function (ws, req) {
 			}
 		}
 		metasockets[req.user.username].on('message', function(msg) {
+			//should be if (req.user.winner)
 			if (winners.includes(req.user.username)){
 				var message = JSON.stringify({
 					eventtype: 'chat', content: '<span class="playername winner">'+req.user.username+'</span>: '+msg
@@ -277,7 +258,6 @@ router.ws('/meta', function (ws, req) {
 			delete metasockets[req.user.username];
 			for (var i in metasockets){
 				try {
-					metasockets[i].send(JSON.stringify({eventtype: 'userstatus', content: req.user.username+' is now offline'}));
 					metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length}));
 				} catch (ex) {
 					// The WebSocket is not open, ignore

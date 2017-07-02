@@ -1,14 +1,52 @@
 var term;
 var socket;
 var dimensions={rows:50,cols:150};
-var games = ['angband','poschengband','faangband','sil','borg'];
+var games = [
+	{
+		name:'angband',
+		longname:'Angband 4.1.0',
+		desc:"The latest release of the classic dungeon exploration game. Descended from Moria."
+	},
+	{
+		name:'poschengband',
+		longname:'PosChengband 6.1.0b',
+		desc:"One of the most popular variants, and chock full of new content. Includes wilderness. Descended from Zangband."
+	},
+	{
+		name:'sil',
+		longname:'Sil 1.3.0',
+		desc:"Heavily redesigned gameplay mechanics to be a shorter but more tactically intricate game. Very faithful to Tolkein. Descended from NPPAngband"
+	},
+	{
+		name:'faangband',
+		longname:'FAangband 1.4.4',
+		desc:"Redesigned gameplay mechanics, full of new features and new content, including wilderness levels. Faithful to Tolkein. Descended from Oangband"
+	},
+	{
+		name:'borg',
+		longname:'Angband 3.4.1 with APWborg',
+		desc:'Last version of vanilla angband to support the borg, compiled with the most recent version of the APWborg'
+	},
+	{
+		name:'sangband',
+		longname:'Sangband 1.0.0.',
+		desc:'Skills angband'
+	}
+];
+var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
+var chatsocket = new WebSocket(chatURL);
 
 function adjustsize(){
-	var needsize = {wide:{},narrow:{}};
-	needsize.wide.cols = dimensions.cols+35;
-	needsize.wide.rows = dimensions.rows;
-	needsize.narrow.cols = dimensions.cols;
-	needsize.narrow.rows = dimensions.rows+10;
+	var needsize = {
+		wide:{
+			dimensions.cols+35,
+			dimensions.rows
+		},
+		narrow:{
+			dimensions.cols,
+			dimensions.rows+10
+		}
+	};
 	for (var i in needsize) {
 		var optheight = Math.floor(window.innerHeight/needsize[i].rows);
 		var optwidth = Math.floor((window.innerWidth/needsize[i].cols)/testfont(optheight,dimensions,document.body.style.fontFamily).ratio);
@@ -98,5 +136,101 @@ function applyTerminal(mode, qualifier, panels) {
 		socket.addEventListener('message', function (ev) {
 			term.write(ev.data);
 		});
+	}
+}
+function listmatches(){
+	var watchmenu=document.getElementById("watchmenu");
+	var livematches = JSON.parse(watchmenu.innerHTML);
+	watchmenu.innerHTML = 'Live games: ';
+	var watchlist = document.createElement("ul");
+	watchmenu.appendChild(watchlist);
+	for (var i in livematches) {
+		var livematch = document.createElement("li");
+		livematch.className = "livematch";
+		var livelink = document.createElement("button");
+		livelink.className = "player";
+		var playername = document.createTextNode(i+" ("+livematches[i].game+")");
+		livelink.appendChild(playername);
+		livelink.setAttribute('onclick','applyTerminal("spectate","'+i+'")');
+		watchlist.appendChild(livematch);
+		livematch.appendChild(livelink);
+	}
+}
+function listfiles(){
+	var filelinks = JSON.parse(document.getElementById("files").innerHTML);
+	var list = '<ul>';
+	for (var i in filelinks){
+		list+='<li>'+i+'<ul>';
+		for (var j in filelinks[i]){
+				list+='<li>';
+				list+='<a href="/user/'+document.getElementById("username").innerHTML+'/'+i+'/'+filelinks[i][j]+'">';
+				list+=filelinks[i][j]
+				list+='</a>';
+				list+='</li>';
+		}
+		list+='</ul></li>';
+	}
+	list += '</ul>';
+	document.getElementById("files").innerHTML=list;
+}
+function initmeta(chatsocket){
+	chatsocket.addEventListener('message', function (ev) {
+		var data = JSON.parse(ev.data);
+		if (data.eventtype=='chat') {
+			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
+			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+		} else if (data.eventtype=='userstatus') {
+			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
+			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+		} else if (data.eventtype=='usercount') {
+			document.getElementById("usercount").innerHTML=data.content;
+		}
+	});
+	chatsocket.addEventListener('close', function () {
+		document.getElementById("chatlog").innerHTML+='***Disconnected***<br>';
+		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+	});
+	chatsocket.addEventListener('open', function () {
+		document.getElementById("chatlog").innerHTML+='Connected <br>';
+		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+	});
+	document.getElementById("sendchat").setAttribute('onClick','chat()');
+	document.getElementById("chatmessage").onkeypress = function(e){
+		if (!e) e = window.event;
+		var keyCode = e.keyCode || e.which;
+		if (keyCode == '13'){
+			chat();
+		}
+	}
+}
+function chat(){
+	chatsocket.send(document.getElementById("chatmessage").value);
+	document.getElementById("chatmessage").value='';
+}
+function initcontrols(){
+	for (var i in games) {
+		if (i==0) document.getElementById("gamedescription").innerHTML=games[i].desc;
+		var gameoption = document.createElement("option");
+		gameoption.value=games[i].name;
+		gameoption.appendChild(document.createTextNode(games[i].longname));
+		document.getElementById("gameselect").appendChild(gameoption);
+	}
+	document.getElementById("gameselect").addEventListener("change",function(){
+		document.getElementById("gamedescription").innerHTML=games[i].desc;
+	});
+	document.getElementById('playbutton').setAttribute('onclick','applyTerminal("play","'+document.getElementById("gameselect").value+'",'+document.getElementById("panels").value+')');
+	document.getElementById("columns").value=dimensions.cols;
+	document.getElementById("rows").value=dimensions.rows;
+	document.getElementById("columns").addEventListener("input",function(){
+		dimensions.cols=document.getElementById("columns").value;
+		adjustsize();
+	});
+	document.getElementById("rows").addEventListener("input",function(){
+		dimensions.rows=document.getElementById("rows").value;
+		adjustsize();
+	});
+	document.getElementById("panels").oninput = function(){
+		var playbutton = document.getElementById('playbutton');
+		if (playbutton) playbutton.setAttribute('onclick','applyTerminal("play","'+document.getElementById("gameselect").value+'",'+document.getElementById("panels").value+')');
 	}
 }
