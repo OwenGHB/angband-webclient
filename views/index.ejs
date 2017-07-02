@@ -10,6 +10,7 @@
   <body>
 	<% if (typeof(user) == 'undefined') { %>
 		<img id="logo" src="logo.png"></img>
+		<span>Create an account to join in. If your username is unused it will be created ('test' is long since taken). Otherwise please try again.<span>
 		<form id="login-form" method="post">
 			<label>Username:</label>
 			<input type="text" name="username"/></br>
@@ -17,32 +18,25 @@
 			<input type="password" name="password"/></br>
 		</form>
 		<button type="submit" onclick="signIn()">Sign in</button>
-		<script>
-			var loginform = document.getElementById("login-form");
-			function signIn(){
-				loginform.action = "/signin";
-				loginform.submit();
-			}
-		</script>
 	<% } else { %>
 		<div id="container">
-				<div id="terminal-container">
-					<img id="logo" src="logo.png"></img>
-					<div id="playmenu">
-						<label>Game:</label>
-						<select id="gameselect">
-						</select>
-						<div id="gamedescription"></div>
-						<label style="display:none;">columns</label><input style="display:none;" id="columns" type="number" min="80" max="215">
-						<label style="display:none;">rows</label><input style="display:none;" id="rows" type="number" min="47" max="66">
-						<label>subwindows</label><input id="panels" type="number" min="1" max="6" value="1">
-						<button id="playbutton">Play</button>
-					</div>
-					<div id="watchmenu">
-						<%= JSON.stringify(livematches) %>
-					</div>
+			<div id="terminal-container">
+				<img id="logo" src="logo.png"></img>
+				<div id="playmenu">
+					<label>Game:</label>
+					<select id="gameselect">
+					</select>
+					<div id="gamedescription"></div>
+					<label style="display:none;">columns</label><input style="display:none;" id="columns" type="number" min="80" max="215">
+					<label style="display:none;">rows</label><input style="display:none;" id="rows" type="number" min="47" max="66">
+					<label>subwindows</label><input id="panels" type="number" min="1" max="6" value="1">
+					<button id="playbutton">Play</button>
 				</div>
-				<div id="menu">
+				<div id="watchmenu">
+					<%= JSON.stringify(livematches) %>
+				</div>
+			</div>
+			<div id="menu">
 				<div id="settings">
 					<div id="userinfo">
 						Logged in as <span id="username"><%= user.username%></span> <a href="/logout">Log Out</a>
@@ -68,19 +62,23 @@
 					<input type="text" id="chatmessage"></textarea>
 					<button id="sendchat">Send</button>
 				</div>
-				</div>
+			</div>
 		</div>
-		<script>
-			document.getElementById('fontselect').onchange = function(){
-				document.body.style.fontFamily=document.getElementById('fontselect').value;
-				adjustsize();
-			};
-			document.body.style.fontFamily=document.getElementById('fontselect').value;
-			initmeta();
-			listmatches();
-			initcontrols();
-			adjustsize();
-		</script>
 	<% } %>
+	<script>
+	var loginform =  document.getElementById('loginform');
+	if (typeof(loginform)!='undefined') {
+		document.getElementById('fontselect').onchange = function(){
+			document.body.style.fontFamily=document.getElementById('fontselect').value;
+			adjustsize();
+		};
+		document.body.style.fontFamily=document.getElementById('fontselect').value;
+		initmeta(chatsocket);
+		listfiles();
+		listmatches();
+		initcontrols();
+		adjustsize();
+	}
+	</script>
   </body>
 </html>

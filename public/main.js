@@ -5,12 +5,12 @@ var games = [
 	{
 		name:'angband',
 		longname:'Angband 4.1.0',
-		desc:"The latest release of the classic dungeon exploration game. Descended from Moria."
+		desc:"The latest release of the classic dungeon exploration game inspired by the work of JRR Tolkein. Descended from Moria."
 	},
 	{
 		name:'poschengband',
 		longname:'PosChengband 6.1.0b',
-		desc:"One of the most popular variants, and chock full of new content. Includes wilderness. Descended from Zangband."
+		desc:"One of the most popular variants, bursting with new content. Includes wilderness. Descended from Zangband."
 	},
 	{
 		name:'sil',
@@ -26,25 +26,21 @@ var games = [
 		name:'borg',
 		longname:'Angband 3.4.1 with APWborg',
 		desc:'Last version of vanilla angband to support the borg, compiled with the most recent version of the APWborg'
-	},
-	{
-		name:'sangband',
-		longname:'Sangband 1.0.0.',
-		desc:'Skills angband'
 	}
 ];
+var game = 0;
 var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
 var chatsocket = new WebSocket(chatURL);
 
 function adjustsize(){
 	var needsize = {
 		wide:{
-			dimensions.cols+35,
-			dimensions.rows
+			cols: dimensions.cols+35,
+			rows: dimensions.rows
 		},
 		narrow:{
-			dimensions.cols,
-			dimensions.rows+10
+			cols: dimensions.cols,
+			rows: dimensions.rows+10
 		}
 	};
 	for (var i in needsize) {
@@ -216,7 +212,12 @@ function initcontrols(){
 		document.getElementById("gameselect").appendChild(gameoption);
 	}
 	document.getElementById("gameselect").addEventListener("change",function(){
-		document.getElementById("gamedescription").innerHTML=games[i].desc;
+		document.getElementById("gamedescription").innerHTML=games.find(function(game){
+			var ismatch = false;
+			if (game.name==document.getElementById("gameselect").value) ismatch = true;
+			return ismatch;
+		}).desc;
+		document.getElementById('playbutton').setAttribute('onclick','applyTerminal("play","'+document.getElementById("gameselect").value+'",'+document.getElementById("panels").value+')');
 	});
 	document.getElementById('playbutton').setAttribute('onclick','applyTerminal("play","'+document.getElementById("gameselect").value+'",'+document.getElementById("panels").value+')');
 	document.getElementById("columns").value=dimensions.cols;
@@ -233,4 +234,9 @@ function initcontrols(){
 		var playbutton = document.getElementById('playbutton');
 		if (playbutton) playbutton.setAttribute('onclick','applyTerminal("play","'+document.getElementById("gameselect").value+'",'+document.getElementById("panels").value+')');
 	}
+}
+function signIn(){
+	var loginform = document.getElementById("login-form");
+	loginform.action = "/signin";
+	loginform.submit();
 }
