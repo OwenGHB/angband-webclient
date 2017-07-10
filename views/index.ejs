@@ -8,33 +8,35 @@
 	<script src="/main.js"></script>
   </head>
   <body>
-	<% if (typeof(user) == 'undefined') { %>
-		<img id="logo" src="logo.png"></img>
-		<span>Create an account to join in. If your username is unused it will be created ('test' is long since taken). Otherwise please try again.<span>
-		<form id="login-form" method="post">
-			<label>Username:</label>
-			<input type="text" name="username"/></br>
-			<label>Password:</label>
-			<input type="password" name="password"/></br>
-		</form>
-		<button type="submit" onclick="signIn()">Sign in</button>
-	<% } else { %>
 		<div id="container">
-			<div id="terminal-container">
+		<% if (typeof(user) == 'undefined') { %>
+			<img id="logo" src="logo.png"></img></br>
+			<span>Create an account to join in. If your username is unused it will be created. Otherwise please try again.<span>
+			<form id="login-form" method="post">
+				<label>Username:</label>
+				<input type="text" name="username"/></br>
+				<label>Password:</label>
+				<input type="password" name="password"/></br>
+			</form>
+			<button type="submit" onclick="signIn()">Sign in</button>
+		<% } else { %>
+			<div id="mainmenu">
 				<img id="logo" src="logo.png"></img>
 				<div id="playmenu">
 					<label>Game:</label>
 					<select id="gameselect">
 					</select>
 					<div id="gamedescription"></div>
-					<label style="display:none;">columns</label><input style="display:none;" id="columns" type="number" min="80" max="215">
-					<label style="display:none;">rows</label><input style="display:none;" id="rows" type="number" min="47" max="66">
-					<label>subwindows</label><input id="panels" type="number" min="1" max="6" value="1">
+					<label style="display:none;">columns</label>
+					<input style="display:none;" id="columns" type="number" min="80" max="215">
+					<label style="display:none;">rows</label>
+					<input style="display:none;" id="rows" type="number" min="47" max="66">
+					<label>subwindows:</label><input id="panels" type="number" min="1" max="6" value="1">
 					<button id="playbutton">Play</button>
 				</div>
-				<div id="watchmenu">
-					<%= JSON.stringify(livematches) %>
-				</div>
+				<div id="watchmenu"></div>
+			</div>
+			<div id="terminal-container">
 			</div>
 			<div id="menu">
 				<div id="settings">
@@ -49,13 +51,12 @@
 						<option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
 						<option value='"Lucida Console", monospace'>Lucida Console</option>
 					</select> 
-				</div>
 				<% if (user.username=='Gwarl') { %>
 					<div id="debug">
 					</div>
 				<% } %>
+				</div>
 				<div id="files">
-					<%= JSON.stringify(files) %>
 				</div>
 				<div id="chat">
 					<div id="chatlog"></div>
@@ -63,21 +64,15 @@
 					<button id="sendchat">Send</button>
 				</div>
 			</div>
+		<% } %>
 		</div>
-	<% } %>
 	<script>
 	var loginform =  document.getElementById('loginform');
 	if (typeof(loginform)!='undefined') {
-		document.getElementById('fontselect').onchange = function(){
-			document.body.style.fontFamily=document.getElementById('fontselect').value;
-			adjustsize();
-		};
-		document.body.style.fontFamily=document.getElementById('fontselect').value;
-		initmeta(chatsocket);
-		listfiles();
-		listmatches();
+		initsettings();
 		initcontrols();
 		adjustsize();
+		initmeta();
 	}
 	</script>
   </body>

@@ -10,21 +10,35 @@ a {
     src: url(YOzFontOTWD.ttf);
 }
 body {	
+
+}
+body,input,button,select,option {	
     font-family: monospace;
 	margin: 0;
 	padding: 0;
+	background: black;
+	color: lightgray;
+	border: none;
 }
 input,button,select {
-	font-family: monospace;
-	background-color: #000000;
-	color: lightgray;
+	background: transparent;
+	outline-offset: -2px;
+	outline: 2px outset darkgray;
+	padding: 2px;
+	margin: 1px;
+}
+input:hover,button:hover,select:hover {
+	outline: 2px outset white;
 }
 #container {
     background: black;
 	color: lightgray;
 }
 .winner{
-	color: #BB22BB
+	color: #AF11AF;
+}
+.silwinner{
+	color: #EFEF11;
 }
 .terminal {
   float: left;
@@ -39,7 +53,11 @@ input,button,select {
 
 }
 #terminal-container {
+	display: none;
 	background-color: black;
+	float: left;
+}
+#mainmenu {
 	float: left;
 }
 #menu {

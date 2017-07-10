@@ -8,14 +8,9 @@ var games = [
 		desc:"The latest release of the classic dungeon exploration game inspired by the work of JRR Tolkein. Descended from Moria."
 	},
 	{
-		name:'poschengband',
-		longname:'PosChengband 6.1.0b',
-		desc:"One of the most popular variants, bursting with new content. Includes wilderness. Descended from Zangband."
-	},
-	{
-		name:'sil',
-		longname:'Sil 1.3.0',
-		desc:"Heavily redesigned gameplay mechanics to be a shorter but more tactically intricate game. Very faithful to Tolkein. Descended from NPPAngband"
+		name:'competition',
+		longname:'Competition 207',
+		desc:"Aldarion is a Dunadan who has a knack for reading arcane runes. Unfortunately, he took that as a sign that he should be a Valar-slaying mage, and he's regretting his life decisions at the moment."
 	},
 	{
 		name:'faangband',
@@ -23,14 +18,61 @@ var games = [
 		desc:"Redesigned gameplay mechanics, full of new features and new content, including wilderness levels. Faithful to Tolkein. Descended from Oangband"
 	},
 	{
-		name:'borg',
-		longname:'Angband 3.4.1 with APWborg',
-		desc:'Last version of vanilla angband to support the borg, compiled with the most recent version of the APWborg'
+		name:'nppangband',
+		longname:'NPPAngband 7.1.0',
+		desc:"Attempts to preserve classic angband gameplay but with various improvements."
+	},
+	{
+		name:'nppmoria',
+		longname:'NPPMoria 7.1.0',
+		desc:"A recreation of Moria using the NPPAngband engine."
+	},
+	{
+		name:'oangband',
+		longname:'Oangband 1.1.0u',
+		desc:'Opinion angband. Redesigned gameplay mechanics and extra content. Very influential'
+	},
+	{
+		name:'poschengband',
+		longname:'PosChengband 6.1.0b',
+		desc:"One of the most popular variants, bursting with new content. Includes wilderness. Descended from Zangband."
+	},
+	{
+		name:'sangband',
+		longname:'Sangband 1.0.0',
+		desc:'Skills Angband.'
+	},
+	{
+		name:'sil',
+		longname:'Sil 1.3.0',
+		desc:"Heavily redesigned gameplay mechanics to be a shorter but more tactically intricate game. Very faithful to Tolkein. Descended from NPPAngband"
+	},
+	{
+		name:'steamband',
+		longname:'Steamband 0.4.1f',
+		desc:'Steampunk Angband. Please use your site username for your character name if playing, or else progress will be lost.'
+	},
+	{
+		name:'tome',
+		longname:'ToME 2.3.6-ah',
+		desc:"Full of new content, quests and a large open world. Descended from Zangband."
+	},
+	{
+		name:'umoria',
+		longname:'UMoria 5.6',
+		desc:'A restoration of the original Moria game.'
+	},
+	{
+		name:'unangband',
+		longname:'UnAngband 6.5.0a',
+		desc:"Influential variant full of new content with new quests, classes and locations."
+	},
+	{
+		name:'zangband',
+		longname:'ZAngband 2.7.5pre1',
+		desc:"Massively influential variant. New races, classes, and an overworld."
 	}
 ];
-var game = 0;
-var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
-var chatsocket = new WebSocket(chatURL);
 
 function adjustsize(){
 	var needsize = {
@@ -56,6 +98,8 @@ function adjustsize(){
 	document.getElementById("container").style.height=window.innerHeight+'px';
 	document.getElementById("container").style.fontSize=fontSize+'px';
 	document.getElementById("container").style.lineHeight=lineHeight+'px';
+	document.getElementById("mainmenu").style.width=Math.ceil(results.x)+'px';
+	document.getElementById("mainmenu").style.height=Math.ceil(results.y)+'px';
 	document.getElementById("terminal-container").style.width=Math.ceil(results.x)+'px';
 	document.getElementById("terminal-container").style.height=Math.ceil(results.y)+'px';
 	if (widescreen) {
@@ -103,6 +147,10 @@ function testfont(lineHeight,dimensions,fontFamily) {
 	return results;
 }
 function applyTerminal(mode, qualifier, panels) {
+	var debug = document.getElementById('debug');
+	var child = document.getElementById("p1");
+	document.getElementById("container").removeChild(document.getElementById("mainmenu"));
+	document.getElementById("terminal-container").style.display="block";
 	var terminalContainer=document.getElementById("terminal-container");
 	terminalContainer.innerHTML='';
 	var terminfo = 'xterm-256color';
@@ -121,9 +169,15 @@ function applyTerminal(mode, qualifier, panels) {
 			socket = new WebSocket(socketURL);
 			term.on('data', function(data) {
 				socket.send(data);
+				if (false) {
+					debug.innerHTML=JSON.stringify(data);
+				}
 			});
 			socket.addEventListener('message', function (ev) {
 				term.write(ev.data);
+			});
+			socket.addEventListener('close', function(){
+
 			});
 		});  
 	} else if (mode=='spectate') {
@@ -132,11 +186,13 @@ function applyTerminal(mode, qualifier, panels) {
 		socket.addEventListener('message', function (ev) {
 			term.write(ev.data);
 		});
+		socket.addEventListener('close', function(){
+
+		});
 	}
 }
-function listmatches(){
+function listmatches(livematches){
 	var watchmenu=document.getElementById("watchmenu");
-	var livematches = JSON.parse(watchmenu.innerHTML);
 	watchmenu.innerHTML = 'Live games: ';
 	var watchlist = document.createElement("ul");
 	watchmenu.appendChild(watchlist);
@@ -146,14 +202,19 @@ function listmatches(){
 		var livelink = document.createElement("button");
 		livelink.className = "player";
 		var playername = document.createTextNode(i+" ("+livematches[i].game+")");
+		var idletime = document.createTextNode(" idle "+livematches[i].idletime+"0 seconds");
 		livelink.appendChild(playername);
 		livelink.setAttribute('onclick','applyTerminal("spectate","'+i+'")');
 		watchlist.appendChild(livematch);
 		livematch.appendChild(livelink);
+		if (parseInt(livematches[i].idletime)>0) {
+			livematch.appendChild(idletime);
+		}
 	}
+	var debug = false;
+	if (debug) debug.innerHTML=JSON.stringify(livematches);
 }
-function listfiles(){
-	var filelinks = JSON.parse(document.getElementById("files").innerHTML);
+function listfiles(filelinks){
 	var list = '<ul>';
 	for (var i in filelinks){
 		list+='<li>'+i+'<ul>';
@@ -167,19 +228,26 @@ function listfiles(){
 		list+='</ul></li>';
 	}
 	list += '</ul>';
-	document.getElementById("files").innerHTML=list;
+	return list;
 }
-function initmeta(chatsocket){
+function initmeta(){
+	var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
+	var chatsocket = new WebSocket(chatURL);
 	chatsocket.addEventListener('message', function (ev) {
 		var data = JSON.parse(ev.data);
+		//switch this
 		if (data.eventtype=='chat') {
-			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
-			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
-		} else if (data.eventtype=='userstatus') {
 			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
 			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
 		} else if (data.eventtype=='usercount') {
 			document.getElementById("usercount").innerHTML=data.content;
+		} else if (data.eventtype=='matchupdate') {
+			listmatches(data.content);
+		} else if (data.eventtype=='fileupdate') {
+			document.getElementById("files").innerHTML=listfiles(data.content);
+		} else if (data.eventtype=='spectatorinfo') {
+			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
+			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
 		}
 	});
 	chatsocket.addEventListener('close', function () {
@@ -190,18 +258,18 @@ function initmeta(chatsocket){
 		document.getElementById("chatlog").innerHTML+='Connected <br>';
 		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
 	});
-	document.getElementById("sendchat").setAttribute('onClick','chat()');
+	document.getElementById("sendchat").addEventListener("click",function() {
+		chatsocket.send(document.getElementById("chatmessage").value);
+		document.getElementById("chatmessage").value='';
+	});
 	document.getElementById("chatmessage").onkeypress = function(e){
 		if (!e) e = window.event;
 		var keyCode = e.keyCode || e.which;
 		if (keyCode == '13'){
-			chat();
+			chatsocket.send(document.getElementById("chatmessage").value);
+			document.getElementById("chatmessage").value='';
 		}
 	}
-}
-function chat(){
-	chatsocket.send(document.getElementById("chatmessage").value);
-	document.getElementById("chatmessage").value='';
 }
 function initcontrols(){
 	for (var i in games) {
@@ -234,6 +302,13 @@ function initcontrols(){
 		var playbutton = document.getElementById('playbutton');
 		if (playbutton) playbutton.setAttribute('onclick','applyTerminal("play","'+document.getElementById("gameselect").value+'",'+document.getElementById("panels").value+')');
 	}
+}
+function initsettings(){
+	document.getElementById('fontselect').onchange = function(){
+		document.body.style.fontFamily=document.getElementById('fontselect').value;
+		adjustsize();
+	};
+	document.body.style.fontFamily=document.getElementById('fontselect').value;
 }
 function signIn(){
 	var loginform = document.getElementById("login-form");
