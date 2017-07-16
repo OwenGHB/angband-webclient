@@ -1,9 +1,0 @@
-mkdir src
-cd src
-git clone https://github.com/angband/angband
-git clone https://github.com/poschengband/poschengband
-git clone https://github.com/NickMcConnell/FAangband
-for dir in `ls`; do cd $dir && ./autogen.sh && ./configure --prefix=$HOME --with-setgid=angbandlive --disable-x11 --disable-sdl-mixer && make && make install && make clean && cd ../; done;
-
-
-

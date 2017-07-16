@@ -18,6 +18,11 @@ var games = [
 		desc:"Redesigned gameplay mechanics, full of new features and new content, including wilderness levels. Faithful to Tolkein. Descended from Oangband"
 	},
 	{
+		name:'hellband',
+		longname:'Hellband 0.8.7',
+		desc:"Fantasy renaissance Italian setting, informed by demonology and inspired by Dante. Descended from Zangband. Won't load keymaps (i.e. movement) from default pref folder, you have to make your own."
+	},
+	{
 		name:'nppangband',
 		longname:'NPPAngband 7.1.0',
 		desc:"Attempts to preserve classic angband gameplay but with various improvements."
@@ -75,31 +80,45 @@ var games = [
 ];
 
 function adjustsize(){
+	var prefersize = {cols:30,rows:8};
 	var needsize = {
 		wide:{
-			cols: dimensions.cols+35,
+			cols: dimensions.cols+prefersize.cols,
 			rows: dimensions.rows
 		},
 		narrow:{
 			cols: dimensions.cols,
-			rows: dimensions.rows+10
+			rows: dimensions.rows+prefersize.rows
 		}
 	};
 	for (var i in needsize) {
-		var optheight = Math.floor(window.innerHeight/needsize[i].rows);
-		var optwidth = Math.floor((window.innerWidth/needsize[i].cols)/testfont(optheight,dimensions,document.body.style.fontFamily).ratio);
-		needsize[i].lineHeight = Math.min(optwidth,optheight);
+		var t_height = Math.floor(window.innerHeight/needsize[i].rows);
+		var t_result = testfont(t_height,needsize[i],document.body.style.fontFamily);
+		while (testfont(t_height,needsize[i],document.body.style.fontFamily).x >  window.innerWidth && t_height > 2){
+			t_height--;
+		}
+		needsize[i].lineHeight = t_height;
 	}
-	var lineHeight=Math.max(needsize.narrow.lineHeight,needsize.wide.lineHeight);
+	var widescreen;
+	var lineheight;
+	if (needsize.narrow.lineHeight<needsize.wide.lineHeight){
+		lineHeight=needsize.wide.lineHeight;
+		widescreen=true;
+	} else {
+		lineHeight=needsize.narrow.lineHeight;
+		widescreen=false;
+	}
 	var fontSize=lineHeight;
 	var results = testfont(lineHeight,dimensions,document.body.style.fontFamily);
-	var widescreen=(needsize.narrow.lineHeight<=needsize.wide.lineHeight);
 	document.getElementById("container").style.width=window.innerWidth+'px';
 	document.getElementById("container").style.height=window.innerHeight+'px';
 	document.getElementById("container").style.fontSize=fontSize+'px';
 	document.getElementById("container").style.lineHeight=lineHeight+'px';
-	document.getElementById("mainmenu").style.width=Math.ceil(results.x)+'px';
-	document.getElementById("mainmenu").style.height=Math.ceil(results.y)+'px';
+	var mainmenu = document.getElementById("mainmenu");
+	if (mainmenu) {
+		document.getElementById("mainmenu").style.width=Math.ceil(results.x)+'px';
+		document.getElementById("mainmenu").style.height=Math.ceil(results.y)+'px';
+	}
 	document.getElementById("terminal-container").style.width=Math.ceil(results.x)+'px';
 	document.getElementById("terminal-container").style.height=Math.ceil(results.y)+'px';
 	if (widescreen) {
@@ -135,14 +154,14 @@ function testfont(lineHeight,dimensions,fontFamily) {
 	for (var j=0;j<rows;j++){
 		var text = "";
 		for (var k=0;k<cols;k++) {
-			text+='l';
+			text+='#';
 		}
 		var node = document.createTextNode(text);
 		span.appendChild(node);
 		span.innerHTML+='</br>';
 	}
 	document.body.appendChild(span);
-	var results = {x:span.offsetWidth,y:span.offsetHeight,ratio:(span.offsetWidth/cols)/(span.offsetHeight/rows)};
+	var results = {x:span.scrollWidth,y:span.scrollHeight,ratio:(span.scrollWidth/cols)/(span.scrollHeight/rows)};
 	document.body.removeChild(span);
 	return results;
 }
@@ -304,6 +323,28 @@ function initcontrols(){
 	}
 }
 function initsettings(){
+	var fonts = [ 
+	'AmstradPC1512',
+	'IBM_BIOS',
+	'IBM_CGA',
+	'IBM_CGAthin',
+	'IBM_EGA8',
+	'IBM_EGA9',
+	'IBM_MDA',
+	'IBM_VGA8',
+	'IBM_VGA9',
+	'TandyNew_225',
+	'TandyNew_TV',
+	'VGA_SquarePx',
+	'YOz14s',
+	'YOzFontOTWD'
+	];
+	for (var i in fonts) {
+		var fontoption = document.createElement('option');
+		fontoption.value = fonts[i];
+		fontoption.appendChild(document.createTextNode(fonts[i]));
+		document.getElementById('fontselect').appendChild(fontoption);
+	}
 	document.getElementById('fontselect').onchange = function(){
 		document.body.style.fontFamily=document.getElementById('fontselect').value;
 		adjustsize();
