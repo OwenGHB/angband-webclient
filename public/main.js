@@ -1,6 +1,3 @@
-var term;
-var socket;
-var dimensions={rows:50,cols:150};
 var games = [
 	{
 		name:'angband',
@@ -78,6 +75,20 @@ var games = [
 		desc:"Massively influential variant. New races, classes, and an overworld."
 	}
 ];
+
+var term;
+var socket;
+var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
+var dimensions={rows:50,cols:150};
+var terminfo = 'xterm-256color';
+term = new Terminal({
+	termName: terminfo,
+	colors: Terminal.xtermColors,
+	cols: dimensions.cols,
+	rows: dimensions.rows,
+	cursorBlink: false
+});
+term.applicationCursor=true;
 
 function adjustsize(){
 	var prefersize = {cols:30,rows:8};
@@ -172,42 +183,18 @@ function applyTerminal(mode, qualifier, panels) {
 	document.getElementById("terminal-container").style.display="block";
 	var terminalContainer=document.getElementById("terminal-container");
 	terminalContainer.innerHTML='';
-	var terminfo = 'xterm-256color';
-	term = new Terminal({
-		termName: terminfo,
-		colors: Terminal.xtermColors,
-		cols: dimensions.cols,
-		rows: dimensions.rows,
-		cursorBlink: false
-	});
 	term.open(terminalContainer);
-	var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/'+mode;
 	if (mode=='play') {
-		term.applicationCursor=true;
-		fetch('/newgame?game='+qualifier+'&panels='+panels+'&rows='+dimensions.rows+'&cols='+dimensions.cols, {credentials: 'include', method: 'POST'}).then(function () {
-			socket = new WebSocket(socketURL);
-			term.on('data', function(data) {
-				socket.send(data);
-				if (false) {
-					debug.innerHTML=JSON.stringify(data);
-				}
-			});
-			socket.addEventListener('message', function (ev) {
-				term.write(ev.data);
-			});
-			socket.addEventListener('close', function(){
-
-			});
-		});  
+		
+		socket.send(JSON.stringify({eventtype:'newgame',content:{game:qualifier,panels:panels,dimensions:dimensions}}));
+		term.on('data', function(data) {
+			socket.send(JSON.stringify({eventtype:'gameinput',content:data}));
+			if (false) {
+				debug.innerHTML=JSON.stringify(data);
+			}
+		});
 	} else if (mode=='spectate') {
-		socketURL += '?watch='+qualifier;
-		socket = new WebSocket(socketURL);
-		socket.addEventListener('message', function (ev) {
-			term.write(ev.data);
-		});
-		socket.addEventListener('close', function(){
-
-		});
+		socket.send(JSON.stringify({eventtype:'subscribe',content:{player:qualifier}}));
 	}
 }
 function listmatches(livematches){
@@ -250,9 +237,8 @@ function listfiles(filelinks){
 	return list;
 }
 function initmeta(){
-	var chatURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
-	var chatsocket = new WebSocket(chatURL);
-	chatsocket.addEventListener('message', function (ev) {
+	socket = new WebSocket(socketURL);
+	socket.addEventListener('message', function (ev) {
 		var data = JSON.parse(ev.data);
 		//switch this
 		if (data.eventtype=='chat') {
@@ -267,25 +253,26 @@ function initmeta(){
 		} else if (data.eventtype=='spectatorinfo') {
 			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
 			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+		} else if (data.eventtype=='gameoutput') {
+			term.write(data.content);
 		}
 	});
-	chatsocket.addEventListener('close', function () {
+	socket.addEventListener('close', function () {
 		document.getElementById("chatlog").innerHTML+='***Disconnected***<br>';
 		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
 	});
-	chatsocket.addEventListener('open', function () {
-		document.getElementById("chatlog").innerHTML+='Connected <br>';
+	socket.addEventListener('open', function () {
 		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
 	});
 	document.getElementById("sendchat").addEventListener("click",function() {
-		chatsocket.send(document.getElementById("chatmessage").value);
+		chatsocket.send(JSON.stringify({eventtype:'chat',content:document.getElementById("chatmessage").value}));
 		document.getElementById("chatmessage").value='';
 	});
 	document.getElementById("chatmessage").onkeypress = function(e){
 		if (!e) e = window.event;
 		var keyCode = e.keyCode || e.which;
 		if (keyCode == '13'){
-			chatsocket.send(document.getElementById("chatmessage").value);
+			socket.send(JSON.stringify({eventtype:'chat',content:document.getElementById("chatmessage").value}));
 			document.getElementById("chatmessage").value='';
 		}
 	}

@@ -57,31 +57,6 @@ app.get('/', function(req, res) {
 	res.render('index', {title:'GwaRL.xyz', user: req.user});
 });
 
-app.post('/newgame', function(req, res) {
-	res.setHeader('Access-Control-Allow-Credentials', 'true');
-	var user = req.user;
-	var query = req.query;
-	var game = query.game;
-	var panels = query.panels;
-	var cols = parseInt(query.cols);
-	var rows = parseInt(query.rows);
-	var message = {eventtype:'newgame',content:{game:game,panels:panels,dimensions:{cols:cols,rows:rows}}};
-	awc.respond(user,message);
-	res.end();
-});
-
-app.ws('/play', function (ws, req) {
-	var user = req.user;
-	var message = {eventtype:'connectplayer',content:{ws:ws}};
-	awc.respond(user,message);
-});
-
-app.ws('/spectate', function (ws, req) {
-	var player = req.query.watch;
-	var message = {eventtype:'subscribe',content:{player:player, ws:ws}};
-	awc.respond(user,message);
-});
-
 app.ws('/meta', function (ws, req) {
 	if (typeof(req.user.username)!='undefined'){
 		awc.welcome(req.user, ws);

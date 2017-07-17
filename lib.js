@@ -3,14 +3,14 @@ var ps = require('ps-node');
 var fs = require('fs-extra');
 
 var lib = {};
-lib.matches = {};
-lib.metasockets={};
-lib.chatlog = [];
+matches = {};
+metasockets = {};
+chatlog = [];
 
 var home = '/home/angbandlive';
 
 //check player alive status for recording purposes
-isalive=function(playerfile){
+function isalive(playerfile){
 	var alive = true;
 	var file = fs.openSync(playerfile, 'r');
 	var buffer = new Buffer(36);
@@ -28,9 +28,14 @@ lib.respond=function(user,msg){
 	} else if (msg.eventtype=='newgame'){
 		newgame(user,msg.content);
 	} else if (msg.eventtype=='connectplayer'){
-		connectplayer(user.username,msg.content.ws);
-	}  else if (msg.eventtype=='subscribe'){
+		connectplayer(user.username);
+	} else if (msg.eventtype=='subscribe'){
 		subscribe(user,msg.content);
+	} else if (msg.eventtype=='gameinput'){
+		if (typeof(matches[user.username])!='undefined'){
+			matches[user.username].term.write(msg.content);
+			matches[user.username].idle=false;
+		}
 	}
 }
 function chat(user,message){
@@ -56,13 +61,13 @@ function chat(user,message){
 			eventtype: 'chat', content: '<span class="playername">'+user.username+'</span>: '+message
 		});
 	}
-	lib.chatlog.unshift(response);
-	while (lib.chatlog.length>20) {
-		lib.chatlog.pop();
+	chatlog.unshift(response);
+	while (chatlog.length>20) {
+		chatlog.pop();
 	}
-	for (var i in lib.metasockets){
+	for (var i in metasockets){
 		try {
-			lib.metasockets[i].send(response);
+			metasockets[i].send(response);
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		}
@@ -103,7 +108,8 @@ function newgame(user,msg){
 	var game = msg.game;
 	var panels = msg.panels;
 	var dimensions = msg.dimensions;
-	if (typeof(lib.matches[user.username])=='undefined'){
+	var player = user.username;
+	if (typeof(matches[user.username])=='undefined'){
 		var compgame = 'angband';
 		var compnumber = '207';
 		var panelarg = '-b';
@@ -222,66 +228,45 @@ function newgame(user,msg){
 			rows: dimensions.rows,
 			cwd: process.env.HOME
 		});
+		term.on('data', function(data) {
+			var message = JSON.stringify({eventtype:'gameoutput',content:data})
+			try {
+				metasockets[player].send(message);
+			} catch (ex) {
+				// The WebSocket is not open, ignore
+			}
+			if (typeof(matches[player])!='undefined') for (var i in matches[player].spectators) {
+				try {
+					metasockets[matches[player].spectators[i]].send(message);
+				} catch (ex) {
+					// The WebSocket is not open, ignore
+				}
+			}
+		});
 		var match = {
 			term: term,
 			game: game,
 			idle: false,
 			idletime: 0,
-			spectators: {}
+			spectators: []
 		}
-		lib.matches[user.username] = match;
+		matches[user.username] = match;
 	} else {
-		console.log('Using existing process with PID: ' + lib.matches[user.username].term.pid);
+		console.log('Using existing process with PID: ' + matches[user.username].term.pid);
 	}
-	for (var i in lib.metasockets){
+	for (var i in metasockets){
 		try {
-			lib.metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(lib.matches)}));
+			metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		}
 	}
 }
-function connectplayer(player,ws){
-	lib.matches[player].socket=ws;
-	var term = lib.matches[player].term;
-	term.on('data', function(data) {
-		try {
-			ws.send(data);
-		} catch (ex) {
-			// The WebSocket is not open, ignore
-		}
-		if (typeof(lib.matches[player])!='undefined') for (var i in lib.matches[player].spectators) {
-			try {
-				lib.matches[player].spectators[i].send(data);
-			} catch (ex) {
-				// The WebSocket is not open, ignore
-			}
-		}
-	});
-	ws.on('message', function(msg) {
-		term.write(msg);
-		if (typeof(lib.matches[player])!='undefined') lib.matches[player].idle=false;
-	});
-	ws.once('close', function () {
-		if (player!='borg'){
-			console.log('Closing terminal for ' + player);
-			//we need to check there's a match in the first place
-			if (typeof(lib.matches[player])!='undefined'){
-				closegame(player);
-			} else {
-				console.log('no match found for '+player+' in match list. I wonder why?');
-			}
-		}
-	});
-	term.write(' ');
-	console.log(player + ' started a game');
-}
-
 function closegame(player){
 	//kill the process if it hasn't already
 	//horrific reverse engineering hack here
-	var term = lib.matches[player].term;
-	if (lib.matches[player].game=='competition'){
+	var term = matches[player].term;
+	if (matches[player].game=='competition'){
 		var gamepid=parseInt(term.pid)+3;
 	} else {
 		var gamepid=term.pid;
@@ -306,10 +291,10 @@ function closegame(player){
 		//now kill the pty
 		term.kill();
 		// Clean things up
-		delete lib.matches[player];
-		for (var i in lib.metasockets){
+		delete matches[player];
+		for (var i in metasockets){
 			try {
-				lib.metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
+				metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
 			} catch (ex) {
 				// The WebSocket is not open, ignore
 			}
@@ -318,52 +303,63 @@ function closegame(player){
 }
 function subscribe(user,message){
 	var player = message.player;
-	var ws = message.ws;
-	var term = lib.matches[player].term;
+	var term = matches[player].term;
 	var spectator = user.username;
 	if (typeof(term)!='undefined'&&typeof(user)!='undefined') {
-		lib.metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator+" is now watching"}));
-		lib.matches[player].spectators[spectator]=ws;
-		ws.once('close', function() {
-			try {
-				lib.metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator+" is no longer watching"}));
-			} catch (ex) {
-				// The WebSocket is not open, ignore
-			}
-			if (typeof(lib.matches[player])!='undefined') delete lib.matches[player].spectators[spectator];
-		});
+		metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator+" is now watching"}));
+		matches[player].spectators.push(spectator);
 	}
 }
 lib.welcome=function(user,ws) {
-	lib.metasockets[user.username] = ws;
+	metasockets[user.username] = ws;
+	var player = user.username;
+	//send some info to the user upon connecting
 	try {
-		for (var i in lib.chatlog){
-			lib.metasockets[user.username].send(lib.chatlog[lib.chatlog.length-i-1]);
+		for (var i in chatlog){
+			metasockets[user.username].send(chatlog[chatlog.length-i-1]);
 		}
-		lib.metasockets[user.username].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(lib.matches)}));
-		lib.metasockets[user.username].send(JSON.stringify({eventtype: 'fileupdate', content: lib.getfilelist(user.username)}));
-		lib.metasockets[user.username].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(lib.metasockets).length}));
+		metasockets[user.username].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
+		metasockets[user.username].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.username)}));
+		metasockets[user.username].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length}));
 	} catch (ex) {
 		// The WebSocket is not open, ignore
 	}
-	for (var i in lib.metasockets){
+	
+	//announce their arrival
+	for (var i in metasockets){
 		try {
-			lib.metasockets[i].send(JSON.stringify({
-				eventtype: 'usercount', content: 'Users online: '+Object.keys(lib.metasockets).length
+			metasockets[i].send(JSON.stringify({
+				eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length
 			}));
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		}
 	}
-	lib.metasockets[user.username].on('message', function(message) {
-		var msg = {eventtype: 'chat', content: message};
+	
+	//listen for inputs
+	metasockets[user.username].on('message', function(message) {
+		var msg = JSON.parse(message);
 		lib.respond(user,msg);
 	});
-	lib.metasockets[user.username].once('close', function() {
-		delete lib.metasockets[user.username];
-		for (var i in lib.metasockets){
+	
+	//bid farewell
+	metasockets[user.username].once('close', function() {
+		if (player!='borg'){
+			console.log('Closing socket for ' + player);
+			//we need to check there's a match in the first place
+			if (typeof(matches[player])!='undefined'){
+				closegame(player);
+			} for (var i in matches) {
+				if (typeof(matches[i])!='undefined'&&matches[i].spectators.includes(user.username)) {
+					delete matches[i].spectators[matches[i].spectators.indexOf(user.username)];
+				}
+			}
+		}
+		delete metasockets[user.username];
+		//announce the departure
+		for (var i in metasockets){
 			try {
-				lib.metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(lib.metasockets).length}));
+				metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length}));
 			} catch (ex) {
 				// The WebSocket is not open, ignore
 			}
@@ -371,37 +367,22 @@ lib.welcome=function(user,ws) {
 	});
 }
 lib.keepalive=function(){
-	var matchlist=getmatchlist(lib.matches);
-	for (var i in lib.matches) {
-		if (typeof(lib.matches[i].socket)!='undefined') {
-			try {
-				lib.matches[i].socket.ping();
-			} catch (ex) {
-				
-			}
-			if (lib.matches[i].idle) {
-				lib.matches[i].idletime++;
-			} else {
-				lib.matches[i].idletime=0;
-			}
-			lib.matches[i].idle=true;
-			if (lib.matches[i].idletime>60) {
-				lib.matches[i].socket.close();
-			} else {
-				for (var j in lib.matches[i].spectators) {
-					try {
-						lib.matches[i].spectators[j].ping();
-					} catch (ex) {
-						
-					}
-				}
-			}
+	var matchlist=getmatchlist(matches);
+	for (var i in matches) {
+		if (matches[i].idle) {
+			matches[i].idletime++;
+		} else {
+			matches[i].idletime=0;
 		}
+		matches[i].idle=true;
+		if (matches[i].idletime>60) {
+			closegame(i);
+		} 
 	}
-	for (var i in lib.metasockets) {
+	for (var i in metasockets) {
 		try {
-			lib.metasockets[i].ping();
-			lib.metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: matchlist}));
+			metasockets[i].ping();
+			metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: matchlist}));
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		}
