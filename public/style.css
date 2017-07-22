@@ -64,19 +64,18 @@ body,input,button,select,option {
     font-family: monospace;
 	margin: 0;
 	padding: 0;
+	outline-offset: -1px;
 	background: black;
 	color: lightgray;
 	border: none;
 }
 input,button,select {
 	background: transparent;
-	outline-offset: -2px;
-	outline: 2px outset darkgray;
-	padding: 2px;
-	margin: 1px;
+	outline: 1px outset darkgray;
 }
-input:hover,button:hover,select:hover {
-	outline: 2px outset white;
+input:hover,button:hover,select:hover,option:hover {
+	background: lightgray;
+	color: black;
 }
 #container {
     background: black;
@@ -86,6 +85,7 @@ input:hover,button:hover,select:hover {
 	color: #AF11AF;
 }
 .MITZE{
+	color: #AF11AF;
 	font-family:YOz14s;
 }
 .silwinner{
@@ -100,8 +100,9 @@ input:hover,button:hover,select:hover {
   color: black;
   background: white;
 }
-#userinfo {
-
+.navlink {
+	width:100%;
+	display:block;
 }
 #terminal-container {
 	display: none;
@@ -113,6 +114,12 @@ input:hover,button:hover,select:hover {
 }
 #menu {
 	background-color: black;
+	float: left;
+}
+#sidebarmenu {
+	float: left;
+}
+#navigation {
 	float: left;
 }
 #settings {

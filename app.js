@@ -13,6 +13,7 @@ var passport = require('passport');
 var awc = require('./lib.js');
 var LocalStrategy = require('passport-local').Strategy;
 var Account = require('./models/account');
+var fs = require('fs-extra');
 
 //set up our pinging
 setInterval(function(){awc.keepalive()},10000);

@@ -5,6 +5,7 @@
 	<meta name="description" content="Web based client for playing Angband and select variants remotely. Supports recording and live spectating.">
 	<link rel='stylesheet' href='/style.css' />
 	<script src="term.js" ></script>
+	<script src="/games.js"></script>
 	<script src="/main.js"></script>
   </head>
   <body>
@@ -39,27 +40,51 @@
 			<div id="terminal-container">
 			</div>
 			<div id="menu">
-				<div id="settings">
-					<div id="userinfo">
-						Logged in as <span id="username"><%= user.username%></span> <a href="/logout">Log Out</a>
+				<div id="sidebarmenu">
+					<div id="menutabs">
+						<button id="navigationbutton">Navigation</button>
+						<button id="settingsbutton">Settings</button>
+						<button id="filesbutton">Files</button>
+						<button href="/logout">Log Out</button>
 					</div>
-					<div id="usercount">Users online:</div>
-					<label>Font:</label>
-					<select id="fontselect">
-						<option value='monospace'>default</option>
-						<option value='"Consolas", monospace'>Consolas</option>
-						<option value='"Courier", monospace'>Courier</option>
-						<option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
-						<option value='"Lucida Console", monospace'>Lucida Console</option>
-					</select> 
-				<% if (user.username=='Gwarl') { %>
-					<div id="debug">
+					<div id="navigation">
+						<button id="homebutton" class="navlink">Home</button>
 					</div>
-				<% } %>
-				</div>
-				<div id="files">
+					<div id="settings" style="display:none;">
+						<label>Font:</label>
+						<select id="fontselect">
+							<option value='monospace'>default</option>
+							<option value='"Consolas", monospace'>Consolas</option>
+							<option value='"Courier", monospace'>Courier</option>
+							<option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
+							<option value='"Lucida Console", monospace'>Lucida Console</option>
+						</select> 
+						<label>sidebar columns (minimum)</label>
+						<input id="mincolumns" type="number" min="20" max="45" value="30">
+						<label>sidebar rows (minimum)</label>
+						<input id="minrows" type="number" min="5" max="25" value="8">
+						<label>widescreen (sidebar right):</label>
+						<select id="widescreen">
+							<option value='auto'>auto</option>
+							<option value='on'>on</option>
+							<option value='off'>off</option>
+						</select> 
+						<button id="applysettings">Apply</button>
+					<% if (user.username=='Gwarl') { %>
+						<div id="debug">
+						</div>
+					<% } %>
+					</div>
+					<div id="files" style="display:none;">
+					</div>
 				</div>
 				<div id="chat">
+					<div id="chattabs">
+						<button id="chatbutton">Chat</button>
+						<button id="userlistbutton">Users online:</button>
+					</div>
+					<div id="userlist" style="display:none;">
+					</div>
 					<div id="chatlog"></div>
 					<input type="text" id="chatmessage"></textarea>
 					<button id="sendchat">Send</button>

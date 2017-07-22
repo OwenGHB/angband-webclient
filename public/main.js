@@ -1,87 +1,10 @@
-var games = [
-	{
-		name:'angband',
-		longname:'Angband 4.1.0',
-		desc:"The latest release of the classic dungeon exploration game inspired by the work of JRR Tolkein. Descended from Moria."
-	},
-	{
-		name:'competition',
-		longname:'Competition 207',
-		desc:"Aldarion is a Dunadan who has a knack for reading arcane runes. Unfortunately, he took that as a sign that he should be a Valar-slaying mage, and he's regretting his life decisions at the moment."
-	},
-	{
-		name:'faangband',
-		longname:'FAangband 1.4.4',
-		desc:"Redesigned gameplay mechanics, full of new features and new content, including wilderness levels. Faithful to Tolkein. Descended from Oangband"
-	},
-	{
-		name:'hellband',
-		longname:'Hellband 0.8.7',
-		desc:"Fantasy renaissance Italian setting, informed by demonology and inspired by Dante. Descended from Zangband. Won't load keymaps (i.e. movement) from default pref folder, you have to make your own."
-	},
-	{
-		name:'nppangband',
-		longname:'NPPAngband 7.1.0',
-		desc:"Attempts to preserve classic angband gameplay but with various improvements."
-	},
-	{
-		name:'nppmoria',
-		longname:'NPPMoria 7.1.0',
-		desc:"A recreation of Moria using the NPPAngband engine."
-	},
-	{
-		name:'oangband',
-		longname:'Oangband 1.1.0u',
-		desc:'Opinion angband. Redesigned gameplay mechanics and extra content. Very influential'
-	},
-	{
-		name:'poschengband',
-		longname:'PosChengband 6.1.0b',
-		desc:"One of the most popular variants, bursting with new content. Includes wilderness. Descended from Zangband."
-	},
-	{
-		name:'sangband',
-		longname:'Sangband 1.0.0',
-		desc:'Skills Angband.'
-	},
-	{
-		name:'sil',
-		longname:'Sil 1.3.0',
-		desc:"Heavily redesigned gameplay mechanics to be a shorter but more tactically intricate game. Very faithful to Tolkein. Descended from NPPAngband"
-	},
-	{
-		name:'steamband',
-		longname:'Steamband 0.4.1f',
-		desc:'Steampunk Angband. Please use your site username for your character name if playing, or else progress will be lost.'
-	},
-	{
-		name:'tome',
-		longname:'ToME 2.3.6-ah',
-		desc:"Full of new content, quests and a large open world. Descended from Zangband."
-	},
-	{
-		name:'umoria',
-		longname:'UMoria 5.6',
-		desc:'A restoration of the original Moria game.'
-	},
-	{
-		name:'unangband',
-		longname:'UnAngband 6.5.0a',
-		desc:"Influential variant full of new content with new quests, classes and locations."
-	},
-	{
-		name:'zangband',
-		longname:'ZAngband 2.7.5pre1',
-		desc:"Massively influential variant. New races, classes, and an overworld."
-	}
-];
 
-var term;
-var socket;
+
 var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
+var socket;
 var dimensions={rows:50,cols:150};
 var terminfo = 'xterm-256color';
-term = new Terminal({
+var term = new Terminal({
 	termName: terminfo,
 	colors: Terminal.xtermColors,
 	cols: dimensions.cols,
@@ -89,9 +12,13 @@ term = new Terminal({
 	cursorBlink: false
 });
 term.applicationCursor=true;
+var spyglass = {};
+var playing = false;
 
 function adjustsize(){
-	var prefersize = {cols:30,rows:8};
+	var prefersize={cols:parseInt(document.getElementById('mincolumns').value),rows:parseInt(document.getElementById('minrows').value)};
+	var windowwidth = Math.min(window.innerWidth,document.documentElement.clientWidth);
+	var windowheight = Math.min(window.innerHeight,document.documentElement.clientHeight);
 	var needsize = {
 		wide:{
 			cols: dimensions.cols+prefersize.cols,
@@ -103,16 +30,21 @@ function adjustsize(){
 		}
 	};
 	for (var i in needsize) {
-		var t_height = Math.floor(window.innerHeight/needsize[i].rows);
+		var t_height = Math.floor(windowheight/needsize[i].rows);
 		var t_result = testfont(t_height,needsize[i],document.body.style.fontFamily);
-		while (testfont(t_height,needsize[i],document.body.style.fontFamily).x >  window.innerWidth && t_height > 2){
+		while (testfont(t_height,needsize[i],document.body.style.fontFamily).x >  windowwidth && t_height > 2){
 			t_height--;
 		}
 		needsize[i].lineHeight = t_height;
 	}
-	var widescreen;
 	var lineheight;
-	if (needsize.narrow.lineHeight<needsize.wide.lineHeight){
+	if (document.getElementById('widescreen').value=='on'){
+		lineHeight=needsize.wide.lineHeight;
+		widescreen=true;
+	} else if (document.getElementById('widescreen').value=='off'){
+		lineHeight=needsize.narrow.lineHeight;
+		widescreen=false;
+	} else if (needsize.narrow.lineHeight<needsize.wide.lineHeight){
 		lineHeight=needsize.wide.lineHeight;
 		widescreen=true;
 	} else {
@@ -121,8 +53,8 @@ function adjustsize(){
 	}
 	var fontSize=lineHeight;
 	var results = testfont(lineHeight,dimensions,document.body.style.fontFamily);
-	document.getElementById("container").style.width=window.innerWidth+'px';
-	document.getElementById("container").style.height=window.innerHeight+'px';
+	document.getElementById("container").style.width=windowwidth+'px';
+	document.getElementById("container").style.height=windowheight+'px';
 	document.getElementById("container").style.fontSize=fontSize+'px';
 	document.getElementById("container").style.lineHeight=lineHeight+'px';
 	var mainmenu = document.getElementById("mainmenu");
@@ -132,26 +64,31 @@ function adjustsize(){
 	}
 	document.getElementById("terminal-container").style.width=Math.ceil(results.x)+'px';
 	document.getElementById("terminal-container").style.height=Math.ceil(results.y)+'px';
+	var settingsdivids=["navigation","settings","files"];
 	if (widescreen) {
-		document.getElementById("menu").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
-		document.getElementById("menu").style.height=Math.ceil(results.y)+'px';
-		document.getElementById("settings").style.height=Math.floor(6*window.innerHeight/20)+'px';
-		document.getElementById("settings").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
-		document.getElementById("files").style.height=Math.floor(7*window.innerHeight/20)+'px';
-		document.getElementById("files").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
-		document.getElementById("chat").style.height=Math.floor(7*window.innerHeight/20)+'px';
-		document.getElementById("chat").style.width=(window.innerWidth-Math.ceil(results.x)-1)+'px';
-		document.getElementById("chatlog").style.height=(Math.ceil(7*window.innerHeight/20)-Math.max(document.getElementById("chatmessage").offsetHeight,document.getElementById("sendchat").offsetHeight)-document.getElementById("usercount").offsetHeight-1)+'px';
+		document.getElementById("menu").style.width=(windowwidth-Math.ceil(results.x)-1)+'px';
+		document.getElementById("menu").style.height=windowheight+'px';
+		document.getElementById("sidebarmenu").style.width=(windowwidth-Math.ceil(results.x)-1)+'px';
+		document.getElementById("sidebarmenu").style.height=Math.floor(windowheight/2)+'px';
+		for (var i in settingsdivids) {
+			document.getElementById(settingsdivids[i]).style.height=(Math.floor(windowheight/2)-document.getElementById("menutabs").offsetHeight)+'px';
+			document.getElementById(settingsdivids[i]).style.width=(windowwidth-Math.ceil(results.x)-1)+'px';
+		}
+		document.getElementById("chat").style.height=(Math.floor(windowheight/2))+'px';
+		document.getElementById("chat").style.width=(windowwidth-Math.ceil(results.x)-1)+'px';
+		document.getElementById("chatlog").style.height=(Math.ceil(windowheight/2)-Math.max(document.getElementById("chatmessage").offsetHeight,document.getElementById("sendchat").offsetHeight)-document.getElementById("chattabs").offsetHeight-1)+'px';
 	} else {
-		document.getElementById("menu").style.width=window.innerWidth+'px';
-		document.getElementById("menu").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
-		document.getElementById("settings").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
-		document.getElementById("settings").style.width=Math.floor(6*window.innerWidth/20)+'px';
-		document.getElementById("files").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
-		document.getElementById("files").style.width=Math.floor(7*window.innerWidth/20)+'px';
-		document.getElementById("chat").style.height=(window.innerHeight-Math.ceil(results.y)-1)+'px';
-		document.getElementById("chat").style.width=Math.floor(7*window.innerWidth/20)+'px';
-		document.getElementById("chatlog").style.height=(window.innerHeight-Math.ceil(results.y)-Math.max(document.getElementById("chatmessage").offsetHeight,document.getElementById("sendchat").offsetHeight)-document.getElementById("usercount").offsetHeight-1)+'px';
+		document.getElementById("menu").style.width=windowwidth+'px';
+		document.getElementById("menu").style.height=(windowheight-Math.ceil(results.y)-1)+'px';
+		document.getElementById("sidebarmenu").style.width=Math.floor(windowwidth/2)+'px';
+		document.getElementById("sidebarmenu").style.height=(windowheight-Math.ceil(results.y)-1)+'px';
+		for (var i in settingsdivids) {
+			document.getElementById(settingsdivids[i]).style.height=(windowheight-Math.ceil(results.y)-document.getElementById("menutabs").offsetHeight-1)+'px';
+			document.getElementById(settingsdivids[i]).style.width=Math.floor(windowwidth/2)+'px';
+		}
+		document.getElementById("chat").style.height=(windowheight-Math.ceil(results.y)-1)+'px';
+		document.getElementById("chat").style.width=Math.floor(windowwidth/2)+'px';
+		document.getElementById("chatlog").style.height=(windowheight-Math.ceil(results.y)-Math.max(document.getElementById("chatmessage").offsetHeight,document.getElementById("sendchat").offsetHeight)-document.getElementById("chattabs").offsetHeight-1)+'px';
 	}
 }
 function testfont(lineHeight,dimensions,fontFamily) {
@@ -179,22 +116,46 @@ function testfont(lineHeight,dimensions,fontFamily) {
 function applyTerminal(mode, qualifier, panels) {
 	var debug = document.getElementById('debug');
 	var child = document.getElementById("p1");
-	document.getElementById("container").removeChild(document.getElementById("mainmenu"));
+	document.getElementById("mainmenu").style.display="none";
 	document.getElementById("terminal-container").style.display="block";
 	var terminalContainer=document.getElementById("terminal-container");
 	terminalContainer.innerHTML='';
-	term.open(terminalContainer);
 	if (mode=='play') {
-		
-		socket.send(JSON.stringify({eventtype:'newgame',content:{game:qualifier,panels:panels,dimensions:dimensions}}));
-		term.on('data', function(data) {
-			socket.send(JSON.stringify({eventtype:'gameinput',content:data}));
-			if (false) {
-				debug.innerHTML=JSON.stringify(data);
-			}
-		});
+		if (!playing){
+			playing=true;
+			var livelink = document.createElement("button");
+			livelink.className = "navlink";
+			var textnode = document.createTextNode(qualifier);
+			livelink.appendChild(textnode);
+			livelink.setAttribute('onclick','applyTerminal("play","'+qualifier+'")');
+			document.getElementById("navigation").appendChild(livelink);
+			socket.send(JSON.stringify({eventtype:'newgame',content:{game:qualifier,panels:panels,dimensions:dimensions}}));
+			term.on('data', function(data) {
+				socket.send(JSON.stringify({eventtype:'gameinput',content:data}));
+				if (false) {
+					debug.innerHTML=JSON.stringify(data);
+				}
+			});
+		}
+		term.open(terminalContainer);
 	} else if (mode=='spectate') {
-		socket.send(JSON.stringify({eventtype:'subscribe',content:{player:qualifier}}));
+		if (typeof(spyglass[qualifier])=='undefined') {
+			var livelink = document.createElement("button");
+			livelink.className = "navlink";
+			var textnode = document.createTextNode(qualifier);
+			livelink.appendChild(textnode);
+			livelink.setAttribute('onclick','applyTerminal("spectate","'+qualifier+'")');
+			document.getElementById("navigation").appendChild(livelink);
+			spyglass[qualifier] = new Terminal({
+				termName: terminfo,
+				colors: Terminal.xtermColors,
+				cols: dimensions.cols,
+				rows: dimensions.rows,
+				cursorBlink: false
+			});
+			socket.send(JSON.stringify({eventtype:'subscribe',content:{player:qualifier}}));
+		}
+		spyglass[qualifier].open(terminalContainer);
 	}
 }
 function listmatches(livematches){
@@ -245,7 +206,8 @@ function initmeta(){
 			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
 			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
 		} else if (data.eventtype=='usercount') {
-			document.getElementById("usercount").innerHTML=data.content;
+			document.getElementById("userlist").innerHTML='<ul><li>'+data.content.join('</li><li>')+'</li></ul>';
+			document.getElementById("userlistbutton").innerHTML='Users online: '+data.content.length;
 		} else if (data.eventtype=='matchupdate') {
 			listmatches(data.content);
 		} else if (data.eventtype=='fileupdate') {
@@ -253,8 +215,21 @@ function initmeta(){
 		} else if (data.eventtype=='spectatorinfo') {
 			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
 			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
-		} else if (data.eventtype=='gameoutput') {
+		} else if (data.eventtype=='owngameoutput') {
 			term.write(data.content);
+		} else if (data.eventtype=='gameoutput'){
+			if (typeof(spyglass[data.content.player])!='undefined') {
+				spyglass[data.content.player].write(data.content.data);
+			} else {
+				spyglass[data.content.player] = new Terminal({
+					termName: terminfo,
+					colors: Terminal.xtermColors,
+					cols: dimensions.cols,
+					rows: dimensions.rows,
+					cursorBlink: false
+				});
+				spyglass[data.content.player].write(data.content.data);
+			}
 		}
 	});
 	socket.addEventListener('close', function () {
@@ -310,20 +285,47 @@ function initcontrols(){
 	}
 }
 function initsettings(){
+	document.getElementById("navigationbutton").addEventListener("click",function(){
+		document.getElementById("navigation").style.display="block";
+		document.getElementById("settings").style.display="none";
+		document.getElementById("files").style.display="none";
+	});
+	document.getElementById("settingsbutton").addEventListener("click",function(){
+		document.getElementById("navigation").style.display="none";
+		document.getElementById("settings").style.display="block";
+		document.getElementById("files").style.display="none";
+	});
+	document.getElementById("filesbutton").addEventListener("click",function(){
+		document.getElementById("navigation").style.display="none";
+		document.getElementById("settings").style.display="none";
+		document.getElementById("files").style.display="block";
+	});
+	document.getElementById("chatbutton").addEventListener("click",function(){
+		document.getElementById("chatlog").style.display="block";
+		document.getElementById("chatmessage").style.display="inline";
+		document.getElementById("sendchat").style.display="inline";
+		document.getElementById("userlist").style.display="none";
+	});
+	document.getElementById("userlistbutton").addEventListener("click",function(){
+		document.getElementById("chatlog").style.display="none";
+		document.getElementById("chatmessage").style.display="none";
+		document.getElementById("sendchat").style.display="none";
+		document.getElementById("userlist").style.display="block";
+	});
+	document.getElementById("homebutton").addEventListener("click",function(){
+		document.getElementById("mainmenu").style.display="block";
+		document.getElementById("terminal-container").style.display="none";
+	});
 	var fonts = [ 
 	'AmstradPC1512',
 	'IBM_BIOS',
 	'IBM_CGA',
 	'IBM_CGAthin',
-	'IBM_EGA8',
-	'IBM_EGA9',
 	'IBM_MDA',
-	'IBM_VGA8',
 	'IBM_VGA9',
 	'TandyNew_225',
 	'TandyNew_TV',
 	'VGA_SquarePx',
-	'YOz14s',
 	'YOzFontOTWD'
 	];
 	for (var i in fonts) {
@@ -332,10 +334,10 @@ function initsettings(){
 		fontoption.appendChild(document.createTextNode(fonts[i]));
 		document.getElementById('fontselect').appendChild(fontoption);
 	}
-	document.getElementById('fontselect').onchange = function(){
+	document.getElementById('applysettings').addEventListener("click",function(){
 		document.body.style.fontFamily=document.getElementById('fontselect').value;
 		adjustsize();
-	};
+	});
 	document.body.style.fontFamily=document.getElementById('fontselect').value;
 }
 function signIn(){

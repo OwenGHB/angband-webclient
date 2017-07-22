@@ -90,6 +90,7 @@ function getfilelist(username){
 	var users = fs.readdirSync(home+'/public/user/');
 	if (users.includes(username)){
 		var path = home+'/public/user/'+username+'/';
+		fs.ensureDirSync(path);
 		var ls = fs.readdirSync(path);
 		for (var i in ls){
 			var dumps = [];
@@ -229,15 +230,14 @@ function newgame(user,msg){
 			cwd: process.env.HOME
 		});
 		term.on('data', function(data) {
-			var message = JSON.stringify({eventtype:'gameoutput',content:data})
 			try {
-				metasockets[player].send(message);
+				metasockets[player].send(JSON.stringify({eventtype:'owngameoutput',content:data}));
 			} catch (ex) {
 				// The WebSocket is not open, ignore
 			}
 			if (typeof(matches[player])!='undefined') for (var i in matches[player].spectators) {
 				try {
-					metasockets[matches[player].spectators[i]].send(message);
+					metasockets[matches[player].spectators[i]].send(JSON.stringify({eventtype:'gameoutput',content:{player:player,data:data}}));
 				} catch (ex) {
 					// The WebSocket is not open, ignore
 				}
@@ -303,9 +303,8 @@ function closegame(player){
 }
 function subscribe(user,message){
 	var player = message.player;
-	var term = matches[player].term;
 	var spectator = user.username;
-	if (typeof(term)!='undefined'&&typeof(user)!='undefined') {
+	if (typeof(matches[player])!='undefined'&&typeof(matches[player].term)!='undefined'&&typeof(user.username)!='undefined') {
 		metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator+" is now watching"}));
 		matches[player].spectators.push(spectator);
 	}
@@ -320,7 +319,7 @@ lib.welcome=function(user,ws) {
 		}
 		metasockets[user.username].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
 		metasockets[user.username].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.username)}));
-		metasockets[user.username].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length}));
+		metasockets[user.username].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
 	} catch (ex) {
 		// The WebSocket is not open, ignore
 	}
@@ -329,7 +328,7 @@ lib.welcome=function(user,ws) {
 	for (var i in metasockets){
 		try {
 			metasockets[i].send(JSON.stringify({
-				eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length
+				eventtype: 'usercount', content: Object.keys(metasockets)
 			}));
 		} catch (ex) {
 			// The WebSocket is not open, ignore
@@ -359,7 +358,7 @@ lib.welcome=function(user,ws) {
 		//announce the departure
 		for (var i in metasockets){
 			try {
-				metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: 'Users online: '+Object.keys(metasockets).length}));
+				metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
 			} catch (ex) {
 				// The WebSocket is not open, ignore
 			}
