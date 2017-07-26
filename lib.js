@@ -109,10 +109,11 @@ function newgame(user,msg){
 	var game = msg.game;
 	var panels = msg.panels;
 	var dimensions = msg.dimensions;
+	var asciiwalls = msg.walls;
 	var player = user.username;
 	if (typeof(matches[user.username])=='undefined'){
-		var compgame = 'angband';
-		var compnumber = '207';
+		var compgame = 'faangband';
+		var compnumber = '208';
 		var panelarg = '-b';
 		if (panels>1) panelarg = '-n'+panels;
 		var path = home+'/games/'+game;
@@ -191,6 +192,7 @@ function newgame(user,msg){
 			default:
 			break;
 		}
+		if (msg.walls) args.push('-a');
 		var termdesc = {};
 		if (game=='competition'){
 			var newattempt = true;

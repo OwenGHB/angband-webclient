@@ -113,7 +113,7 @@ function testfont(lineHeight,dimensions,fontFamily) {
 	document.body.removeChild(span);
 	return results;
 }
-function applyTerminal(mode, qualifier, panels) {
+function applyTerminal(mode, qualifier, panels, walls) {
 	var debug = document.getElementById('debug');
 	var child = document.getElementById("p1");
 	document.getElementById("mainmenu").style.display="none";
@@ -129,7 +129,7 @@ function applyTerminal(mode, qualifier, panels) {
 			livelink.appendChild(textnode);
 			livelink.setAttribute('onclick','applyTerminal("play","'+qualifier+'")');
 			document.getElementById("navigation").appendChild(livelink);
-			socket.send(JSON.stringify({eventtype:'newgame',content:{game:qualifier,panels:panels,dimensions:dimensions}}));
+			socket.send(JSON.stringify({eventtype:'newgame',content:{game:qualifier,panels:panels,dimensions:dimensions,walls:walls}}));
 			term.on('data', function(data) {
 				socket.send(JSON.stringify({eventtype:'gameinput',content:data}));
 				if (false) {
@@ -266,7 +266,7 @@ function initcontrols(){
 			if (game.name==document.getElementById("gameselect").value) ismatch = true;
 			return ismatch;
 		}).desc;
-		document.getElementById('playbutton').setAttribute('onclick','applyTerminal("play","'+document.getElementById("gameselect").value+'",'+document.getElementById("panels").value+')');
+		document.getElementById('playbutton').setAttribute('onclick','applyTerminal("play","'+document.getElementById("gameselect").value+'",'+document.getElementById("panels").value+','+document.getElementById("walls").checked+')');
 	});
 	document.getElementById('playbutton').setAttribute('onclick','applyTerminal("play","'+document.getElementById("gameselect").value+'",'+document.getElementById("panels").value+')');
 	document.getElementById("columns").value=dimensions.cols;

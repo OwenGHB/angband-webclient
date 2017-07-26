@@ -6,8 +6,8 @@ var games = [
 	},
 	{
 		name:'competition',
-		longname:'Competition 207',
-		desc:"Aldarion is a Dunadan who has a knack for reading arcane runes. Unfortunately, he took that as a sign that he should be a Valar-slaying mage, and he's regretting his life decisions at the moment."
+		longname:'Competition 208',
+		desc:"Taregor is a Druadan ranger who has taken it upon himself to rid Beleriand of evil. The way is fraught with peril, but he has many talents."
 	},
 	{
 		name:'faangband',
