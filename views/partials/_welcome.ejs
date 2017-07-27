@@ -1,0 +1,26 @@
+<div class="login-form text-center">
+    <div>
+        <img id="logo" src="logo.png"></img>
+    </div>
+    
+    <p>Create an account to join in. If your username is unused it will be created. Otherwise please try again.<p>
+    
+    <div class="form">
+        <form id="login-form" method="post">
+        	<label>Username:</label>
+        	<input type="text" name="username"/></br>
+        	<label>Password:</label>
+        	<input type="password" name="password"/></br>
+        </form>
+        
+        <button type="submit" onclick="signIn()">Sign in</button>
+    </div>
+</div>
+
+<script>
+    function signIn(){
+    	var loginform = document.getElementById("login-form");
+    	loginform.action = "/signin";
+    	loginform.submit();
+    }
+</script>

@@ -57,6 +57,9 @@ a {
 	font-family:YOzFontOTWD;
 	src: url(fonts/YOzFontOTWD.ttf);
 }
+
+
+
 body {	
 
 }
@@ -71,12 +74,16 @@ body,input,button,select,option {
 }
 input,button,select {
 	background: transparent;
-	outline: 1px outset darkgray;
+	/*outline: 1px outset darkgray;*/
 }
 input:hover,button:hover,select:hover,option:hover {
-	background: lightgray;
-	color: black;
+	/*background: lightgray;*/
+	/*color: black;*/
 }
+input:focus{
+    outline: none;
+}
+
 #container {
     background: black;
 	color: lightgray;
@@ -138,4 +145,41 @@ input:hover,button:hover,select:hover,option:hover {
 #chatmessage {
 	background: black;
 	color: lightgray;
+}
+
+
+/* UTILITY CLASSES */
+.text-center {
+	text-align: center;
+}
+
+
+/* LOGIN FORM */
+.login-form img {
+	padding: 3em 0;
+	text-align: center;
+}
+.login-form .form {
+	display: inline-block;
+	margin: 0 auto;
+}
+.login-form form input, .login-form button {
+	transition: .3s linear;
+}
+.login-form form input {
+	background-color: #383838;
+	border: 1px solid #282828;
+	padding: 3px;
+	margin-bottom: 0.3rem;
+}
+.login-form form input:focus, .login-form button:hover {
+	background-color: #424242;
+}
+.login-form button {
+	padding: 0.3rem 0.6rem;
+	background-color: #383838;
+	border: 1px solid #282828;
+	width: 100%;
+	cursor: pointer;
+	outline: 0;
 }

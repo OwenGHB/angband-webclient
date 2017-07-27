@@ -1,6 +1,6 @@
 
-
-var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
+var protocol = location.protocol === "https:" ? "wss" : "ws";
+var socketURL = protocol + '://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
 var socket;
 var dimensions={rows:50,cols:150};
 var terminfo = 'xterm-256color';
@@ -339,9 +339,4 @@ function initsettings(){
 		adjustsize();
 	});
 	document.body.style.fontFamily=document.getElementById('fontselect').value;
-}
-function signIn(){
-	var loginform = document.getElementById("login-form");
-	loginform.action = "/signin";
-	loginform.submit();
 }

@@ -1,19 +1,19 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var session = require('cookie-session');
-var bodyParser = require('body-parser');
-var terminal = require('term.js');
-var app = express();
-var expressWs = require('express-ws')(app);
-var mongoose = require('mongoose');
-var passport = require('passport');
-var awc = require('./lib.js');
+var express       = require('express');
+var path          = require('path');
+var favicon       = require('serve-favicon');
+var logger        = require('morgan');
+var cookieParser  = require('cookie-parser');
+var session       = require('cookie-session');
+var bodyParser    = require('body-parser');
+var terminal      = require('term.js');
+var app           = express();
+var expressWs     = require('express-ws')(app);
+var mongoose      = require('mongoose');
+var passport      = require('passport');
+var awc           = require('./lib.js');
 var LocalStrategy = require('passport-local').Strategy;
-var Account = require('./models/account');
-var fs = require('fs-extra');
+var Account       = require('./models/account');
+var fs            = require('fs-extra');
 
 //set up our pinging
 setInterval(function(){awc.keepalive()},10000);
@@ -47,10 +47,12 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 // Connect mongoose
-mongoose.connect('mongodb://localhost/bandit', function(err) {
+const db_url = process.env.MONGODB_URL || 'mongodb://localhost/bandit';
+mongoose.connect(db_url, function(err) {
   if (err) {
-    console.log('Could not connect to mongodb on localhost. Ensure that you have mongodb running on localhost and mongodb accepts connections on standard ports!');
+    return console.error("Could not connect to mongodb. Ensure that you have mongodb running on localhost and mongodb accepts connections on standard ports!");
   }
+  console.log("database connection established");
 });
 
 // Register routes

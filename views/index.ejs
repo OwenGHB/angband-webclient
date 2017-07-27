@@ -11,15 +11,7 @@
   <body>
 		<div id="container">
 		<% if (typeof(user) == 'undefined') { %>
-			<img id="logo" src="logo.png"></img></br>
-			<span>Create an account to join in. If your username is unused it will be created. Otherwise please try again.<span>
-			<form id="login-form" method="post">
-				<label>Username:</label>
-				<input type="text" name="username"/></br>
-				<label>Password:</label>
-				<input type="password" name="password"/></br>
-			</form>
-			<button type="submit" onclick="signIn()">Sign in</button>
+			<%- include('partials/_welcome'); %>
 		<% } else { %>
 			<div id="mainmenu">
 				<img id="logo" src="logo.png"></img>
