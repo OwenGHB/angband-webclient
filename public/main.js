@@ -2,7 +2,7 @@
 var protocol = location.protocol === "https:" ? "wss" : "ws";
 var socketURL = protocol + '://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
 var socket;
-var dimensions={rows:50,cols:150};
+var dimensions={rows:50, cols:150};
 var terminfo = 'xterm-256color';
 var term = new Terminal({
 	termName: terminfo,
@@ -198,59 +198,59 @@ function listfiles(filelinks){
 	return list;
 }
 function initmeta(){
-	socket = new WebSocket(socketURL);
-	socket.addEventListener('message', function (ev) {
-		var data = JSON.parse(ev.data);
-		//switch this
-		if (data.eventtype=='chat') {
-			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
-			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
-		} else if (data.eventtype=='usercount') {
-			document.getElementById("userlist").innerHTML='<ul><li>'+data.content.join('</li><li>')+'</li></ul>';
-			document.getElementById("userlistbutton").innerHTML='Users online: '+data.content.length;
-		} else if (data.eventtype=='matchupdate') {
-			listmatches(data.content);
-		} else if (data.eventtype=='fileupdate') {
-			document.getElementById("files").innerHTML=listfiles(data.content);
-		} else if (data.eventtype=='spectatorinfo') {
-			document.getElementById("chatlog").innerHTML+=data.content+'<br>';
-			document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
-		} else if (data.eventtype=='owngameoutput') {
-			term.write(data.content);
-		} else if (data.eventtype=='gameoutput'){
-			if (typeof(spyglass[data.content.player])!='undefined') {
-				spyglass[data.content.player].write(data.content.data);
-			} else {
-				spyglass[data.content.player] = new Terminal({
-					termName: terminfo,
-					colors: Terminal.xtermColors,
-					cols: dimensions.cols,
-					rows: dimensions.rows,
-					cursorBlink: false
-				});
-				spyglass[data.content.player].write(data.content.data);
-			}
-		}
-	});
-	socket.addEventListener('close', function () {
-		document.getElementById("chatlog").innerHTML+='***Disconnected***<br>';
-		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
-	});
-	socket.addEventListener('open', function () {
-		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
-	});
-	document.getElementById("sendchat").addEventListener("click",function() {
-		chatsocket.send(JSON.stringify({eventtype:'chat',content:document.getElementById("chatmessage").value}));
-		document.getElementById("chatmessage").value='';
-	});
-	document.getElementById("chatmessage").onkeypress = function(e){
-		if (!e) e = window.event;
-		var keyCode = e.keyCode || e.which;
-		if (keyCode == '13'){
-			socket.send(JSON.stringify({eventtype:'chat',content:document.getElementById("chatmessage").value}));
-			document.getElementById("chatmessage").value='';
-		}
-	}
+	// socket = new WebSocket(socketURL);
+	// socket.addEventListener('message', function (ev) {
+	// 	var data = JSON.parse(ev.data);
+	// 	//switch this
+	// 	if (data.eventtype=='chat') {
+	// 		document.getElementById("chatlog").innerHTML+=data.content+'<br>';
+	// 		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+	// 	} else if (data.eventtype=='usercount') {
+	// 		document.getElementById("userlist").innerHTML='<ul><li>'+data.content.join('</li><li>')+'</li></ul>';
+	// 		document.getElementById("userlistbutton").innerHTML='Users online: '+data.content.length;
+	// 	} else if (data.eventtype=='matchupdate') {
+	// 		listmatches(data.content);
+	// 	} else if (data.eventtype=='fileupdate') {
+	// 		document.getElementById("files").innerHTML=listfiles(data.content);
+	// 	} else if (data.eventtype=='spectatorinfo') {
+	// 		document.getElementById("chatlog").innerHTML+=data.content+'<br>';
+	// 		document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+	// 	} else if (data.eventtype=='owngameoutput') {
+	// 		term.write(data.content);
+	// 	} else if (data.eventtype=='gameoutput'){
+	// 		if (typeof(spyglass[data.content.player])!='undefined') {
+	// 			spyglass[data.content.player].write(data.content.data);
+	// 		} else {
+	// 			spyglass[data.content.player] = new Terminal({
+	// 				termName: terminfo,
+	// 				colors: Terminal.xtermColors,
+	// 				cols: dimensions.cols,
+	// 				rows: dimensions.rows,
+	// 				cursorBlink: false
+	// 			});
+	// 			spyglass[data.content.player].write(data.content.data);
+	// 		}
+	// 	}
+	// });
+	// socket.addEventListener('close', function () {
+	// 	document.getElementById("chatlog").innerHTML+='***Disconnected***<br>';
+	// 	document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+	// });
+	// socket.addEventListener('open', function () {
+	// 	document.getElementById("chatlog").scrollTop = document.getElementById("chatlog").scrollHeight - document.getElementById("chatlog").clientHeight;
+	// });
+	// document.getElementById("sendchat").addEventListener("click",function() {
+	// 	chatsocket.send(JSON.stringify({eventtype:'chat',content:document.getElementById("chatmessage").value}));
+	// 	document.getElementById("chatmessage").value='';
+	// });
+	// document.getElementById("chatmessage").onkeypress = function(e){
+	// 	if (!e) e = window.event;
+	// 	var keyCode = e.keyCode || e.which;
+	// 	if (keyCode == '13'){
+	// 		socket.send(JSON.stringify({eventtype:'chat',content:document.getElementById("chatmessage").value}));
+	// 		document.getElementById("chatmessage").value='';
+	// 	}
+	// }
 }
 function initcontrols(){
 	for (var i in games) {

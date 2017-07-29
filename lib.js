@@ -48,21 +48,23 @@ function chat(user,message){
 		'wobbly',
 		'rodent'
 	];
-	if (winners.includes(user.username)){
+	if (user.isWinner) {
 		var response = JSON.stringify({
 			eventtype: 'chat', content: '<span class="playername winner">'+user.username+'</span>: '+message
 		});
-	} else if (user.username=='MITZE'){
+	} 
+	else if (user.username=='MITZE'){
 		var response = JSON.stringify({
 			eventtype: 'chat', content: '<span class="playername MITZE">'+user.username+'</span>: '+message
 		});
-	} else {
+	} 
+	else {
 		var response = JSON.stringify({
-			eventtype: 'chat', content: '<span class="playername">'+user.username+'</span>: '+message
+			eventtype: 'chat', content: '<span class="playername basic">'+user.username+'</span>: '+message
 		});
 	}
 	chatlog.unshift(response);
-	while (chatlog.length>20) {
+	while (chatlog.length>100) {
 		chatlog.pop();
 	}
 	for (var i in metasockets){

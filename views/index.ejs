@@ -2,8 +2,10 @@
 <html>
   <head>
     <title>Angband Live</title>
-	<meta name="description" content="Web based client for playing Angband and select variants remotely. Supports recording and live spectating.">
+	<meta name="description" content="Web based client for playing Angband and variants remotely. Supports recording and live spectating.">
+	<link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel='stylesheet' href='/style.css' />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="term.js" ></script>
 	<script src="/games.js"></script>
 	<script src="/main.js"></script>
@@ -11,89 +13,19 @@
   <body>
 		<div id="container">
 		<% if (typeof(user) == 'undefined') { %>
-			<%- include('partials/_welcome'); %>
+			<%- include('partials/_login'); %>
 		<% } else { %>
-			<div id="mainmenu">
-				<img id="logo" src="logo.png"></img>
-				<div id="playmenu">
-					<label>Game:</label>
-					<select id="gameselect">
-					</select>
-					<div id="gamedescription"></div>
-					<label style="display:none;">columns</label>
-					<input style="display:none;" id="columns" type="number" min="80" max="215">
-					<label style="display:none;">rows</label>
-					<input style="display:none;" id="rows" type="number" min="47" max="66">
-					<label>subwindows:</label><input id="panels" type="number" min="1" max="6" value="1">
-					<label>ascii walls:</label><input id="walls" type="checkbox">
-					<button id="playbutton">Play</button>
-				</div>
-				<div id="watchmenu"></div>
-			</div>
-			<div id="terminal-container">
-			</div>
-			<div id="menu">
-				<div id="sidebarmenu">
-					<div id="menutabs">
-						<button id="navigationbutton">Navigation</button>
-						<button id="settingsbutton">Settings</button>
-						<button id="filesbutton">Files</button>
-						<button href="/logout">Log Out</button>
-					</div>
-					<div id="navigation">
-						<button id="homebutton" class="navlink">Home</button>
-					</div>
-					<div id="settings" style="display:none;">
-						<label>Font:</label>
-						<select id="fontselect">
-							<option value='monospace'>default</option>
-							<option value='"Consolas", monospace'>Consolas</option>
-							<option value='"Courier", monospace'>Courier</option>
-							<option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>
-							<option value='"Lucida Console", monospace'>Lucida Console</option>
-							<option value='"Terminus", monospace'>Terminus</option>
-						</select> 
-						<label>sidebar columns (minimum)</label>
-						<input id="mincolumns" type="number" min="20" max="45" value="30">
-						<label>sidebar rows (minimum)</label>
-						<input id="minrows" type="number" min="5" max="25" value="8">
-						<label>widescreen (sidebar right):</label>
-						<select id="widescreen">
-							<option value='auto'>auto</option>
-							<option value='on'>on</option>
-							<option value='off'>off</option>
-						</select> 
-						<button id="applysettings">Apply</button>
-					<% if (user.username=='Gwarl') { %>
-						<div id="debug">
-						</div>
-					<% } %>
-					</div>
-					<div id="files" style="display:none;">
-					</div>
-				</div>
-				<div id="chat">
-					<div id="chattabs">
-						<button id="chatbutton">Chat</button>
-						<button id="userlistbutton">Users online:</button>
-					</div>
-					<div id="userlist" style="display:none;">
-					</div>
-					<div id="chatlog"></div>
-					<input type="text" id="chatmessage"></textarea>
-					<button id="sendchat">Send</button>
-				</div>
-			</div>
+			<%- include('partials/_lobby'); %>
 		<% } %>
 		</div>
 	<script>
-	var loginform =  document.getElementById('loginform');
-	if (typeof(loginform)!='undefined') {
-		initsettings();
-		initcontrols();
-		adjustsize();
-		initmeta();
-	}
+		// var loginform =  document.getElementById('loginform');
+		// if (typeof(loginform)!='undefined') {
+		// 	initsettings();
+		// 	initcontrols();
+		// 	adjustsize();
+		// 	initmeta();
+		// }
 	</script>
   </body>
 </html>

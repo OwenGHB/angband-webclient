@@ -1,0 +1,267 @@
+<div class="flex">
+	<div class="pane-main">
+		<div id="games-lobby"><%- include('_games_lobby'); %></div>
+		<div id="terminal-container" class="terminal hidden"><%- include('_terminal'); %></div>
+	</div>
+	<div class="pane-side">
+		<div class="tab-buttons">
+			<a href="#" title="navigation" onClick=showTab(1)><i class="material-icons">dashboard</i></a>
+			<a href="#" title="chat" onClick=showTab(2)><i class="material-icons">message</i></a>
+			<a href="#" title="people" onClick=showTab(3)><i class="material-icons">people</i></a>
+			<a href="#" title="files" onClick=showTab(4)><i class="material-icons">attach_file</i></a>
+			<a href="#" title="settings" onClick=showTab(5)><i class="material-icons">settings</i></a>
+			<a href="/logout" title="logout" class="float-right"><i class="material-icons">exit_to_app</i></a>
+		</div> 
+		<div class="tab-panels">
+			<div class="tab hidden" id="tab-navigation"><%- include('tabs/_tab_navigation'); %></div>
+			<div class="tab hidden" id="tab-chat"><%- include('tabs/_tab_chat'); %></div>
+			<div class="tab hidden" id="tab-people"><%- include('tabs/_tab_people'); %></div>
+			<div class="tab hidden" id="tab-files"><%- include('tabs/_tab_files'); %></div>
+			<div class="tab hidden" id="tab-settings"><%- include('tabs/_tab_settings'); %></div>
+		</div>
+	</div>
+</div>
+<script>
+	var current_tab = null;
+	var spyglass = {};
+	var playing = false;
+	var dimensions={ rows:50, cols:150 };
+	var term = new Terminal({
+		termName: terminfo,
+		colors: Terminal.xtermColors,
+		cols: dimensions.cols,
+		rows: dimensions.rows,
+		cursorBlink: false
+	});
+	term.applicationCursor=true;
+	
+	function addMessage(msg, extra_class) {
+		var $msg = $(msg);
+		if(extra_class) 
+			$("#chatlog .wrapper").append('<div class="message"><span class="' + extra_class + '">' + msg + '</span></div>');
+		else 
+			$("#chatlog .wrapper").append('<div class="message">' + msg + '</div>');
+	}
+	function updateUserCount(users) { 
+		$("#peoplelist .info").html("<p>there " + (users.length>1?"are":"is") + " <b>" + users.length + "</b> user" + (users.length>1?"s":"") + " online");
+		$("#peoplelist .people").html("");
+		for(var i=0; i<users.length; i++)
+			$("#peoplelist .people").append("<div> - " + users[i] + "</div>");
+	}
+	function listMatches(matches) {
+		$("#watchmenu ul").html("");
+		var players = Object.keys(matches);
+		if(players.length > 0) {
+			for(var i=0; i<players.length; i++) {
+				var p = players[i];
+				var m = matches[p];
+				var idle = m.idletime > 0 ? `, idle for <span>${m.idletime}</span> seconds` : "";
+				$("#watchmenu ul").append(`<li><span>${players[i]}</span> playing <span>${matches[players[i]].game}</span>${idle}</li>`);			
+			}
+		}
+		else {
+			$("#watchmenu ul").append(`<li>there are no live games right now</li>`);
+		}
+	}
+	function listFiles(files) { console.log("todo"); }
+	
+	
+	function showTab(pos) {
+		const tabs = $(".tab-panels").children().map(function(i,e){return e.id;});
+		for(var i=0; i<tabs.length; i++) {
+			if(i === pos-1)
+				$("#"+tabs[i]).removeClass("hidden")
+			else 
+				$("#"+tabs[i]).addClass("hidden");
+		}
+	}
+	
+	function applyTerminal(mode, qualifier, panels, walls) {
+		$terminal = $("#terminal-container");
+		if(mode === "play") {
+			if (!playing){
+				playing = true;
+				$("#navigation").append(function() {
+					return $('<a href="#">' + qualifier + '</a>').click(function() {
+						applyTerminal("play", q);
+					});
+				});
+				socket.send(JSON.stringify({
+					eventtype:'newgame',
+					content: {
+						game:qualifier,
+						panels:panels,
+						dimensions:dimensions,
+						walls:walls
+					}
+				}));
+				term.on('data', function(data) {
+					socket.send(JSON.stringify({eventtype: 'gameinput', content: data}));
+				});
+			}
+			console.log("term on", $terminal,$terminal.get(0));
+			term.open($terminal.get(0));
+		}
+		else if(mode === "spectate") {
+			
+		}
+		// hide lobby and unhide terminal
+		$("#games-lobby").addClass("hidden");
+		$("#terminal-container").removeClass("hidden");
+	}
+	
+	function initChat() {
+		socket = new WebSocket(socketURL);
+		socket.addEventListener('message', function (ev) {
+			var data = JSON.parse(ev.data);
+			switch(data.eventtype) {
+				case "chat":
+					addMessage(data.content); break;
+				case "usercount":
+					updateUserCount(data.content); break;
+				case "matchupdate":
+					listMatches(data.content); break;
+				case "fileupdate":
+					listFiles(data.content); break;
+				case "spectatorinfo":
+					addMessage(data.content); break;
+				case "owngameoutput":
+					term.write(data.content); break;
+				case "gameoutput":
+					if (typeof(spyglass[data.content.player])!='undefined') {
+						spyglass[data.content.player].write(data.content.data);
+					} 
+					else {
+						spyglass[data.content.player] = new Terminal({
+							termName: terminfo,
+							colors: Terminal.xtermColors,
+							cols: dimensions.cols,
+							rows: dimensions.rows,
+							cursorBlink: false
+						});
+						spyglass[data.content.player].write(data.content.data);
+					}
+					break;
+				default:
+					console.warn("unknown socket event occured", data.eventtype); break;
+			}
+		});
+		socket.addEventListener('close', function () {
+			addMessage("***Disconnected***", "system");
+		});
+		socket.addEventListener('open', function () {
+			addMessage("***Connected to chat***", "system");
+		});
+		// document.getElementById("sendchat").addEventListener("click",function() {
+		// 	chatsocket.send(JSON.stringify({eventtype:'chat',content:document.getElementById("chatmessage").value}));
+		// 	document.getElementById("chatmessage").value='';
+		// });
+		$("#new-message-input input").keypress(function(e) {
+			if (!e) e = window.event;
+			var keyCode = e.keyCode || e.which;
+			if (keyCode == '13'){
+				socket.send(JSON.stringify({eventtype:'chat',content:$(this).val()}));
+				$(this).val("");
+			}
+		});
+	}
+	
+	function initGameList() {
+		// populate select
+		for(var i=0; i<games.length; i++) {
+			var g=games[i];
+			$("#gameselect").append(`<option value=${g.name} title="${g.desc}">${g.longname}</option>`);
+		}
+		// select onchange
+		$("#gameselect").change(function(e) {
+			console.log(e);
+			for(var i=0; i<games.length; i++) {
+				if(e.target.value === games[i].name) {
+					$("#game-description").html(games[i].desc);
+				}
+			}
+		});
+		$("#gameselect").trigger("change");
+		$("#playbutton").click(function() {
+			var gamename = $("#gameselect").val();
+			var panels = $("#panels").val()
+			applyTerminal("play", gamename, panels);
+		});
+	}
+	
+	$(function() {
+		// init and open chat tab by default
+		initChat(); showTab(2);
+		
+		// init angband variants list box
+		initGameList();
+	});
+</script>
+
+<!--<div id="mainmenu">-->
+	
+<!--</div>-->
+
+<!--<div id="terminal-container">-->
+<!--</div>-->
+
+<!--<div id="menu">-->
+<!--	<div id="sidebarmenu">-->
+<!--		<div id="menutabs">-->
+<!--			<button id="navigationbutton">Navigation</button>-->
+<!--			<button id="settingsbutton">Settings</button>-->
+<!--			<button id="filesbutton">Files</button>-->
+<!--			<button href="/logout">Log Out</button>-->
+<!--		</div>-->
+<!--		<div id="navigation">-->
+<!--			<button id="homebutton" class="navlink">Home</button>-->
+<!--		</div>-->
+<!--		<div id="settings" style="display:none;">-->
+<!--			<label>Font:</label>-->
+<!--			<select id="fontselect">-->
+<!--				<option value='monospace'>default</option>-->
+<!--				<option value='"Consolas", monospace'>Consolas</option>-->
+<!--				<option value='"Courier", monospace'>Courier</option>-->
+<!--				<option value='"DejaVu Sans Mono", monospace'>DejaVu Sans Mono</option>-->
+<!--				<option value='"Lucida Console", monospace'>Lucida Console</option>-->
+<!--				<option value='"Terminus", monospace'>Terminus</option>-->
+<!--			</select> -->
+<!--			<label>sidebar columns (minimum)</label>-->
+<!--			<input id="mincolumns" type="number" min="20" max="45" value="30">-->
+<!--			<label>sidebar rows (minimum)</label>-->
+<!--			<input id="minrows" type="number" min="5" max="25" value="8">-->
+<!--			<label>widescreen (sidebar right):</label>-->
+<!--			<select id="widescreen">-->
+<!--				<option value='auto'>auto</option>-->
+<!--				<option value='on'>on</option>-->
+<!--				<option value='off'>off</option>-->
+<!--			</select> -->
+<!--			<button id="applysettings">Apply</button>-->
+<!--		<% if (user.username=='Gwarl') { %>-->
+<!--			<div id="debug">-->
+<!--			</div>-->
+<!--		<% } %>-->
+<!--		</div>-->
+<!--		<div id="files" style="display:none;">-->
+<!--		</div>-->
+<!--	</div>-->
+<!--	<div id="chat">-->
+<!--		<div id="chattabs">-->
+<!--			<button id="chatbutton">Chat</button>-->
+<!--			<button id="userlistbutton">Users online:</button>-->
+<!--		</div>-->
+<!--		<div id="userlist" style="display:none;">-->
+<!--		</div>-->
+<!--		<div id="chatlog"></div>-->
+<!--		<input type="text" id="chatmessage"></textarea>-->
+<!--		<button id="sendchat">Send</button>-->
+<!--	</div>-->
+<!--</div>-->
+
+<script>
+    console.log("initializing startup scripts");
+    // initsettings();
+	// initcontrols();
+	// adjustsize();
+	// initmeta();
+</script>

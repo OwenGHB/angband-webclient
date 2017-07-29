@@ -93,7 +93,7 @@ input:focus{
 }
 .MITZE{
 	color: #AF11AF;
-	font-family:YOz14s;
+	font-family: "YOz14s";
 }
 .silwinner{
 	color: #EFEF11;
@@ -140,7 +140,7 @@ input:focus{
 	float: left;
 }
 #chatlog {
-	overflow-y: scroll;
+	overflow-y: hidden;
 }
 #chatmessage {
 	background: black;
@@ -149,9 +149,78 @@ input:focus{
 
 
 /* UTILITY CLASSES */
-.text-center {
-	text-align: center;
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.flex-grow { flex-grow: 1; }
+.float-right { float: right; }
+.hidden { display: none !important; }
+
+/* LAYOUT */
+html, body, #container {
+	height: 100%;
+	overflow: hidden;
 }
+.flex {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: stretch;
+	height: 100%;
+}
+.flex .pane-main {
+	flex-grow: 1;
+}
+.flex .pane-side {
+	width: 20%;
+	min-width: 300px;
+	display: flex;
+	flex-direction: column;
+}
+.flex .tab-panels {
+	flex-grow: 1;
+	display: flex;
+    flex-direction: column;
+}
+.flex .tab-buttons,
+.flex .tab-panels {
+	margin-right: 0.25rem;
+}
+.flex .tab-panels .tab {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.flex .pane-main,
+.flex .pane-side { border: 0 solid blue;}
+.tab-panels .hidden { display: none !important; }
+.tab-panels .panel {
+	background-color: #0f0f0f;
+	border: 2px solid #353535;
+	margin-bottom: 0.25rem;
+	padding: 0.4rem;
+}
+
+
+/* TAB CHAT CONTENTS */
+#chatlog {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+#chatlog .basic {
+	color: #eeeeee;
+	font-weight: 600;
+}
+#chatlog .system { color: burlywood; }
+#chatlog .message { word-wrap: break-word; }
+#new-message-input input { width: 100%; }
+
+
+/* TAB PEOPLE CONTENS */
+#peoplelist .info {	color: #777; }
+#peoplelist .info p { margin: 0; }
+#peoplelist .info b { color: #aaa; }
 
 
 /* LOGIN FORM */
@@ -177,9 +246,69 @@ input:focus{
 }
 .login-form button {
 	padding: 0.3rem 0.6rem;
-	background-color: #383838;
-	border: 1px solid #282828;
+	background-color: #1b1b1b;
+	border: 1px solid #2b2b2b;
 	width: 100%;
 	cursor: pointer;
 	outline: 0;
+}
+
+
+/* MAIN PANE: GAMES LOBBY */
+#gameselect:hover { box-shadow: none; }
+#games-lobby img { margin: 2rem 0; }
+#games-lobby h2 { 
+	color: #627d94; 
+	margin: 1rem 0 0.2rem 0; 
+}
+#games-lobby .new-game {
+	display: flex;
+	flex-direction: column;
+}
+#games-lobby .new-game .row {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+#games-lobby .new-game .row div { 
+	min-width: 200px; 
+	padding: 0 0.5rem; 
+}
+#game-description {
+	max-width: 400px;
+    text-align: center;
+    color: gray;
+}
+#playbutton {
+	padding: 0.4rem 2rem;
+    background-color: #171719;
+    border: 2px solid #353535;
+    color: #c7c6c6;
+    text-decoration: none;
+    margin-bottom: 2rem;
+}
+#playbutton:hover { background-color: #353535; }
+#watchmenu ul {
+	padding: 0;
+	display: inline-block;
+}
+#watchmenu ul li {
+	list-style-type: none;
+	color: gray;
+	cursor: pointer;
+	padding: 1px 4px;
+}
+#watchmenu ul li:hover {
+	background-color: #1d2226;
+}
+#watchmenu ul li span {
+	color: #ddd;
+}
+#watchmenu ul li:hover span {
+	color: #bada55;
+}
+
+/* MAIN PANE: TERMINAL */
+#terminal-container {
+	border: 1px solid gray;
 }
