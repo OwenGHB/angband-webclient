@@ -38,7 +38,7 @@ function listMatches(matches) {
 		for(var i=0; i<players.length; i++) {
 			var p = players[i];
 			var m = matches[p];
-			var idle = m.idletime > 0 ? ', idle for <span>'+m.idletime+'</span> seconds' : "";
+			var idle = m.idletime > 0 ? ', idle for <span>'+m.idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append('<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>'+idle+'</li>');			
 		}
 	}

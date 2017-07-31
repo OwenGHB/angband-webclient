@@ -386,6 +386,10 @@ html, body, #container {
 	border: 2px solid #353535;
 	display: block;
 }
+#terminal-container,
+#tester {
+	line-height: 100%;
+}
 #tester {
 	display: inline-block;
 	visibility: hidden;
