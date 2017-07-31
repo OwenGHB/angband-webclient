@@ -1,7 +1,8 @@
 <div class="flex">
 	<div class="pane-main">
 		<div id="games-lobby"><%- include('_games_lobby'); %></div>
-		<div id="terminal-container" class="terminal hidden"><%- include('_terminal'); %></div>
+		<div id="terminal-pane" class="hidden"><%- include('_terminal'); %></div>
+		<div id="tester" class="terminal">a</div>
 	</div>
 	<div class="pane-side">
 		<div class="tab-buttons">
@@ -26,6 +27,7 @@
 	var spyglass = {};
 	var playing = false;
 	var dimensions={ rows:50, cols:150 };
+	var safety = 10;  // for font size calculation
 	var term = new Terminal({
 		termName: terminfo,
 		colors: Terminal.xtermColors,
@@ -103,11 +105,58 @@
 			term.open($terminal.get(0));
 		}
 		else if(mode === "spectate") {
-			
+			if (typeof(spyglass[qualifier])=='undefined') {
+				$("#navigation").append(function() {
+					return $('<a href="#">' + qualifier + '</a>').click(function() {
+						applyTerminal("spectate", qualifier);
+					});
+				});
+				spyglass[qualifier] = new Terminal({
+					termName: terminfo,
+					colors: Terminal.xtermColors,
+					cols: dimensions.cols,
+					rows: dimensions.rows,
+					cursorBlink: false
+				});
+				socket.send(JSON.stringify({eventtype:'subscribe', content:{player:qualifier}}));
+			}
+			spyglass[qualifier].open($terminal.get(0));
 		}
+		
+		// resize terminal container to fit remaining space nicely
+		adjustTerminalFontSize();
+		
 		// hide lobby and unhide terminal
 		$("#games-lobby").addClass("hidden");
-		$("#terminal-container").removeClass("hidden");
+		$("#terminal-pane").removeClass("hidden");
+	}
+	
+	function adjustTerminalFontSize() {
+		$("#tester").css("display", "initial");
+		$("#tester").css("visibility", "hidden");
+		var sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20];
+		var window_width = $(window).innerWidth();
+		var $mainpane = $(".pane-main");
+		var mph = $mainpane.innerHeight();
+		var mpw = $mainpane.innerWidth();
+		var selected_size = sizes[0];
+		for(var i=0; i<sizes.length; i++) {
+			$("#tester").css('font-size', sizes[i] + "px");
+			var tw = $("#tester").innerWidth();
+			var th = $("#tester").innerHeight();
+			var cfs = $("#tester").css('font-size');
+			console.log("main-pane:", mpw, mph, "testing font size:", sizes[i], "test div:", tw, th, "term:",tw*dimensions.cols, th*dimensions.rows);
+			var check_width = dimensions.cols * tw > mpw-safety;
+			var check_height = window_width < 1000 ? false : dimensions.rows * th > mph-safety;
+			if(check_height || check_width) {
+				console.log("best font size is", selected_size, `that gives width=${dimensions.cols * tw} and height=${dimensions.rows * th}`);
+				break;
+			}
+			else 
+				selected_size = sizes[i];
+		}
+		$("#tester").css("display", "none");
+		$("#terminal-container").css("font-size", selected_size + "px");
 	}
 	
 	function initChat() {
@@ -195,6 +244,9 @@
 		
 		// init angband variants list box
 		initGameList();
+		
+		// terminal resizer
+		$(window).resize(function() { adjustTerminalFontSize(); });
 	});
 </script>
 

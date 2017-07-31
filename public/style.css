@@ -160,11 +160,12 @@ input:focus{
 html, body, #container {
 	height: 100%;
 	overflow: hidden;
+	min-width: 768px;
 }
 .flex {
 	display: flex;
 	flex-direction: row;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	align-items: stretch;
 	height: 100%;
 }
@@ -199,6 +200,20 @@ html, body, #container {
 	border: 2px solid #353535;
 	margin-bottom: 0.25rem;
 	padding: 0.4rem;
+}
+
+@media (max-width: 1000px) {
+	.flex {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-items: stretch;
+		height: 100%;
+	}
+	.flex .pane-side {
+		width: 100%;
+		margin-top: 5px;
+	}
 }
 
 
@@ -309,7 +324,22 @@ html, body, #container {
 }
 
 /* MAIN PANE: TERMINAL */
+#terminal-pane {
+	display: flex;
+    flex-grow: 1;
+    height: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 #terminal-container {
-	border: 1px solid gray;
+	border: 2px solid #353535;
 	display: block;
+}
+#tester {
+	display: inline-block;
+	visibility: hidden;
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
