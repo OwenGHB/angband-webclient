@@ -263,6 +263,10 @@ html, body, #container {
 .tab-panels .tab a:hover {
 	color: #e29497;
 }
+.tab-panels label {
+	color: #daa043;
+	margin-right: 5px;
+}
 
 
 /* TAB CHAT CONTENTS */

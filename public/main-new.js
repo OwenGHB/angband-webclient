@@ -18,6 +18,25 @@ var term = new Terminal({
 });
 term.applicationCursor=true;
 
+var fonts = [
+	"Share Tech Mono",
+	"Fira Mono",
+	"Nova Mono",
+	"Overpass Mono",
+	"Oxygen Mono",
+	"Cutive Mono",
+	"VT323",
+	"Anonymous Pro",
+	"PT Mono",
+	"Ubuntu Mono",
+	"Cousine",
+	"Space Mono",
+	"Droid Sans Mono",
+	"Source Code Pro",
+	"Roboto Mono",
+	"Inconsolata"
+];
+
 function addMessage(msg, extra_class) {
 	var $msg = $(msg);
 	if(extra_class) 
@@ -39,7 +58,11 @@ function listMatches(matches) {
 			var p = players[i];
 			var m = matches[p];
 			var idle = m.idletime > 0 ? ', idle for <span>'+m.idletime+'0</span> seconds' : "";
-			$("#watchmenu ul").append('<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>'+idle+'</li>');			
+			$("#watchmenu ul").append(function(i) {
+			    return $('<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>'+idle+'</li>').click(function() {
+			        applyTerminal("spectate", players[i]);
+			    });
+			}(i));			
 		}
 	}
 	else {
@@ -224,7 +247,41 @@ function initGameList() {
 	});
 }
 
+function changeTerminalFont(family, skipSaving) {
+	var f = '"' + family + '", monospace';
+	$("#terminal-container").css("font-family", f);
+	$("#tester").css("font-family", f);
+	$("#terminal-container").css("font-size", "8px");
+	$("#tester").css("font-size", "8px");
+	adjustTerminalFontSize();
+	if(!skipSaving) saveOption("terminal_font_family", family);
+}
+
+function saveOption(opt, val) {
+	if(window.localStorage) {
+		var ls = window.localStorage.getItem("aw_options");
+		if(!ls) ls = {};
+		else ls = JSON.parse(ls);
+		ls[opt] = val;
+		window.localStorage.setItem("aw_options", JSON.stringify(ls));
+	}
+}
+
+function loadAndApplyOptions() {
+	if(window.localStorage) {
+		var ls = window.localStorage.getItem("aw_options");
+		if(ls) {
+			ls = JSON.parse(ls);
+			// restore terminal font
+			changeTerminalFont(ls["terminal_font_family"], false);
+		}
+	}
+}
+
 $(function() {
+	// apply options from local storage
+	loadAndApplyOptions();
+	
 	// init and open chat tab by default
 	initChat(); showTab(2);
 	
@@ -239,6 +296,12 @@ $(function() {
     	$("#terminal-pane").addClass("hidden");
     	$("#games-lobby").removeClass("hidden");
 	});
+	
+	// add extra fonts
+	fonts.map(function(f,i) {
+		$("#extra-fonts").append('<option value="' + f + '">' + f + '</option>');
+	});
+	$("#extra-fonts").change(function(e) { changeTerminalFont(e.target.value); });
 	
     // scroll chat messages
 	setTimeout(function() {
