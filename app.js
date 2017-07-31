@@ -57,7 +57,7 @@ mongoose.connect(db_url, function(err) {
 
 // Register routes
 app.get('/', function(req, res) {
-	res.render('index', {title:'GwaRL.xyz', user: req.user});
+	res.render('index', {user: req.user});
 });
 
 app.ws('/meta', function (ws, req) {
@@ -68,10 +68,13 @@ app.ws('/meta', function (ws, req) {
 
 app.post('/signin', 
 	function(req, res, next) {
-		Account.find({username:req.body.username},function(err, result){
+		Account.find({username:req.body.username}, function(err, result) {
 			if (result.length>0){
 				next();
-			} else {
+			} 
+			else {
+			  if(req.body.username.length < 3)
+			    return res.json({error: true, mgs:"username too short"});
 				if (req.body.username.match(/^[a-zA-Z_]+$/)!=null) {
 					Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
 						if (err) {
@@ -89,7 +92,8 @@ app.post('/signin',
 	},
 	passport.authenticate('local'),
 	function(req, res) {
-		res.redirect('/');
+		// res.redirect('/');
+		return res.json({error: false, mgs: "ok"});
 	}
 );
 

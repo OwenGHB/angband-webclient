@@ -88,8 +88,14 @@ input:focus{
     background: black;
 	color: lightgray;
 }
+
+/* ROLES AND STATUS */
+.dev {
+	color: #d29554;
+}
 .winner{
-	color: #AF11AF;
+	/*color: #AF11AF;*/
+	color: #b976b9;
 }
 .MITZE{
 	color: #AF11AF;
@@ -98,6 +104,7 @@ input:focus{
 .silwinner{
 	color: #EFEF11;
 }
+
 .terminal {
   float: left;
   color: white;
@@ -161,6 +168,7 @@ html, body, #container {
 	height: 100%;
 	overflow: hidden;
 	min-width: 768px;
+	font-size: 12px;
 }
 .flex {
 	display: flex;
@@ -177,20 +185,26 @@ html, body, #container {
 	min-width: 300px;
 	display: flex;
 	flex-direction: column;
+    padding: 0.25rem 0.25rem 0 0.25rem;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 .flex .tab-panels {
 	flex-grow: 1;
 	display: flex;
     flex-direction: column;
+    height: 100%;
 }
 .flex .tab-buttons,
 .flex .tab-panels {
-	margin-right: 0.25rem;
+	/*margin-right: 0.25rem;*/
+	/*height: 100%;*/
 }
 .flex .tab-panels .tab {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 .flex .pane-main,
 .flex .pane-side { border: 0 solid blue;}
@@ -201,6 +215,13 @@ html, body, #container {
 	margin-bottom: 0.25rem;
 	padding: 0.4rem;
 }
+.flex .tab-panels .tab .wrapper {
+	height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /*display: flex;*/
+    /*flex-direction: column-reverse;*/
+}
 
 @media (max-width: 1000px) {
 	.flex {
@@ -210,17 +231,44 @@ html, body, #container {
 		align-items: stretch;
 		height: 100%;
 	}
+	.flex .pane-main { flex-grow: 0; }
 	.flex .pane-side {
 		width: 100%;
-		margin-top: 5px;
+		flex-grow: 1;
 	}
+}
+
+/* TABS */
+.tab-buttons {
+	padding: 10px 0;
+}
+.tab-buttons a {
+	color: #778990;
+	text-decoration: none;
+}
+.tab-buttons a:hover, .tab-buttons a.selected {
+	color: #00B7FF;
+	text-decoration: underline;
+}
+.tab-panels .tab ul {
+	margin: 0;
+    list-style-type: none;
+    padding: 0;
+}
+.tab-panels .tab a {
+	display: block;
+	text-decoration: none;
+	color: #dc5d62;
+}
+.tab-panels .tab a:hover {
+	color: #e29497;
 }
 
 
 /* TAB CHAT CONTENTS */
 #chatlog {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: flex-end;
 }
 #chatlog .basic {
@@ -236,6 +284,8 @@ html, body, #container {
 #peoplelist .info {	color: #777; }
 #peoplelist .info p { margin: 0; }
 #peoplelist .info b { color: #aaa; }
+
+/* TAB NAVIGATION */
 
 
 /* LOGIN FORM */

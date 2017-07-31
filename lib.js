@@ -48,7 +48,11 @@ function chat(user,message){
 		'wobbly',
 		'rodent'
 	];
-	if (user.isWinner) {
+	if(user.isDev)
+		var response = JSON.stringify({
+			eventtype: 'chat', content: '<span class="playername dev">'+user.username+'</span>: '+message
+		});
+	else if (user.isWinner) {
 		var response = JSON.stringify({
 			eventtype: 'chat', content: '<span class="playername winner">'+user.username+'</span>: '+message
 		});

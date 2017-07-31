@@ -1,6 +1,6 @@
 <div class="login-form text-center">
     <div>
-        <img id="logo" src="logo.png"></img>
+        <img id="logo" src="logo.png" />
     </div>
     
     <p>Create an account to join in. If your username is unused it will be created. Otherwise please try again.<p>
@@ -8,19 +8,42 @@
     <div class="form">
         <form id="login-form" method="post">
         	<label>Username:</label>
-        	<input type="text" name="username"/></br>
+        	<input id="username" type="text" name="username" placeholder="min 3 characters"/></br>
         	<label>Password:</label>
-        	<input type="password" name="password"/></br>
+        	<input id="password" type="password" name="password"/></br>
         </form>
         
-        <button type="submit" onclick="signIn()">Sign in</button>
+        <button id="signin">Sign in</button>
     </div>
+    
+    <div id="error-msg"></div>
+    
+    <div id="donate">
+            
+    </div>
+    
 </div>
 
 <script>
-    function signIn(){
-    	var loginform = document.getElementById("login-form");
-    	loginform.action = "/signin";
-    	loginform.submit();
-    }
+    $(function() {
+        $("#signin").click(function() {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            if(username.length < 3)
+                return alert("username is too short");
+            if(password.length === 0)
+                return alert("enter password");
+            $.post("/signin", {username: username, password:password})
+            .then(function(res) {
+                if(res.error)
+                    alert(res.msg);
+                else
+                    location.href = "/";
+            })
+            .catch(function(error) {
+               if(error.status === 401)
+                    alert("invalid username/password");
+            });
+        });
+    });
 </script>
