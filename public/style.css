@@ -57,6 +57,9 @@ a {
 	font-family:YOzFontOTWD;
 	src: url(fonts/YOzFontOTWD.ttf);
 }
+
+
+
 body {	
 
 }
@@ -71,26 +74,37 @@ body,input,button,select,option {
 }
 input,button,select {
 	background: transparent;
-	outline: 1px outset darkgray;
+	/*outline: 1px outset darkgray;*/
 }
 input:hover,button:hover,select:hover,option:hover {
-	background: lightgray;
-	color: black;
+	/*background: lightgray;*/
+	/*color: black;*/
 }
+input:focus{
+    outline: none;
+}
+
 #container {
     background: black;
 	color: lightgray;
 }
+
+/* ROLES AND STATUS */
+.dev {
+	color: #d29554;
+}
 .winner{
-	color: #AF11AF;
+	/*color: #AF11AF;*/
+	color: #b976b9;
 }
 .MITZE{
 	color: #AF11AF;
-	font-family:YOz14s;
+	font-family: "YOz14s";
 }
 .silwinner{
 	color: #EFEF11;
 }
+
 .terminal {
   float: left;
   color: white;
@@ -133,9 +147,264 @@ input:hover,button:hover,select:hover,option:hover {
 	float: left;
 }
 #chatlog {
-	overflow-y: scroll;
+	overflow-y: hidden;
 }
 #chatmessage {
 	background: black;
 	color: lightgray;
+}
+
+
+/* UTILITY CLASSES */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.flex-grow { flex-grow: 1; }
+.float-right { float: right; }
+.hidden { display: none !important; }
+
+/* LAYOUT */
+html, body, #container {
+	height: 100%;
+	overflow: hidden;
+	min-width: 768px;
+	font-size: 12px;
+}
+.flex {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: stretch;
+	height: 100%;
+}
+.flex .pane-main {
+	flex-grow: 1;
+}
+.flex .pane-side {
+	width: 20%;
+	min-width: 300px;
+	display: flex;
+	flex-direction: column;
+    padding: 0.25rem 0.25rem 0 0.25rem;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.flex .tab-panels {
+	flex-grow: 1;
+	display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.flex .tab-buttons,
+.flex .tab-panels {
+	/*margin-right: 0.25rem;*/
+	/*height: 100%;*/
+}
+.flex .tab-panels .tab {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.flex .pane-main,
+.flex .pane-side { border: 0 solid blue;}
+.tab-panels .hidden { display: none !important; }
+.tab-panels .panel {
+	background-color: #0f0f0f;
+	border: 2px solid #353535;
+	margin-bottom: 0.25rem;
+	padding: 0.4rem;
+}
+.flex .tab-panels .tab .wrapper {
+	height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+@media (max-width: 1000px) {
+	.flex {
+		flex-direction: column;
+	}
+	.flex .pane-main { flex-grow: 0; }
+	.flex .pane-side {
+		width: 100%;
+		flex-grow: 1;
+	}
+}
+
+/* TABS */
+.tab-buttons {
+	padding: 10px 0;
+}
+.tab-buttons a {
+	color: #778990;
+	text-decoration: none;
+}
+.tab-buttons a:hover, .tab-buttons a.selected {
+	color: #00B7FF;
+	text-decoration: underline;
+}
+.tab-panels .tab ul {
+	margin: 0;
+    list-style-type: none;
+    padding: 0;
+}
+.tab-panels .tab a {
+	display: block;
+	text-decoration: none;
+	color: #dc5d62;
+}
+.tab-panels .tab a:hover {
+	color: #e29497;
+}
+.tab-panels label {
+}
+.tab-panels table .label {
+	color: #dc8c45;
+	padding-right: 10px;
+}
+
+
+/* TAB CHAT CONTENTS */
+#chatlog {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+}
+#chatlog .basic {
+	color: #eeeeee;
+	font-weight: 600;
+}
+#chatlog .system { color: burlywood; }
+#chatlog .message { word-wrap: break-word; }
+#new-message-input input { width: 100%; font-size: inherit; }
+
+
+/* TAB PEOPLE CONTENS */
+#peoplelist .info {	color: #777; }
+#peoplelist .info p { margin: 0; }
+#peoplelist .info b { color: #aaa; }
+
+
+/* TAB FILES */
+#tab-files .game { 
+	color: #dc8c45; 
+	margin-bottom: 5px;
+}
+#tab-files .game a { margin-left: 10px; }
+#tab-files .game span {
+    display: block;
+    margin-left: 10px;
+    color: #808080;
+}
+
+
+/* LOGIN FORM */
+.login-form img {
+	padding: 3em 0;
+	text-align: center;
+}
+.login-form .form {
+	display: inline-block;
+	margin: 0 auto;
+}
+.login-form form input, .login-form button {
+	transition: .3s linear;
+}
+.login-form form input {
+	background-color: #383838;
+	border: 1px solid #282828;
+	padding: 3px;
+	margin-bottom: 0.3rem;
+}
+.login-form form input:focus, .login-form button:hover {
+	background-color: #424242;
+}
+.login-form button {
+	padding: 0.3rem 0.6rem;
+	background-color: #1b1b1b;
+	border: 1px solid #2b2b2b;
+	width: 100%;
+	cursor: pointer;
+	outline: 0;
+}
+
+
+/* MAIN PANE: GAMES LOBBY */
+#gameselect:hover { box-shadow: none; }
+#games-lobby img { margin: 2rem 0; }
+#games-lobby h2 { 
+	color: #627d94; 
+	margin: 1rem 0 0.2rem 0; 
+}
+#games-lobby .new-game {
+	display: flex;
+	flex-direction: column;
+}
+#games-lobby .new-game .row {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+#games-lobby .new-game .row div { 
+	min-width: 200px; 
+	padding: 0 0.5rem; 
+}
+#game-description {
+	max-width: 400px;
+    text-align: center;
+    color: gray;
+}
+#playbutton {
+	padding: 0.4rem 2rem;
+    background-color: #171719;
+    border: 2px solid #353535;
+    color: #c7c6c6;
+    text-decoration: none;
+    margin-bottom: 2rem;
+}
+#playbutton:hover { background-color: #353535; }
+#watchmenu ul {
+	padding: 0;
+	display: inline-block;
+}
+#watchmenu ul li {
+	list-style-type: none;
+	color: gray;
+	cursor: pointer;
+	padding: 1px 4px;
+}
+#watchmenu ul li:hover {
+	background-color: #1d2226;
+}
+#watchmenu ul li span {
+	color: #ddd;
+}
+#watchmenu ul li:hover span {
+	color: #bada55;
+}
+
+/* MAIN PANE: TERMINAL */
+#terminal-pane {
+	display: flex;
+    flex-grow: 1;
+    height: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+#terminal-container {
+	border: 2px solid #353535;
+	display: block;
+}
+#terminal-container,
+#tester {
+	line-height: 100%;
+}
+#tester {
+	display: inline-block;
+	visibility: hidden;
+	margin: 0;
+	padding: 0;
+	border: 0;
 }

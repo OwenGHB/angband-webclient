@@ -1,0 +1,64 @@
+<div class="login-form text-center">
+    <div>
+        <img id="logo" src="logo.png" />
+    </div>
+    
+    <p>Create an account to join in. If your username is unused it will be created. Otherwise please try again.<p>
+    
+    <div class="form">
+        <form id="login-form" method="post">
+        	<label>Username:</label>
+        	<input id="username" type="text" name="username" placeholder="min 3 characters"/></br>
+        	<label>Password:</label>
+        	<input id="password" type="password" name="password"/></br>
+        </form>
+        
+        <button id="signin">Sign in</button>
+    </div>
+    
+    <div id="error-msg"></div>
+    
+    <div id="donate">
+            
+    </div>
+    
+</div>
+
+<script>
+    function changeButton(login) {
+        if(login) {
+            $(this).attr("disabled", "disabled");
+            $(this).html("loading..");
+        }
+        else {
+            $(this).removeAttr("disabled");
+            $(this).html("Sign in");
+        }
+    }
+    $(function() {
+        $("#signin").click(function() {
+            changeButton(true);
+            var username = $("#username").val();
+            var password = $("#password").val();
+            if(username.length === 0)
+                return alert("username is too short");
+            if(password.length === 0)
+                return alert("enter password");
+            $.post("/signin", {username: username, password:password})
+            .then(function(res) {
+                if(res.error) {
+                    alert(res.msg);
+                    changeButton(false);
+                }
+                else
+                    location.href = "/";
+            })
+            .catch(function(error) {
+               if(error.status === 401) {
+                    alert("invalid username/password");
+                    changeButton(false);
+               }
+            });
+        });
+    });
+</script>

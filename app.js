@@ -1,19 +1,19 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var session = require('cookie-session');
-var bodyParser = require('body-parser');
-var terminal = require('term.js');
-var app = express();
-var expressWs = require('express-ws')(app);
-var mongoose = require('mongoose');
-var passport = require('passport');
-var awc = require('./lib.js');
+var express       = require('express');
+var path          = require('path');
+var favicon       = require('serve-favicon');
+var logger        = require('morgan');
+var cookieParser  = require('cookie-parser');
+var session       = require('cookie-session');
+var bodyParser    = require('body-parser');
+var terminal      = require('term.js');
+var app           = express();
+var expressWs     = require('express-ws')(app);
+var mongoose      = require('mongoose');
+var passport      = require('passport');
+var awc           = require('./lib.js');
 var LocalStrategy = require('passport-local').Strategy;
-var Account = require('./models/account');
-var fs = require('fs-extra');
+var Account       = require('./models/account');
+var fs            = require('fs-extra');
 
 //set up our pinging
 setInterval(function(){awc.keepalive()},10000);
@@ -22,7 +22,7 @@ setInterval(function(){awc.keepalive()},10000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
+// uncomment after placing your favicon in /public. Not needed
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -47,15 +47,17 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 // Connect mongoose
-mongoose.connect('mongodb://localhost/bandit', function(err) {
+const db_url = process.env.MONGODB_URL || 'mongodb://localhost/bandit';
+mongoose.connect(db_url, function(err) {
   if (err) {
-    console.log('Could not connect to mongodb on localhost. Ensure that you have mongodb running on localhost and mongodb accepts connections on standard ports!');
+    return console.error("Could not connect to mongodb. Ensure that you have mongodb running on localhost and mongodb accepts connections on standard ports!");
   }
+  console.log("database connection established");
 });
 
 // Register routes
 app.get('/', function(req, res) {
-	res.render('index', {title:'GwaRL.xyz', user: req.user});
+	res.render('index', {user: req.user});
 });
 
 app.ws('/meta', function (ws, req) {
@@ -66,11 +68,14 @@ app.ws('/meta', function (ws, req) {
 
 app.post('/signin', 
 	function(req, res, next) {
-		Account.find({username:req.body.username},function(err, result){
+		Account.find({username:req.body.username}, function(err, result) {
 			if (result.length>0){
 				next();
-			} else {
-				if (req.body.username.match(/^[a-zA-Z_]+$/)!=null) {
+			} 
+			else {
+			  if(req.body.username.length < 3)
+			    return res.json({error: true, mgs:"username too short"});
+				if (req.body.username.match(/^[a-zA-Z_]+$/) != null) {
 					Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
 						if (err) {
 							console.log('error while user register!', err);
@@ -79,7 +84,8 @@ app.post('/signin',
 						console.log('user registered!');
 						next();
 					});
-				} else {
+				} 
+				else {
 					next();
 				}
 			}
@@ -87,7 +93,8 @@ app.post('/signin',
 	},
 	passport.authenticate('local'),
 	function(req, res) {
-		res.redirect('/');
+		// res.redirect('/');
+		return res.json({error: false, mgs: "ok"});
 	}
 );
 

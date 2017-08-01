@@ -1,8 +1,8 @@
 
-
-var socketURL = 'ws://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
+var protocol = location.protocol === "https:" ? "wss" : "ws";
+var socketURL = protocol + '://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
 var socket;
-var dimensions={rows:50,cols:150};
+var dimensions={rows:50, cols:150};
 var terminfo = 'xterm-256color';
 var term = new Terminal({
 	termName: terminfo,
@@ -138,7 +138,8 @@ function applyTerminal(mode, qualifier, panels, walls) {
 			});
 		}
 		term.open(terminalContainer);
-	} else if (mode=='spectate') {
+	} 
+	else if (mode=='spectate') {
 		if (typeof(spyglass[qualifier])=='undefined') {
 			var livelink = document.createElement("button");
 			livelink.className = "navlink";
@@ -341,9 +342,4 @@ function initsettings(){
 		adjustsize();
 	});
 	document.body.style.fontFamily=document.getElementById('fontselect').value;
-}
-function signIn(){
-	var loginform = document.getElementById("login-form");
-	loginform.action = "/signin";
-	loginform.submit();
 }
