@@ -34,8 +34,12 @@ var fonts = [
 	"Droid Sans Mono",
 	"Source Code Pro",
 	"Roboto Mono",
-	"Inconsolata"
+	"Inconsolata",
+	"Lucida Console",
+	"Courier"
 ];
+var font_sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20];
+
 
 function addMessage(msg, extra_class) {
 	var $msg = $(msg);
@@ -69,7 +73,28 @@ function listMatches(matches) {
 		$("#watchmenu ul").append('<li>there are no live games right now</li>');
 	}
 }
-function listFiles(files) { console.log("todo"); }
+function listFiles(files) {
+	var $tab = $("#tab-files div");
+	var user = files.username;
+	delete files.username;
+	var games = Object.keys(files);
+	if(games.length === 0)
+		return;
+	$tab.html("");
+	for(var i=0; i<games.length; i++) {
+		var $game = $('<div class="game">' +games[i]+ '</div>');
+		var userfiles = files[games[i]];
+		if(userfiles.length > 0) {
+			for(var f=0; f<userfiles.length; f++) {
+				$game.append('<a href="/user/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
+			}
+		}
+		else
+			$game.append('<span>no files</span>');
+		$tab.append($game);
+	}
+	
+}
 
 
 function showTab(pos, el) {
@@ -128,6 +153,7 @@ function applyTerminal(mode, qualifier, panels, walls) {
 			});
 			socket.send(JSON.stringify({eventtype:'subscribe', content:{player:qualifier}}));
 		}
+		$terminal.html("");
 		spyglass[qualifier].open($terminal.get(0));
 	}
 	
@@ -140,10 +166,12 @@ function applyTerminal(mode, qualifier, panels, walls) {
 }
 
 function adjustTerminalFontSize() {
+	$("#terminal-container").css("font-size", 8);
 	$("#tester").css("display", "initial");
 	$("#tester").css("visibility", "hidden");
-	var sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20];
+	var sizes = font_sizes;
 	var window_width = $(window).innerWidth();
+	var window_height = $(window).innerHeight();
 	var $mainpane = $(".pane-main");
 	var mph = $mainpane.innerHeight();
 	var mpw = $mainpane.innerWidth();
@@ -154,8 +182,11 @@ function adjustTerminalFontSize() {
 		var th = $("#tester").innerHeight();
 		var cfs = $("#tester").css('font-size');
 // 		console.log("main-pane:", mpw, mph, "testing font size:", sizes[i], "test div:", tw, th, "term:",tw*dimensions.cols, th*dimensions.rows);
+		var sidebar_pos = $("#opt-sidebar-bottom").prop("checked");
 		var check_width = dimensions.cols * tw > mpw-safety;
 		var check_height = window_width < 1000 ? false : dimensions.rows * th > mph-safety;
+		if(sidebar_pos)
+			check_height = dimensions.rows * th > window_height - 200;
 		if(check_height || check_width) {
 // 			console.log("best font size is", selected_size, `that gives width=${dimensions.cols * tw} and height=${dimensions.rows * th}`);
 			break;
@@ -208,6 +239,7 @@ function initChat() {
 	});
 	socket.addEventListener('close', function () {
 		addMessage("***Disconnected***", "system");
+		// todo: attempt to reconnect!
 	});
 	socket.addEventListener('open', function () {
 		addMessage("***Connected to chat***", "system");
@@ -257,6 +289,29 @@ function changeTerminalFont(family, skipSaving) {
 	if(!skipSaving) saveOption("terminal_font_family", family);
 }
 
+function changeSidebarOnBottom(force, skipSaving) {
+	if(force) {
+		$(".flex").css("flex-direction", "column");
+		$(".flex .pane-main").css("flex-grow", 0);
+		$(".flex .pane-side").css("width", "100%");
+		$(".flex .pane-side").css("flex-grow", 1);
+	}
+	else {
+		$(".flex").css("flex-direction", "row");
+		$(".flex .pane-main").css("flex-grow", 1);
+		$(".flex .pane-side").css("width", "20%");
+		$(".flex .pane-side").css("flex-grow", 0);
+	}
+	adjustTerminalFontSize();
+	if(!skipSaving) saveOption("sidebar_on_bottom", force);
+}
+
+function changeUIFontSize(size, skipSaving) {
+	$("html, body, #container").css("font-size", size);
+	adjustTerminalFontSize();
+	if(!skipSaving) saveOption("ui_font_size", size);
+}
+
 function saveOption(opt, val) {
 	if(window.localStorage) {
 		var ls = window.localStorage.getItem("aw_options");
@@ -273,13 +328,45 @@ function loadAndApplyOptions() {
 		if(ls) {
 			ls = JSON.parse(ls);
 			// restore terminal font
-			changeTerminalFont(ls["terminal_font_family"], false);
+			if(ls["terminal_font_family"]) {
+				changeTerminalFont(ls["terminal_font_family"], false);
+				$("#extra-fonts").val(ls["terminal_font_family"]);
+			}
+			
+			// ui font size
+			if(ls["ui_font_size"]) {
+				changeUIFontSize(ls["ui_font_size"], false);
+				$("#opt-ui-font-size").val(ls["ui_font_size"]);
+			}
+			
+			// sidebar position
+			if(ls["sidebar_on_bottom"]) {
+				changeSidebarOnBottom(ls["sidebar_on_bottom"], false);
+				$("#opt-sidebar-bottom").prop("checked", ls["sidebar_on_bottom"]);
+			}
 		}
 	}
 }
 
 $(function() {
-	// apply options from local storage
+	// add extra fonts
+	fonts = fonts.sort();
+	fonts.map(function(f,i) {
+		$("#extra-fonts").append('<option value="' + f + '">' + f + '</option>');
+	});
+	$("#extra-fonts").change(function(e) { changeTerminalFont(e.target.value); });
+	
+	// add bottom sidebar force option
+	$("#opt-sidebar-bottom").change(function(e) { changeSidebarOnBottom(e.target.checked); });
+	
+	// add ui font size options
+	font_sizes.map(function(f,i) {
+		$("#opt-ui-font-size").append('<option value="' + f + 'px">' + f + 'px</option>');
+	});
+	$("#opt-ui-font-size").change(function(e) { changeUIFontSize(e.target.value); });
+	$("#opt-ui-font-size").val($("html").css("font-size"));
+	
+	// restore and apply options from local storage
 	loadAndApplyOptions();
 	
 	// init and open chat tab by default
@@ -297,11 +384,6 @@ $(function() {
     	$("#games-lobby").removeClass("hidden");
 	});
 	
-	// add extra fonts
-	fonts.map(function(f,i) {
-		$("#extra-fonts").append('<option value="' + f + '">' + f + '</option>');
-	});
-	$("#extra-fonts").change(function(e) { changeTerminalFont(e.target.value); });
 	
     // scroll chat messages
 	setTimeout(function() {

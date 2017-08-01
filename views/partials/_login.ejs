@@ -25,24 +25,39 @@
 </div>
 
 <script>
+    function changeButton(login) {
+        if(login) {
+            $(this).attr("disabled", "disabled");
+            $(this).html("loading..");
+        }
+        else {
+            $(this).removeAttr("disabled");
+            $(this).html("Sign in");
+        }
+    }
     $(function() {
         $("#signin").click(function() {
+            changeButton(true);
             var username = $("#username").val();
             var password = $("#password").val();
-            if(username.length < 3)
+            if(username.length === 0)
                 return alert("username is too short");
             if(password.length === 0)
                 return alert("enter password");
             $.post("/signin", {username: username, password:password})
             .then(function(res) {
-                if(res.error)
+                if(res.error) {
                     alert(res.msg);
+                    changeButton(false);
+                }
                 else
                     location.href = "/";
             })
             .catch(function(error) {
-               if(error.status === 401)
+               if(error.status === 401) {
                     alert("invalid username/password");
+                    changeButton(false);
+               }
             });
         });
     });

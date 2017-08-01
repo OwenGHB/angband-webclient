@@ -219,17 +219,11 @@ html, body, #container {
 	height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    /*display: flex;*/
-    /*flex-direction: column-reverse;*/
 }
 
 @media (max-width: 1000px) {
 	.flex {
-		display: flex;
 		flex-direction: column;
-		flex-wrap: nowrap;
-		align-items: stretch;
-		height: 100%;
 	}
 	.flex .pane-main { flex-grow: 0; }
 	.flex .pane-side {
@@ -264,8 +258,10 @@ html, body, #container {
 	color: #e29497;
 }
 .tab-panels label {
-	color: #daa043;
-	margin-right: 5px;
+}
+.tab-panels table .label {
+	color: #dc8c45;
+	padding-right: 10px;
 }
 
 
@@ -281,7 +277,7 @@ html, body, #container {
 }
 #chatlog .system { color: burlywood; }
 #chatlog .message { word-wrap: break-word; }
-#new-message-input input { width: 100%; }
+#new-message-input input { width: 100%; font-size: inherit; }
 
 
 /* TAB PEOPLE CONTENS */
@@ -289,7 +285,18 @@ html, body, #container {
 #peoplelist .info p { margin: 0; }
 #peoplelist .info b { color: #aaa; }
 
-/* TAB NAVIGATION */
+
+/* TAB FILES */
+#tab-files .game { 
+	color: #dc8c45; 
+	margin-bottom: 5px;
+}
+#tab-files .game a { margin-left: 10px; }
+#tab-files .game span {
+    display: block;
+    margin-left: 10px;
+    color: #808080;
+}
 
 
 /* LOGIN FORM */
