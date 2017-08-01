@@ -184,15 +184,17 @@ function listmatches(livematches){
 function listfiles(filelinks){
 	var list = '<ul>';
 	for (var i in filelinks){
-		list+='<li>'+i+'<ul>';
-		for (var j in filelinks[i]){
-				list+='<li>';
-				list+='<a href="/user/'+document.getElementById("username").innerHTML+'/'+i+'/'+filelinks[i][j]+'">';
-				list+=filelinks[i][j]
-				list+='</a>';
-				list+='</li>';
+		if (i!='username'){
+			list+='<li>'+i+'<ul>';
+			for (var j in filelinks[i]){
+					list+='<li>';
+					list+='<a href="/user/'+filelinks.username+'/'+i+'/'+filelinks[i][j]+'">';
+					list+=filelinks[i][j]
+					list+='</a>';
+					list+='</li>';
+			}
+			list+='</ul></li>';
 		}
-		list+='</ul></li>';
 	}
 	list += '</ul>';
 	return list;

@@ -46,7 +46,9 @@ function chat(user,message){
 		'Ingwe_Ingweron',
 		'Serinus_Serinus',
 		'wobbly',
-		'rodent'
+		'rodent',
+		'clouded',
+		'Philip'
 	];
 	if (winners.includes(user.username)){
 		var response = JSON.stringify({
@@ -102,6 +104,7 @@ function getfilelist(username){
 				files[ls[i]]=dumps;
 			}
 		}
+		files.username=username;
 	}
 	return files;
 }
