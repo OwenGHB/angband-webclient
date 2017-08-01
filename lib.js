@@ -7,7 +7,7 @@ matches = {};
 metasockets = {};
 chatlog = [];
 
-var home = '/home/bandit';
+var home = '/home/angbandlive';
 
 //check player alive status for recording purposes
 function isalive(playerfile){
