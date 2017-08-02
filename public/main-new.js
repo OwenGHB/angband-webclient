@@ -60,12 +60,10 @@ function listMatches(matches) {
 	var players = Object.keys(matches);
 	if(players.length > 0) {
 		for(var i=0; i<players.length; i++) {
-			var p = players[i];
-			var m = matches[p];
-			var idle = m.idletime > 0 ? ', idle for <span>'+m.idletime+'0</span> seconds' : "";
+			var idle = matches[players[i]].idletime > 0 ? ', idle for <span>'+matches[players[i]].idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append(function(i) {
 			    return $('<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>'+idle+'</li>').click(function() {
-			        applyTerminal("spectate", p, 1, "no", m.dimensions);
+			        applyTerminal("spectate", players[i], 1, "no", matches[players[i]].dimensions);
 			    });
 			}(i));			
 		}
