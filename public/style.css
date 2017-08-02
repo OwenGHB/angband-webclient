@@ -74,7 +74,10 @@ body,input,button,select,option {
 }
 input,button,select {
 	background: transparent;
-	/*outline: 1px outset darkgray;*/
+    outline-width: 1px;
+	outline-style: solid;
+	/*width: 100%;*/
+	outline-color: #353535;
 }
 input:hover,button:hover,select:hover,option:hover {
 	/*background: lightgray;*/
@@ -91,7 +94,7 @@ input:focus{
 
 /* ROLES AND STATUS */
 .dev {
-	color: #d29554;
+	color: #ea5656;
 }
 .winner{
 	/*color: #AF11AF;*/
@@ -193,7 +196,8 @@ html, body, #container {
 	flex-grow: 1;
 	display: flex;
     flex-direction: column;
-    height: 100%;
+    /*height: 100%;*/
+    height: 100px;
 }
 .flex .tab-buttons,
 .flex .tab-panels {
@@ -277,7 +281,7 @@ html, body, #container {
 }
 #chatlog .system { color: burlywood; }
 #chatlog .message { word-wrap: break-word; }
-#new-message-input input { width: 100%; font-size: inherit; }
+#new-message-input input { width: 100%; font-size: inherit; outline: none;}
 
 
 /* TAB PEOPLE CONTENS */
@@ -345,6 +349,7 @@ html, body, #container {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
+	margin-bottom: 2px;
 }
 #games-lobby .new-game .row div { 
 	min-width: 200px; 
@@ -407,4 +412,16 @@ html, body, #container {
 	margin: 0;
 	padding: 0;
 	border: 0;
+}
+
+.new-game select {
+	outline-width: 1px;
+    outline-style: solid;
+    width: 100%;
+    outline-color: #353535;
+    padding: 2px 5px;
+}
+.new-game .text-right {
+	position: relative;
+	top: 4px;
 }

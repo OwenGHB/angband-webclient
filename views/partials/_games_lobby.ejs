@@ -2,19 +2,54 @@
 	
 	<div class="text-center"><img id="logo" src="logo.png" /></div>
 	
-	<h2 class="text-center">...:: open your game ::...</h2>
+	<h2 class="text-center">...::[ open your game ]::...</h2>
 	<div class="new-game">
 		<div class="row">
 			<div class="text-right">game:</div>
 			<div class="text-left"><select id="gameselect"></select></div>
 		</div>
+		
+		<div class="row">
+			<div class="text-right">terminal width (cols):</div>
+			<div class="text-left"><select id="term-cols">
+			</select></div>
+		</div>
+		
+		<div class="row">
+			<div class="text-right">terminal height (rows):</div>
+			<div class="text-left"><select id="term-rows">
+			</select></div>
+		</div>
+		
+		<!--<div class="row">-->
+		<!--	<div class="text-right">terminal font:</div>-->
+		<!--	<div class="text-left"><select id="term-font">-->
+		<!--		<option value="monospace">default monospace</option>-->
+		<!--	</select></div>-->
+		<!--</div>-->
+		
 		<div class="row">
 			<div class="text-right">subwindows:</div>
-			<div class="text-left">1</div>
+			<div class="text-left">
+				<select id="subwindows">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+				</select>
+			</div>
 		</div>
-		<div class="row">
+		<div class="hidden row">
 			<div class="text-right">ASCII walls:</div>
-			<div class="text-left">no</div>
+			<div class="text-left">
+				<select id="ascii-walls">
+					<option value="yes">yes</option>
+					<option value="no">no</option>
+				</select>
+			</div>
 		</div>
 		<div class="row">
 			<p id="game-description"></p>

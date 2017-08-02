@@ -315,13 +315,22 @@ function closegame(player){
 function subscribe(user,message){
 	var player = message.player;
 	var spectator = user.username;
-	if (typeof(matches[player])!='undefined'&&typeof(matches[player].term)!='undefined'&&typeof(user.username)!='undefined') {
-		metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator+" is now watching"}));
-		metasockets[spectator].send(JSON.stringify({eventtype: 'spyglasstermsize', content: {player:player,dimensions:{matches[player].term.rows,matches[player].term.cols}}}));
+	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.username)!='undefined') {
+		metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator + " is now watching"}));
+		metasockets[spectator].send(JSON.stringify({
+			eventtype: 'spyglasstermsize', 
+			content: {
+				player: player,
+				dimensions: {
+					rows: matches[player].term.rows,
+					cols: matches[player].term.cols
+				}
+			}
+		}));
 		matches[player].spectators.push(spectator);
 	}
 }
-lib.welcome=function(user,ws) {
+lib.welcome = function(user,ws) {
 	metasockets[user.username] = ws;
 	var player = user.username;
 	//send some info to the user upon connecting
