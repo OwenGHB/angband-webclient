@@ -31,6 +31,7 @@ app.use(cookieParser());
 app.use(session({name: 'session',keys: ['air', 'fire', 'water']}));
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('/home/angbandlive/public/user'));
 
 // Configure passport middleware
 app.use(passport.initialize());

@@ -87,7 +87,7 @@ function listFiles(files) {
 		var userfiles = files[games[i]];
 		if(userfiles.length > 0) {
 			for(var f=0; f<userfiles.length; f++) {
-				$game.append('<a href="/user/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
+				$game.append('<a href="/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
 			}
 		}
 		else
