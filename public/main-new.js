@@ -7,16 +7,17 @@ var socket;
 
 var spyglass = {};
 var playing = false;
-var dimensions={ rows:50, cols:150 };
-var terminfo = 'xterm-256color';
-var term = new Terminal({
-	termName: terminfo,
-	colors: Terminal.xtermColors,
-	cols: dimensions.cols,
-	rows: dimensions.rows,
-	cursorBlink: false
-});
-term.applicationCursor=true;
+var term;
+var dimensions= {};
+// var terminfo = 'xterm-256color';
+// var term = new Terminal({
+// 	termName: terminfo,
+// 	colors: Terminal.xtermColors,
+// 	cols: dimensions.cols,
+// 	rows: dimensions.rows,
+// 	cursorBlink: false
+// });
+// term.applicationCursor=true;
 
 var fonts = [
 	"Share Tech Mono",
@@ -39,7 +40,7 @@ var fonts = [
 	"Courier"
 ];
 var font_sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20];
-
+var localStorage;
 
 function addMessage(msg, extra_class) {
 	var $msg = $(msg);
@@ -64,7 +65,7 @@ function listMatches(matches) {
 			var idle = m.idletime > 0 ? ', idle for <span>'+m.idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append(function(i) {
 			    return $('<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>'+idle+'</li>').click(function() {
-			        applyTerminal("spectate", players[i]);
+			        applyTerminal("spectate", p, 1, "no", m.dimensions);
 			    });
 			}(i));			
 		}
@@ -111,22 +112,33 @@ function showTab(pos, el) {
 	}
 }
 
-function applyTerminal(mode, qualifier, panels, walls) {
+function createTerminal(dimensions) {
+	return new Terminal({
+		termName: 'xterm-256color',
+		colors: Terminal.xtermColors,
+		cols: dimensions.cols,
+		rows: dimensions.rows,
+		cursorBlink: false
+	});
+}
+function applyTerminal(mode, qualifier, panels, walls, d) {
 	$terminal = $("#terminal-container");
+	dimensions = d;
 	if(mode === "play") {
 		if (!playing){
 			playing = true;
+			term = createTerminal(d);
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + ' (your game)</a></li>').click(function() {
-					applyTerminal("play", qualifier);
+					applyTerminal("play", qualifier, panels, walls, d);
 				});
 			});
 			socket.send(JSON.stringify({
 				eventtype:'newgame',
 				content: {
-					game:qualifier,
+					game: qualifier,
 					panels: panels,
-					dimensions: dimensions,
+					dimensions: d,
 					walls: walls
 				}
 			}));
@@ -141,16 +153,10 @@ function applyTerminal(mode, qualifier, panels, walls) {
 		if (typeof(spyglass[qualifier])=='undefined') {
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + '</a></li>').click(function() {
-					applyTerminal("spectate", qualifier);
+					applyTerminal("spectate", qualifier, panels, walls, d);
 				});
 			});
-			spyglass[qualifier] = new Terminal({
-				termName: terminfo,
-				colors: Terminal.xtermColors,
-				cols: dimensions.cols,
-				rows: dimensions.rows,
-				cursorBlink: false
-			});
+			spyglass[qualifier] = createTerminal(d);
 			socket.send(JSON.stringify({eventtype:'subscribe', content:{player:qualifier}}));
 		}
 		$terminal.html("");
@@ -166,7 +172,7 @@ function applyTerminal(mode, qualifier, panels, walls) {
 }
 
 function adjustTerminalFontSize() {
-	$("#terminal-container").css("font-size", 8);
+	$("#terminal-container").css("font-size", 6);
 	$("#tester").css("display", "initial");
 	$("#tester").css("visibility", "hidden");
 	var sizes = font_sizes;
@@ -176,23 +182,22 @@ function adjustTerminalFontSize() {
 	var mph = $mainpane.innerHeight();
 	var mpw = $mainpane.innerWidth();
 	var selected_size = sizes[0];
-	for(var i=0; i<sizes.length; i++) {
-		$("#tester").css('font-size', sizes[i] + "px");
+	var i = 6, found = false;
+	while(i<100 && !found) {
+		$("#tester").css('font-size', i + "px");
 		var tw = $("#tester").innerWidth();
 		var th = $("#tester").innerHeight();
 		var cfs = $("#tester").css('font-size');
-// 		console.log("main-pane:", mpw, mph, "testing font size:", sizes[i], "test div:", tw, th, "term:",tw*dimensions.cols, th*dimensions.rows);
 		var sidebar_pos = $("#opt-sidebar-bottom").prop("checked");
 		var check_width = dimensions.cols * tw > mpw-safety;
-		var check_height = window_width < 1000 ? false : dimensions.rows * th > mph-safety;
-		if(sidebar_pos)
+		var check_height = dimensions.rows * th > mph-safety;
+		if(sidebar_pos || window_width < 1000)
 			check_height = dimensions.rows * th > window_height - 200;
-		if(check_height || check_width) {
-// 			console.log("best font size is", selected_size, `that gives width=${dimensions.cols * tw} and height=${dimensions.rows * th}`);
-			break;
-		}
+		if(check_height || check_width)
+			found = true;
 		else 
-			selected_size = sizes[i];
+			selected_size = i;
+		i = i + 0.5;
 	}
 	$("#tester").css("display", "none");
 	$("#terminal-container").css("font-size", selected_size + "px");
@@ -268,14 +273,22 @@ function initGameList() {
 		for(var i=0; i<games.length; i++) {
 			if(e.target.value === games[i].name) {
 				$("#game-description").html(games[i].desc);
+				saveSelectedGameName(e.target.value);
+				loadDefaultGameOptions(e.target.value);
+				loadGameOptions(e.target.value);
 			}
 		}
+		
 	});
-	$("#gameselect").trigger("change");
 	$("#playbutton").click(function() {
 		var gamename = $("#gameselect").val();
-		var panels = $("#panels").val()
-		applyTerminal("play", gamename, panels);
+		var panels = $("#subwindows").val();
+		var walls = $("#ascii-walls").val();
+		var dimensions = {
+			rows: $("#term-rows").val(),
+			cols: $("#term-cols").val()
+		}
+		applyTerminal("play", gamename, panels, walls, dimensions);
 	});
 }
 
@@ -283,8 +296,8 @@ function changeTerminalFont(family, skipSaving) {
 	var f = '"' + family + '", monospace';
 	$("#terminal-container").css("font-family", f);
 	$("#tester").css("font-family", f);
-	$("#terminal-container").css("font-size", "8px");
-	$("#tester").css("font-size", "8px");
+	$("#terminal-container").css("font-size", "6px");
+	$("#tester").css("font-size", "6px");
 	adjustTerminalFontSize();
 	if(!skipSaving) saveOption("terminal_font_family", family);
 }
@@ -327,7 +340,7 @@ function loadAndApplyOptions() {
 		var ls = window.localStorage.getItem("aw_options");
 		if(ls) {
 			ls = JSON.parse(ls);
-			// restore terminal font
+			// // restore terminal font
 			if(ls["terminal_font_family"]) {
 				changeTerminalFont(ls["terminal_font_family"], false);
 				$("#extra-fonts").val(ls["terminal_font_family"]);
@@ -344,11 +357,78 @@ function loadAndApplyOptions() {
 				changeSidebarOnBottom(ls["sidebar_on_bottom"], false);
 				$("#opt-sidebar-bottom").prop("checked", ls["sidebar_on_bottom"]);
 			}
+			
 		}
 	}
 }
 
+
+function saveSelectedGameName(game) {
+	if(localStorage) {
+		localStorage.setItem("aw_selected_game", game);
+	}
+}
+function loadSelectedGameName() {
+	if(localStorage) {
+		var g = localStorage.getItem("aw_selected_game");
+		if(g) $("#gameselect").val(g).trigger("change");
+		else $("#gameselect").val("angband").trigger("change");
+	}
+}
+function saveGameOptions() {
+	if(localStorage) {
+		var game = $("#gameselect").val();
+		var opts = {
+			rows: $("#term-rows").val(),
+			cols: $("#term-cols").val(),
+			subwindows: $("#subwindows").val(),
+			ascii_walls: $("#ascii-walls").val()
+		};
+		localStorage.setItem("aw_options_" + game, JSON.stringify(opts));
+	}
+}
+function loadGameOptions(game) {
+	if(localStorage) {
+		var opts = localStorage.getItem("aw_options_" + game);
+		if(!opts)
+			return loadDefaultGameOptions(game);
+		opts = JSON.parse(opts);
+		$("#term-rows").val(opts.rows);
+		$("#term-cols").val(opts.cols);
+		// $("#term-font").val(opts.font);
+		$("#subwindows").val(opts.subwindows);
+		$("#ascii-walls").val(opts.ascii_walls);
+	}
+	else
+		loadDefaultGameOptions(game);
+}
+function loadDefaultGameOptions(game) {
+	$("#term-rows").html(""); 
+	$("#term-cols").html(""); 
+	var rows = [24,100], row = 50;
+	var cols = [100,200], col = 120;
+	var subwindows = 1;
+	var ascii_walls = "no";
+	// var font = "monospace";
+	switch (game) {
+		case 'poschengband':
+			rows[0] = 39; break;
+		case 'sangband':
+			rows[0] = 47; break;
+	}
+	var $rows, $cols, $font, $subwindows, $walls, i;
+	for(i=rows[0]; i<=rows[1]; i++) $rows += '<option value="'+i+'">'+i+'</option>';
+	for(i=cols[0]; i<=cols[1]; i++) $cols += '<option value="'+i+'">'+i+'</option>';
+	$("#term-rows").append($rows); $("#term-rows").val(row);
+	$("#term-cols").append($cols); $("#term-cols").val(col);
+	// $("#term-font").val(font);
+	$("#subwindows").val(subwindows);
+	$("#ascii-walls").val(ascii_walls);
+}
+
 $(function() {
+	localStorage = window.localStorage;
+	
 	// add extra fonts
 	fonts = fonts.sort();
 	fonts.map(function(f,i) {
@@ -373,7 +453,7 @@ $(function() {
 	initChat(); showTab(2);
 	
 	// init angband variants list box
-	initGameList();
+	initGameList(); loadSelectedGameName();
 	
 	// terminal resizer
 	$(window).resize(function() { adjustTerminalFontSize(); });
@@ -384,10 +464,12 @@ $(function() {
     	$("#games-lobby").removeClass("hidden");
 	});
 	
-	
     // scroll chat messages
 	setTimeout(function() {
 	    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 	    initComplete = true;
 	}, 1000);
+	
+	// game option change handlers
+	$("#term-cols,#term-rows,#subwindows,#ascii-walls").change(function() { saveGameOptions(); });
 });
