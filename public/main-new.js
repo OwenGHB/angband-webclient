@@ -283,7 +283,7 @@ function initGameList() {
 	$("#playbutton").click(function() {
 		var gamename = $("#gameselect").val();
 		var panels = $("#subwindows").val();
-		var walls = $("#ascii-walls").val();
+		var walls = false;
 		var dimensions = {
 			rows: $("#term-rows").val(),
 			cols: $("#term-cols").val()
@@ -406,9 +406,9 @@ function loadDefaultGameOptions(game) {
 	$("#term-rows").html(""); 
 	$("#term-cols").html(""); 
 	var rows = [24,100], row = 50;
-	var cols = [100,200], col = 120;
+	var cols = [80,215], col = 120;
 	var subwindows = 1;
-	var ascii_walls = "no";
+	var ascii_walls = false;
 	// var font = "monospace";
 	switch (game) {
 		case 'poschengband':
