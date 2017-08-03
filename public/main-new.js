@@ -186,14 +186,14 @@ function cleanSpyGlass(matches){
 		for(var i in spyglass) {
 			if (i=='default'){
 				$("#navigation ul").append(function(i) {
-					return $('<li><a href="#"> - ' + matches[players[i]].game + ' (your game)</a></li>').click(function() {
-						applyTerminal("play", matches[players[i]].game, panels, walls, d);
+					return $('<li><a href="#"> - your game</a></li>').click(function() {
+						applyTerminal("play", 'dud', panels, walls, d);
 					});
 				}(i));
 			} else if (players.includes(i)) {
 				$("#navigation ul").append(function(i) {
-					return $('<li><a href="#"> - ' + players[i] + '</a></li>').click(function() {
-						applyTerminal("spectate", players[i], 1, false, matches[players[i]].dimensions);
+					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
+						applyTerminal("spectate", i, 1, false, matches[i].dimensions);
 					});
 				}(i));	
 			} else {
@@ -214,8 +214,8 @@ function closeGame(){
 		for(var i in spyglass) {
 			if (i!='default') {
 				$("#navigation ul").append(function(i) {
-					return $('<li><a href="#"> - ' + players[i] + '</a></li>').click(function() {
-						applyTerminal("spectate", players[i], 1, false, matches[players[i]].dimensions);
+					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
+						applyTerminal("spectate", i, 1, false);
 					});
 				}(i));	
 			} else {
