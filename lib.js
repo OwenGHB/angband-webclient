@@ -283,7 +283,7 @@ lib.welcome = function(user,ws) {
 	var player = user.username;
 	//send some info to the user upon connecting
 	try {
-		metasockets[user.username].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist}));
+		metasockets[user.username].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist()}));
 		for (var i in chatlog){
 			metasockets[user.username].send(chatlog[chatlog.length-i-1]);
 		}
