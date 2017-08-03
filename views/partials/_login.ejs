@@ -38,13 +38,13 @@
     }
     $(function() {
         $("#signin").click(function() {
-            changeButton(true);
             var username = $("#username").val();
             var password = $("#password").val();
             if(username.length === 0)
                 return alert("username is too short");
             if(password.length === 0)
                 return alert("enter password");
+            changeButton(true);
             $.post("/signin", {username: username, password:password})
             .then(function(res) {
                 if(res.error) {
