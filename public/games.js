@@ -14,4 +14,4 @@ var games = [
 	{name:'umoria',longname:'UMoria 5.6',desc:'A restoration of the original Moria game.'},        
 	{name:'unangband',longname:'UnAngband 6.5.0a',desc:"Influential variant full of new content with new quests, classes and locations."},        
 	{name:'zangband',longname:'ZAngband 2.7.5pre1',desc:"Massively influential variant. New races, classes, and an overworld."}
-];z
+];
