@@ -182,7 +182,7 @@ function cleanSpyGlass(matches){
 		});
 	});
 	var players = Object.keys(matches);
-	if(spyglass.length > 0) {
+	if(Object.keys(spyglass).length > 0) {
 		for(var i in spyglass) {
 			if (i=='default'){
 				$("#navigation ul").append(function(i) {
@@ -210,8 +210,8 @@ function closeGame(){
 			$("#games-lobby").removeClass("hidden");
 		});
 	});
-	if(spyglass.length > 0) {
-		for(var i=0; i<spyglass.length; i++) {
+	if(Object.keys(spyglass).length > 0) {
+		for(var i in spyglass) {
 			if (i!='default') {
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#"> - ' + players[i] + '</a></li>').click(function() {
