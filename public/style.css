@@ -92,22 +92,6 @@ input:focus{
 	color: lightgray;
 }
 
-/* ROLES AND STATUS */
-.dev {
-	color: #ea5656;
-}
-.winner{
-	/*color: #AF11AF;*/
-	color: #b976b9;
-}
-.MITZE{
-	color: #AF11AF;
-	font-family: "YOz14s";
-}
-.silwinner{
-	color: #EFEF11;
-}
-
 .terminal {
   float: left;
   color: white;
@@ -197,7 +181,7 @@ html, body, #container {
 	display: flex;
     flex-direction: column;
     height: 100%;
-    /*height: 100px;*/
+    height: 100px;
 }
 .flex .tab-buttons,
 .flex .tab-panels {
@@ -224,6 +208,7 @@ html, body, #container {
     overflow-y: auto;
     overflow-x: hidden;
     min-height: 100px;
+    height: 100vh;
 }
 
 @media (max-width: 1000px) {
@@ -425,4 +410,21 @@ html, body, #container {
 .new-game .text-right {
 	position: relative;
 	top: 4px;
+}
+
+
+/* ROLES AND STATUS */
+#chatlog .dev {
+	color: #ea5656;
+}
+#chatlog .winner{
+	/*color: #AF11AF;*/
+	color: #b976b9;
+}
+#chatlog .mitze {
+	color: #AF11AF;
+	font-family: "YOz14s";
+}
+#chatlog .silwinner{
+	color: #EFEF11;
 }

@@ -26,13 +26,14 @@
 
 <script>
     function changeButton(login) {
+        var $b = $("#signin");
         if(login) {
-            $(this).attr("disabled", "disabled");
-            $(this).html("loading..");
+            $b.attr("disabled", "disabled");
+            $b.html("loading..");
         }
         else {
-            $(this).removeAttr("disabled");
-            $(this).html("Sign in");
+            $b.removeAttr("disabled");
+            $b.html("Try again");
         }
     }
     $(function() {
