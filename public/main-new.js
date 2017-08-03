@@ -60,12 +60,10 @@ function listMatches(matches) {
 	var players = Object.keys(matches);
 	if(players.length > 0) {
 		for(var i=0; i<players.length; i++) {
-			var p = players[i];
-			var m = matches[p];
-			var idle = m.idletime > 0 ? ', idle for <span>'+m.idletime+'0</span> seconds' : "";
+			var idle = matches[players[i]].idletime > 0 ? ', idle for <span>'+matches[players[i]].idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append(function(i) {
 			    return $('<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>'+idle+'</li>').click(function() {
-			        applyTerminal("spectate", p, 1, "no", m.dimensions);
+			        applyTerminal("spectate", players[i], 1, "no", matches[players[i]].dimensions);
 			    });
 			}(i));			
 		}
@@ -87,7 +85,7 @@ function listFiles(files) {
 		var userfiles = files[games[i]];
 		if(userfiles.length > 0) {
 			for(var f=0; f<userfiles.length; f++) {
-				$game.append('<a href="/user/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
+				$game.append('<a href="/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
 			}
 		}
 		else
@@ -283,7 +281,7 @@ function initGameList() {
 	$("#playbutton").click(function() {
 		var gamename = $("#gameselect").val();
 		var panels = $("#subwindows").val();
-		var walls = $("#ascii-walls").val();
+		var walls = false;
 		var dimensions = {
 			rows: $("#term-rows").val(),
 			cols: $("#term-cols").val()
@@ -406,9 +404,9 @@ function loadDefaultGameOptions(game) {
 	$("#term-rows").html(""); 
 	$("#term-cols").html(""); 
 	var rows = [24,100], row = 50;
-	var cols = [100,200], col = 120;
+	var cols = [80,215], col = 120;
 	var subwindows = 1;
-	var ascii_walls = "no";
+	var ascii_walls = false;
 	// var font = "monospace";
 	switch (game) {
 		case 'poschengband':

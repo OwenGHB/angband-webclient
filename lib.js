@@ -87,7 +87,8 @@ function getmatchlist(matches){
 	for (var i in matches){
 		livematches[i] = {
 			game: matches[i].game,
-			idletime: matches[i].idletime
+			idletime: matches[i].idletime,
+			dimensions:{rows:matches[i].term.rows,cols:matches[i].term.cols} 
 		};
 	}
 	return livematches;
@@ -234,10 +235,13 @@ function newgame(user,msg){
 			args:args,
 			terminfo: terminfo
 		};
+		console.log(termdesc);
+		console.log(dimensions);
+		console.log(process.env.HOME);
 		var term = pty.fork(termdesc.path,termdesc.args,{
 			name: termdesc.terminfo,
-			cols: dimensions.cols,
-			rows: dimensions.rows,
+			cols: parseInt(dimensions.cols),
+			rows: parseInt(dimensions.rows),
 			cwd: process.env.HOME
 		});
 		term.on('data', function(data) {
@@ -315,18 +319,9 @@ function closegame(player){
 function subscribe(user,message){
 	var player = message.player;
 	var spectator = user.username;
+
 	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.username)!='undefined') {
 		metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator + " is now watching"}));
-		metasockets[spectator].send(JSON.stringify({
-			eventtype: 'spyglasstermsize', 
-			content: {
-				player: player,
-				dimensions: {
-					rows: matches[player].term.rows,
-					cols: matches[player].term.cols
-				}
-			}
-		}));
 		matches[player].spectators.push(spectator);
 	}
 }
