@@ -174,7 +174,7 @@ function newgame(user,msg){
 			break;
 			case 'umoria':
 				args = [
-					home+'/var/games/umoria/'+user.username
+					home+'/var/games/'+game+'/'+user.username
 				];
 			break;
 			default:

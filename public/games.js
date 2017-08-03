@@ -8,10 +8,10 @@ var games = [
 	{name:'oangband',longname:'Oangband 1.1.0u',desc:'Opinion angband. Redesigned gameplay mechanics and extra content. Very influential'},        
 	{name:'poschengband',longname:'PosChengband 6.1.0b',desc:"One of the most popular variants,         bursting with new content. Includes wilderness. Descended from Zangband."},        
 	{name:'sangband',longname:'Sangband 1.0.0',desc:'Skills Angband.'},        
-	{name:'sil',longname:'Sil 1.3.0',desc:"Heavily redesigned gameplay mechanics to be a shorter but more tactically intricate game. Very faithful to Tolkein. Descended from NPPAngband},        
+	{name:'sil',longname:'Sil 1.3.0',desc:'Heavily redesigned gameplay mechanics to be a shorter but more tactically intricate game. Very faithful to Tolkein. Descended from NPPAngband'},        
 	{name:'steamband',longname:'Steamband 0.4.1f',desc:'Steampunk Angband. Please use your site username for your character name if playing,         or else progress will be lost.'},        
 	{name:'tome',longname:'ToME 2.3.6-ah',desc:"Full of new content,         quests and a large open world. Descended from Zangband."},        
 	{name:'umoria',longname:'UMoria 5.6',desc:'A restoration of the original Moria game.'},        
 	{name:'unangband',longname:'UnAngband 6.5.0a',desc:"Influential variant full of new content with new quests,         classes and locations."},        
 	{name:'zangband',longname:'ZAngband 2.7.5pre1',desc:"Massively influential variant. New races,         classes,         and an overworld."}
-];
+];z

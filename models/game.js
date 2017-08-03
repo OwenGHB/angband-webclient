@@ -6,7 +6,9 @@ var Game = new Schema({
   longname: String,
   desc: String,
   longdesc: String,
-  paths: Array[String]
+  restrict_paths: Boolean,
+  data_paths: Array[String],
+  args: Array[String]
 });
 
-module.exports = mongoose.model('Account', Account);
+module.exports = mongoose.model('Game', Game);
