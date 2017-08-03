@@ -96,16 +96,38 @@ function getfilelist(username){
 	return files;
 }
 function getgamelist(){
-	var games = {};
-	return games;
+	var gamelist = [];
+	for (var i in games){
+		gamelist.push({name:games[i].name,longname:games[i].longname,desc:games[i].desc});
+	}
+	gamelist.sort(function(a, b) {
+	  var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+	  var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+	  if (nameA < nameB) {
+		return -1;
+	  }
+	  if (nameA > nameB) {
+		return 1;
+	  }
+	  // names must be equal
+	  return 0;
+	});
+	return gamelist;
 }
 function getgameinfo(game){
 	var info = {};
+	for (var i in games){
+		if (games[i].name==game) {
+			info.restrict_paths=games[i].restrict_paths;
+			info.data_paths=games[i].data_paths;
+			info.args=games[i].args;
+		}
+	}
 	return info;
 }
 function newgame(user,msg){
 	var game = msg.game;
-	var gameinfo = games.find(function(){return (games.name==game)});
+	var gameinfo = getgameinfo(game);
 	var panels = msg.panels;
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
@@ -118,78 +140,24 @@ function newgame(user,msg){
 		var path = home+'/games/'+game;
 		var args = [];
 		var terminfo='xterm-256color';
-		switch (game) {
-			case 'sangband':
-			case 'steamband':
-			case 'hellband':
-			case 'zangband':
-			case 'tome':
-			case 'oangband':
-			case 'unangband':
-			case 'poschengband':
-			case 'angband':
-			case 'faangband':
-				args = [
-					'-u'+user.username,
-					'-duser='+home+'/public/user/'+user.username+'/'+game,
-					'-mgcu',
-					'--',
-					panelarg
-				];
-			break;
-			case 'competition':
-				args = [
-					'-u'+compnumber+'-'+user.username,
-					'-duser='+home+'/public/user/'+user.username+'/'+compgame,
-					'-mgcu',
-					'--',
-					panelarg
-				];
-			break;
-			case 'sil':
-				args = [
-					'-u'+user.username,
-					'-dapex='+home+'/var/games/'+game+'/apex',
-					'-duser='+home+'/public/user/'+user.username+'/'+game,
-					'-dsave='+home+'/var/games/'+game+'/save',
-					'-mgcu',
-					'--',
-					panelarg
-				];
-			break;
-			case 'borg':
-				args = [
-					'-u'+user.username,
-					'-d'+home+'/public/user/'+user.username+'/'+game,
-				];
-			break;
-			case 'nppangband':
-				args = [
-					'-u'+user.username,
-					'-d'+home+'/public/user/'+user.username+'/'+game,
-					'-sang',
-					'-mgcu',
-					'--',
-					panelarg
-				];
-			break;
-			case 'nppmoria':
-				args = [
-					'-u'+user.username,
-					'-d'+home+'/public/user/'+user.username+'/'+game,
-					'-smor',
-					'-mgcu',
-					'--',
-					panelarg
-				];
-			break;
-			case 'umoria':
-				args = [
-					home+'/var/games/'+game+'/'+user.username
-				];
-			break;
-			default:
-			break;
+		if (game=='moria'){
+			args.push(home+'/var/games/'+game+'/'+user.username);
+		} else {
+			args.push('-u'+user.username);
+			if (gameinfo.restrict_paths){
+				args.push('-d'+home+'/public/user/'+user.username+'/'+game);
+			} else {
+				args.push('-duser='+home+'/public/user/'+user.username+'/'+game);
+			}
+			for (var i in gameinfo.data_paths){
+				args.push('-d'+gameinfo.data_paths[i]+'='+home+'/var/games/'+game+'/'+gameinfo.data_paths[i]);
+			}
+			for (var i in gameinfo.args){
+				args.push('-'+gameinfo.args[i]);
+			}
+			args.push('-mgcu');
+			args.push('--');
+			args.push(panelarg);
 		}
 		if (msg.walls) args.push('-a');
 		var termdesc = {};
@@ -224,9 +192,6 @@ function newgame(user,msg){
 			args:args,
 			terminfo: terminfo
 		};
-		console.log(termdesc);
-		console.log(dimensions);
-		console.log(process.env.HOME);
 		var term = pty.fork(termdesc.path,termdesc.args,{
 			name: termdesc.terminfo,
 			cols: parseInt(dimensions.cols),
@@ -318,7 +283,7 @@ lib.welcome = function(user,ws) {
 	var player = user.username;
 	//send some info to the user upon connecting
 	try {
-		metasockets[user.username].send(JSON.stringify({eventtype: 'gamelist', content: games}));
+		metasockets[user.username].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist}));
 		for (var i in chatlog){
 			metasockets[user.username].send(chatlog[chatlog.length-i-1]);
 		}

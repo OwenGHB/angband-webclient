@@ -212,6 +212,10 @@ function initChat() {
 	socket.addEventListener('message', function (ev) {
 		var data = JSON.parse(ev.data);
 		switch(data.eventtype) {
+			case "gamelist":
+				// init angband variants list box
+				initGameList(data.content); loadSelectedGameName();
+				break;
 			case "chat":
 				addMessage(data.content); 
 				if(initComplete)
@@ -266,7 +270,7 @@ function initChat() {
 	});
 }
 
-function initGameList() {
+function initGameList(games) {
 	// populate select
 	for(var i=0; i<games.length; i++) {
 		var g=games[i];
@@ -455,9 +459,6 @@ $(function() {
 	
 	// init and open chat tab by default
 	initChat(); showTab(2);
-	
-	// init angband variants list box
-	initGameList(); loadSelectedGameName();
 	
 	// terminal resizer
 	$(window).resize(function() { adjustTerminalFontSize(); });
