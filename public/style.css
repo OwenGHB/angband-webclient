@@ -1,61 +1,61 @@
 a {
 	color: #00B7FF;
 }
-@font-face {
-	font-family:AmstradPC1512;
-	src: url(fonts/PxPlus_AmstradPC1512.ttf);
-}
-@font-face {
-	font-family:IBM_BIOS;
-	src: url(fonts/PxPlus_IBM_BIOS.ttf);
-}
-@font-face {
-	font-family:IBM_CGA;
-	src: url(fonts/PxPlus_IBM_CGA.ttf);
-}
-@font-face {
-	font-family:IBM_CGAthin;
-	src: url(fonts/PxPlus_IBM_CGAthin.ttf);
-}
-@font-face {
-	font-family:IBM_EGA8;
-	src: url(fonts/PxPlus_IBM_EGA8.ttf);
-}
-@font-face {
-	font-family:IBM_EGA9;
-	src: url(fonts/PxPlus_IBM_EGA9.ttf);
-}
-@font-face {
-	font-family:IBM_MDA;
-	src: url(fonts/PxPlus_IBM_MDA.ttf);
-}
-@font-face {
-	font-family:IBM_VGA8;
-	src: url(fonts/PxPlus_IBM_VGA8.ttf);
-}
-@font-face {
-	font-family:IBM_VGA9;
-	src: url(fonts/PxPlus_IBM_VGA9.ttf);
-}
-@font-face {
-	font-family:TandyNew_225;
-	src: url(fonts/PxPlus_TandyNew_225.ttf);
-}
-@font-face {
-	font-family:TandyNew_TV;
-	src: url(fonts/PxPlus_TandyNew_TV.ttf);
-}
-@font-face {
-	font-family:VGA_SquarePx;
-	src: url(fonts/PxPlus_VGA_SquarePx.ttf);
-}
+/*@font-face {*/
+/*	font-family:AmstradPC1512;*/
+/*	src: url(fonts/PxPlus_AmstradPC1512.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:IBM_BIOS;*/
+/*	src: url(fonts/PxPlus_IBM_BIOS.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:IBM_CGA;*/
+/*	src: url(fonts/PxPlus_IBM_CGA.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:IBM_CGAthin;*/
+/*	src: url(fonts/PxPlus_IBM_CGAthin.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:IBM_EGA8;*/
+/*	src: url(fonts/PxPlus_IBM_EGA8.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:IBM_EGA9;*/
+/*	src: url(fonts/PxPlus_IBM_EGA9.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:IBM_MDA;*/
+/*	src: url(fonts/PxPlus_IBM_MDA.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:IBM_VGA8;*/
+/*	src: url(fonts/PxPlus_IBM_VGA8.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:IBM_VGA9;*/
+/*	src: url(fonts/PxPlus_IBM_VGA9.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:TandyNew_225;*/
+/*	src: url(fonts/PxPlus_TandyNew_225.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:TandyNew_TV;*/
+/*	src: url(fonts/PxPlus_TandyNew_TV.ttf);*/
+/*}*/
+/*@font-face {*/
+/*	font-family:VGA_SquarePx;*/
+/*	src: url(fonts/PxPlus_VGA_SquarePx.ttf);*/
+/*}*/
 @font-face {
 	font-family:YOz14s;
-	src: url(fonts/YOz14s.ttf);
+	src: url("/YOz14s.ttf");
 }
 @font-face {
 	font-family:YOzFontOTWD;
-	src: url(fonts/YOzFontOTWD.ttf);
+	src: url("/YOzFontOTWD.ttf");
 }
 
 
@@ -74,19 +74,20 @@ body,input,button,select,option {
 }
 input,button,select {
 	background: transparent;
-    outline-width: 1px;
+    /*outline-width: 1px;*/
 	outline-style: solid;
-	/*width: 100%;*/
+	width: 100%;
 	outline-color: #353535;
 }
 input:hover,button:hover,select:hover,option:hover {
 	/*background: lightgray;*/
 	/*color: black;*/
 }
+input[type="checkbox"],
 input:focus{
     outline: none;
 }
-
+input[type="checkbox"] { width: initial; }
 #container {
     background: black;
 	color: lightgray;
@@ -149,11 +150,16 @@ input:focus{
 .flex-grow { flex-grow: 1; }
 .float-right { float: right; }
 .hidden { display: none !important; }
+.right-flex {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
 
 /* LAYOUT */
 html, body, #container {
 	height: 100%;
-	overflow: hidden;
+	/*overflow: hidden;*/
 	min-width: 768px;
 	font-size: 12px;
 }
@@ -175,6 +181,7 @@ html, body, #container {
     padding: 0.25rem 0.25rem 0 0.25rem;
     box-sizing: border-box;
     overflow: hidden;
+    min-height: 200px;
 }
 .flex .tab-panels {
 	flex-grow: 1;
@@ -209,6 +216,7 @@ html, body, #container {
     overflow-x: hidden;
     min-height: 100px;
     height: 100vh;
+    -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 1000px) {
@@ -387,6 +395,7 @@ html, body, #container {
 #terminal-container {
 	border: 2px solid #353535;
 	display: block;
+	padding: 1px 2px;
 }
 #terminal-container,
 #tester {
@@ -400,7 +409,8 @@ html, body, #container {
 	border: 0;
 }
 
-.new-game select {
+.new-game select,
+#settings select {
 	outline-width: 1px;
     outline-style: solid;
     width: 100%;
@@ -413,18 +423,34 @@ html, body, #container {
 }
 
 
-/* ROLES AND STATUS */
-#chatlog .dev {
-	color: #ea5656;
+/* SCROLLBARS */
+.wrapper::-webkit-scrollbar-track {
+	background-color: transparent;
 }
+
+.wrapper::-webkit-scrollbar {
+	width: 6px;
+	background-color: #3d3d3e;
+}
+
+.wrapper::-webkit-scrollbar-thumb {
+	background-color: #6a6a6b;
+}
+
+
+
+/* ROLES AND STATUS */
 #chatlog .winner{
 	/*color: #AF11AF;*/
-	color: #b976b9;
+	color: #c36ade;
+}
+#chatlog .silwinner{
+	color: #e2e265;
 }
 #chatlog .mitze {
 	color: #AF11AF;
 	font-family: "YOz14s";
 }
-#chatlog .silwinner{
-	color: #EFEF11;
+#chatlog .dev {
+	color: #ea5656;
 }
