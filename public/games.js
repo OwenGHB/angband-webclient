@@ -2,7 +2,7 @@ var games = [
 	{
 		name:'angband',
 		longname:'Angband 4.1.0',
-		desc:"The latest release of the classic dungeon exploration game inspired by the work of JRR Tolkein. Descended from Moria."
+		desc:"The latest release of the classic dungeon exploration game inspired by the work of JRR Tolkien. Descended from Moria."
 	},
 	{
 		name:'competition',
@@ -12,7 +12,7 @@ var games = [
 	{
 		name:'faangband',
 		longname:'FAangband 1.4.4',
-		desc:"Redesigned gameplay mechanics, full of new features and new content, including wilderness levels. Faithful to Tolkein. Descended from Oangband"
+		desc:"Redesigned gameplay mechanics, full of new features and new content, including wilderness levels. Faithful to Tolkien. Descended from Oangband"
 	},
 	{
 		name:'hellband',
