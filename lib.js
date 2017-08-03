@@ -39,17 +39,6 @@ lib.respond=function(user,msg){
 	}
 }
 function chat(user,message){
-	//should be if (user.winner)
-	//lazy hack because I promised Lina a purple name if she won
-	// var winners = [
-	// 	'LinaButterfly',
-	// 	'Ingwe_Ingweron',
-	// 	'Serinus_Serinus',
-	// 	'wobbly',
-	// 	'rodent',
-	// 	'clouded',
-	// 	'Philip'
-	// ];
 	var response = JSON.stringify({ 
 		eventtype: "chat",
 		content: { 
@@ -58,25 +47,6 @@ function chat(user,message){
 			extra: user.roles
 		}
 	});
-	// if(user.isDev)
-	// 	var response = JSON.stringify({
-	// 		eventtype: 'chat', content: '<span class="playername dev">'+user.username+'</span>: '+message
-	// 	});
-	// else if (user.isWinner) {
-	// 	var response = JSON.stringify({
-	// 		eventtype: 'chat', content: '<span class="playername winner">'+user.username+'</span>: '+message
-	// 	});
-	// } 
-	// else if (user.username == 'MITZE') {
-	// 	var response = JSON.stringify({
-	// 		eventtype: 'chat', content: '<span class="playername MITZE">'+user.username+'</span>: '+message
-	// 	});
-	// } 
-	// else {
-	// 	var response = JSON.stringify({
-	// 		eventtype: 'chat', content: '<span class="playername basic">'+user.username+'</span>: '+message
-	// 	});
-	// }
 	chatlog.unshift(response);
 	while (chatlog.length>100) {
 		chatlog.pop();
