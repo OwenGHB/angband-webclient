@@ -430,16 +430,23 @@ html, body, #container {
 
 .wrapper::-webkit-scrollbar {
 	width: 6px;
+	background-color: transparent;
+}
+.wrapper:hover::-webkit-scrollbar {
 	background-color: #3d3d3e;
 }
-
 .wrapper::-webkit-scrollbar-thumb {
+	background-color: transparent;
+}
+.wrapper:hover::-webkit-scrollbar-thumb {
 	background-color: #6a6a6b;
 }
 
 
-
 /* ROLES AND STATUS */
+#chatlog .dev {
+	background-color: #440802;
+}
 #chatlog .winner{
 	/*color: #AF11AF;*/
 	color: #c36ade;
@@ -451,6 +458,6 @@ html, body, #container {
 	color: #AF11AF;
 	font-family: "YOz14s";
 }
-#chatlog .dev {
-	background-color: #440802;
+#chatlog .kt {
+	color: #ea5656;
 }
