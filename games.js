@@ -87,7 +87,7 @@ var games = [
     longname: 'Sil 1.3.0',
     desc: 'Heavily redesigned gameplay mechanics to be a shorter but more tactically intricate game. Very faithful to Tolkein. Descended from NPPAngband',
 	restrict_paths: false,
-    data_paths: [],
+    data_paths: ['save','apex'],
     args: [] },
   { name: 'quickband',
     longname: 'Quickband 2.0.6',

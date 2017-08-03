@@ -148,7 +148,9 @@ function newgame(user,msg){
 			} else {
 				args.push('-u'+user.username);
 			}
-			if (gameinfo.restrict_paths){
+			if (game=='competition'){
+				args.push('-duser='+home+'/public/user/'+user.username+'/'+compgame);
+			} else if (gameinfo.restrict_paths){
 				args.push('-d'+home+'/public/user/'+user.username+'/'+game);
 			} else {
 				args.push('-duser='+home+'/public/user/'+user.username+'/'+game);
