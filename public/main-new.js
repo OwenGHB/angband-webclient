@@ -44,10 +44,16 @@ var localStorage;
 
 function addMessage(msg, extra_class) {
 	var $msg = $(msg);
-	if(extra_class) 
-		$("#chatlog .wrapper").append('<div class="message"><span class="' + extra_class + '">' + msg + '</span></div>');
+	var classes = [];
+	if(msg.extra) 
+		classes = msg.extra.join(" ");
+	if(!extra_class) {
+		var $m = $('<div class="message"><span class="user '+classes+'">'+msg.user+':</span> <span class="msg"></span></div>');
+		$m.find("span.msg").text(msg.message);
+		$("#chatlog .wrapper").append($m);
+	}
 	else 
-		$("#chatlog .wrapper").append('<div class="message">' + msg + '</div>');
+		$("#chatlog .wrapper").append('<div class="message"><span class="system">' + msg + '</span></div>');
 }
 function updateUserCount(users) { 
 	$("#peoplelist .info").html("<p>there " + (users.length>1?"are":"is") + " <b>" + users.length + "</b> user" + (users.length>1?"s":"") + " online");

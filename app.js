@@ -75,7 +75,7 @@ app.post('/signin',
 			} 
 			else {
 			  if(req.body.username.length < 3)
-			    return res.json({error: true, mgs:"username too short"});
+			    return res.json({error: true, msg:"username too short"});
 				if (req.body.username.match(/^[a-zA-Z_]+$/) != null) {
 					Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
 						if (err) {
