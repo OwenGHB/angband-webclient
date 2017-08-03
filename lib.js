@@ -143,7 +143,11 @@ function newgame(user,msg){
 		if (game=='moria'){
 			args.push(home+'/var/games/'+game+'/'+user.username);
 		} else {
-			args.push('-u'+user.username);
+			if (game=='competition'){
+				args.push('-u'+compnumber+'-'+user.username);
+			} else {
+				args.push('-u'+user.username);
+			}
 			if (gameinfo.restrict_paths){
 				args.push('-d'+home+'/public/user/'+user.username+'/'+game);
 			} else {
@@ -212,6 +216,9 @@ function newgame(user,msg){
 				}
 			}
 		});
+		term.on('close', function(data) {
+			closegame(user.username);
+		});
 		var match = {
 			term: term,
 			game: game,
@@ -232,43 +239,50 @@ function newgame(user,msg){
 	}
 }
 function closegame(player){
-	//kill the process if it hasn't already
-	//horrific reverse engineering hack here
-	var term = matches[player].term;
-	if (matches[player].game=='competition'){
-		var gamepid=parseInt(term.pid)+3;
-	} else {
-		var gamepid=term.pid;
+	try {
+		metasockets[player].send(JSON.stringify({eventtype: 'gameover', content: []}));
+	} catch (ex) {
+		// The WebSocket is not open, ignore
 	}
-	ps.lookup({ pid: gamepid }, function(err, resultList ) {
-		if (err) {
-			console.log( err );
+	if (typeof(matches.player!='undefined')){
+		//kill the process if it hasn't already
+		//horrific reverse engineering hack here
+		var term = matches[player].term;
+		if (matches[player].game=='competition'){
+			var gamepid=parseInt(term.pid)+3;
+		} else {
+			var gamepid=term.pid;
 		}
-		var process = resultList[ 0 ];
-		if( process ){
-			ps.kill( gamepid, function( err ) {
-				if (err) {
-					console.log( err );
-				} else {
-					console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
-				}
-			});				
-		}
-		else {
-			console.log( 'Process %s was not found, expect user exited cleanly.',player );
-		}
-		//now kill the pty
-		term.kill();
-		// Clean things up
-		delete matches[player];
-		for (var i in metasockets){
-			try {
-				metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
-			} catch (ex) {
-				// The WebSocket is not open, ignore
+		ps.lookup({ pid: gamepid }, function(err, resultList ) {
+			if (err) {
+				console.log( err );
 			}
-		}
-	});
+			var process = resultList[ 0 ];
+			if( process ){
+				ps.kill( gamepid, function( err ) {
+					if (err) {
+						console.log( err );
+					} else {
+						console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
+					}
+				});				
+			}
+			else {
+				console.log( 'Process %s was not found, expect user exited cleanly.',player );
+			}
+			//now kill the pty
+			term.kill();
+			// Clean things up
+			delete matches[player];
+			for (var i in metasockets){
+				try {
+					metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
+				} catch (ex) {
+					// The WebSocket is not open, ignore
+				}
+			}
+		});
+	}
 }
 function subscribe(user,message){
 	var player = message.player;

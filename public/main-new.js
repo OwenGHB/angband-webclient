@@ -7,7 +7,6 @@ var socket;
 
 var spyglass = {};
 var playing = false;
-var term;
 var dimensions= {};
 // var terminfo = 'xterm-256color';
 // var term = new Terminal({
@@ -131,7 +130,7 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 	if(mode === "play") {
 		if (!playing){
 			playing = true;
-			term = createTerminal(d);
+			spyglass['default'] = createTerminal(d);
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + ' (your game)</a></li>').click(function() {
 					applyTerminal("play", qualifier, panels, walls, d);
@@ -146,12 +145,12 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 					walls: walls
 				}
 			}));
-			term.on('data', function(data) {
+			spyglass['default'].on('data', function(data) {
 				socket.send(JSON.stringify({eventtype: 'gameinput', content: data}));
 			});
 		}
 		$terminal.html("");
-		term.open($terminal.get(0));
+		spyglass['default'].open($terminal.get(0));
 	}
 	else if(mode === "spectate") {
 		if (typeof(spyglass[qualifier])=='undefined') {
@@ -174,7 +173,60 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 	$("#games-lobby").addClass("hidden");
 	$("#terminal-pane").removeClass("hidden");
 }
-
+function cleanSpyGlass(matches){
+	$("#navigation ul").html("");
+	$("#navigation ul").append(function() {
+		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
+			$("#terminal-pane").addClass("hidden");
+			$("#games-lobby").removeClass("hidden");
+		});
+	});
+	var players = Object.keys(matches);
+	if(spyglass.length > 0) {
+		for(var i in spyglass) {
+			if (i=='default'){
+				$("#navigation ul").append(function(i) {
+					return $('<li><a href="#"> - ' + matches[players[i]].game + ' (your game)</a></li>').click(function() {
+						applyTerminal("play", matches[players[i]].game, panels, walls, d);
+					});
+				}(i));
+			} else if (players.includes(i)) {
+				$("#navigation ul").append(function(i) {
+					return $('<li><a href="#"> - ' + players[i] + '</a></li>').click(function() {
+						applyTerminal("spectate", players[i], 1, false, matches[players[i]].dimensions);
+					});
+				}(i));	
+			} else {
+				delete spyglass[i];
+			}
+		}
+	}
+}
+function closeGame(){
+	$("#navigation ul").html("");
+	$("#navigation ul").append(function() {
+		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
+			$("#terminal-pane").addClass("hidden");
+			$("#games-lobby").removeClass("hidden");
+		});
+	});
+	if(spyglass.length > 0) {
+		for(var i=0; i<spyglass.length; i++) {
+			if (i!='default') {
+				$("#navigation ul").append(function(i) {
+					return $('<li><a href="#"> - ' + players[i] + '</a></li>').click(function() {
+						applyTerminal("spectate", players[i], 1, false, matches[players[i]].dimensions);
+					});
+				}(i));	
+			} else {
+				delete spyglass[i];
+			}
+		}
+	}
+	$("#terminal-pane").addClass("hidden");
+	$("#games-lobby").removeClass("hidden");
+	playing=false;
+}
 function adjustTerminalFontSize() {
 	$("#terminal-container").css("font-size", 6);
 	$("#tester").css("display", "initial");
@@ -224,13 +276,15 @@ function initChat() {
 			case "usercount":
 				updateUserCount(data.content); break;
 			case "matchupdate":
-				listMatches(data.content); break;
+				listMatches(data.content); cleanSpyGlass(data.content); break;
 			case "fileupdate":
 				listFiles(data.content); break;
 			case "spectatorinfo":
-				addMessage(data.content); break;
+				addMessage(data.content,"system"); break;
 			case "owngameoutput":
-				term.write(data.content); break;
+				spyglass['default'].write(data.content); break;
+			case "gameover":
+				closeGame(); break;
 			case "gameoutput":
 				if (typeof(spyglass[data.content.player])!='undefined') {
 					spyglass[data.content.player].write(data.content.data);
