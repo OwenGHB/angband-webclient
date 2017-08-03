@@ -462,3 +462,6 @@ html, body, #container {
   background: -moz-radial-gradient(rgba(255,0,0,1),rgba(255,0,0,0)); /*Fx 3.6-15*/
   background: radial-gradient(rgba(255,0,0,1), rgba(255,0,0,0)); /*Standard*/
 }
+#chatlog .kt {
+	color: #EA5656;
+}
