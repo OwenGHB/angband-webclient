@@ -74,7 +74,6 @@ body,input,button,select,option {
 }
 input,button,select {
 	background: transparent;
-    /*outline-width: 1px;*/
 	outline-style: solid;
 	width: 100%;
 	outline-color: #353535;
@@ -88,6 +87,11 @@ input:focus{
     outline: none;
 }
 input[type="checkbox"] { width: initial; }
+
+.login-form input {
+	width: initial;
+    outline-width: 1px;
+}
 #container {
     background: black;
 	color: lightgray;
