@@ -446,7 +446,7 @@ html, body, #container {
 /* ROLES AND STATUS */
 #chatlog .winner{
 	/*color: #AF11AF;*/
-	color: #c36ade;
+	color: #b220b2;
 }
 #chatlog .silwinner{
 	color: #e2e265;
@@ -456,5 +456,9 @@ html, body, #container {
 	font-family: "YOz14s";
 }
 #chatlog .dev {
-	background-color: #440802;
+  background: red; /* For browsers that do not support gradients */
+  background: -webkit-radial-gradient(rgba(255,0,0,1),rgba(255,0,0,0)); /*Safari 5.1-6*/
+  background: -o-radial-gradient(rgba(255,0,0,1),rgba(255,0,0,0)); /*Opera 11.1-12*/
+  background: -moz-radial-gradient(rgba(255,0,0,1),rgba(255,0,0,0)); /*Fx 3.6-15*/
+  background: radial-gradient(rgba(255,0,0,1), rgba(255,0,0,0)); /*Standard*/
 }

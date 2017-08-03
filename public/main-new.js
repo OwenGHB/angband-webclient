@@ -48,7 +48,7 @@ function addMessage(msg, extra_class) {
 	if(msg.extra) 
 		classes = msg.extra.join(" ");
 	if(!extra_class) {
-		var $m = $('<div class="message"><span class="user '+classes+'">'+msg.user+':</span> <span class="msg"></span></div>');
+		var $m = $('<div class="message"><span class="user '+classes+'">'+msg.user+'</span>: <span class="msg"></span></div>');
 		$m.find("span.msg").text(msg.message);
 		$("#chatlog .wrapper").append($m);
 	}

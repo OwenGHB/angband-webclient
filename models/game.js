@@ -7,8 +7,8 @@ var Game = new Schema({
   desc: String,
   longdesc: String,
   restrict_paths: Boolean,
-  data_paths: Array[String],
-  args: Array[String]
+  data_paths: Array,
+  args: Array
 });
 
 module.exports = mongoose.model('Game', Game);

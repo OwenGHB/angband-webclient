@@ -1,6 +1,8 @@
 var pty = require('pty.js');
 var ps = require('ps-node');
 var fs = require('fs-extra');
+var mongoose = require('mongoose');
+var games = require('./games.js');
 
 var lib = {};
 matches = {};
@@ -93,8 +95,17 @@ function getfilelist(username){
 	}
 	return files;
 }
+function getgamelist(){
+	var games = {};
+	return games;
+}
+function getgameinfo(game){
+	var info = {};
+	return info;
+}
 function newgame(user,msg){
 	var game = msg.game;
+	var gameinfo = games.find(function(){return (games.name==game)});
 	var panels = msg.panels;
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
@@ -297,7 +308,6 @@ function closegame(player){
 function subscribe(user,message){
 	var player = message.player;
 	var spectator = user.username;
-
 	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.username)!='undefined') {
 		metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator + " is now watching"}));
 		matches[player].spectators.push(spectator);
@@ -308,6 +318,7 @@ lib.welcome = function(user,ws) {
 	var player = user.username;
 	//send some info to the user upon connecting
 	try {
+		metasockets[user.username].send(JSON.stringify({eventtype: 'gamelist', content: games}));
 		for (var i in chatlog){
 			metasockets[user.username].send(chatlog[chatlog.length-i-1]);
 		}
