@@ -257,8 +257,14 @@ function closegame(player){
 			}
 			var process = resultList[ 0 ];
 			if( process ){
-				term.kill();
-				console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );		
+				ps.kill( gamepid, function( err ) {
+					if (err) {
+						console.log( err );
+					} else {
+						term.kill();
+						console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
+					}
+				});			
 			} else {
 				console.log( 'Process %s was not found, expect user exited cleanly.',player );
 			}
