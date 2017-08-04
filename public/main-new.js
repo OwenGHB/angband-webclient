@@ -100,7 +100,10 @@ function listFiles(files) {
 	
 }
 
-
+function showMenu(){
+	$("#terminal-pane").addClass("hidden");
+	$("#games-lobby").removeClass("hidden");
+}
 function showTab(pos, el) {
 	const tabs = $(".tab-panels").children().map(function(i,e){return e.id;});
 	for(var i=0; i<tabs.length; i++) {
@@ -391,6 +394,25 @@ function changeUIFontSize(size, skipSaving) {
 	if(!skipSaving) saveOption("ui_font_size", size);
 }
 
+function changeBorderStyle(borderstyle, skipSaving) {
+	$(".pane-main .pane-side").css("border-style", borderstyle);
+	
+}
+
+function changeBackgroundColor(bgcolor, skipSaving) {
+	if (tabcolor.match(/[[a-f][A-F]\d]+?/) != null && tabcolor.length == 6){
+		$("html, body, #container").css("background-color", bgcolor);
+		//if(!skipSaving) saveOption("ui_background_color", bgcolor);
+	}
+}
+
+function changeMenuColor(tabcolor, skipSaving) {
+	if (tabcolor.match(/[[a-f][A-F]\d]+?/) != null && tabcolor.length == 6){
+		$(".panel").css("background-color", tabcolor);
+		//if(!skipSaving) saveOption("ui_menu_color", tabcolor);
+	}
+}
+
 function saveOption(opt, val) {
 	if(window.localStorage) {
 		var ls = window.localStorage.getItem("aw_options");
@@ -477,10 +499,10 @@ function loadDefaultGameOptions(game) {
 	var ascii_walls = false;
 	// var font = "monospace";
 	switch (game) {
-		case 'poschengband':
-			rows[0] = 39; break;
-		case 'sangband':
-			rows[0] = 47; break;
+			case 'poschengband':
+					rows[0] = 39; break;
+			case 'sangband':
+					rows[0] = 47; break;
 	}
 	var $rows, $cols, $font, $subwindows, $walls, i;
 	for(i=rows[0]; i<=rows[1]; i++) $rows += '<option value="'+i+'">'+i+'</option>';
@@ -511,6 +533,16 @@ $(function() {
 	});
 	$("#opt-ui-font-size").change(function(e) { changeUIFontSize(e.target.value); });
 	$("#opt-ui-font-size").val($("html").css("font-size"));
+	
+	// add more options
+	var borderstyles = ['solid','inset','outset','ridge','groove','none'];
+	for (var i in borderstyles){
+		$("#opt-ui-border-style").append('<option value="' + borderstyles[i] + '">' + borderstyles[i] + '</option>');
+	}
+	$("#opt-ui-border-style").change(function() { changeBorderStyle($("#opt-ui-border-style").val()); });
+	$("#opt-ui-body-color").val($("body").css("background-color"));
+	$("#opt-ui-chat-color").val($(".panel").css("background-color"));
+	$("#opt-ui-chat-color").change(function() { changeMenuColor($("#opt-ui-border-style").val()); });
 	
 	// restore and apply options from local storage
 	loadAndApplyOptions();
