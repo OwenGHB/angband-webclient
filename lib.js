@@ -28,7 +28,11 @@ lib.respond=function(user,msg){
 	if (msg.eventtype=='chat'){
 		chat(user,msg.content);
 	} else if (msg.eventtype=='newgame'){
-		newgame(user,msg.content);
+		if (typeof(matches[user.username])!='undefined'){
+			closegame(user.username);
+		} else {
+			newgame(user,msg.content);
+		}
 	} else if (msg.eventtype=='connectplayer'){
 		connectplayer(user.username);
 	} else if (msg.eventtype=='subscribe'){
@@ -132,106 +136,103 @@ function newgame(user,msg){
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.username;
-	if (typeof(matches[user.username])=='undefined'){
-		var compgame = 'faangband';
-		var compnumber = '208';
-		var panelarg = '-b';
-		if (panels>1) panelarg = '-n'+panels;
-		var path = home+'/games/'+game;
-		var args = [];
-		var terminfo='xterm-256color';
-		if (game=='moria'){
-			args.push(home+'/var/games/'+game+'/'+user.username);
-		} else {
-			if (game=='competition'){
-				args.push('-u'+compnumber+'-'+user.username);
-			} else {
-				args.push('-u'+user.username);
-			}
-			if (game=='competition'){
-				args.push('-duser='+home+'/public/user/'+user.username+'/'+compgame);
-			} else if (gameinfo.restrict_paths){
-				args.push('-d'+home+'/public/user/'+user.username+'/'+game);
-			} else {
-				args.push('-duser='+home+'/public/user/'+user.username+'/'+game);
-			}
-			for (var i in gameinfo.data_paths){
-				args.push('-d'+gameinfo.data_paths[i]+'='+home+'/var/games/'+game+'/'+gameinfo.data_paths[i]);
-			}
-			for (var i in gameinfo.args){
-				args.push('-'+gameinfo.args[i]);
-			}
-			args.push('-mgcu');
-			args.push('--');
-			args.push(panelarg);
-		}
-		if (msg.walls) args.push('-a');
-		var termdesc = {};
+	var compgame = 'faangband';
+	var compnumber = '208';
+	var panelarg = '-b';
+	if (panels>1) panelarg = '-n'+panels;
+	var path = home+'/games/'+game;
+	var args = [];
+	var terminfo='xterm-256color';
+	if (game=='moria'){
+		args.push(home+'/var/games/'+game+'/'+user.username);
+	} else {
 		if (game=='competition'){
-			var newattempt = true;
-			var newtty = false;
-			var savegames = fs.readdirSync(home+'/var/games/'+compgame+'/save');
-			if (savegames.includes(compnumber+'-'+user.username)){
-				var playerfile = home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username;
-				newattempt = !isalive(playerfile);
-			}
-			var ttydir = fs.readdirSync(home+'/public/user/'+user.username);
-			var ttyfile = home+'/public/user/'+user.username+'/'+compnumber+'-'+user.username+'.ttyrec';
-			if (ttydir.includes(ttyfile)){
-				newtty=true;
-			}
-			var command = home+'/games/'+compgame+' '+args.join(' ');
-			path = 'ttyrec';
-			args = [
-				'-e',
-				command,
-				ttyfile
-			];
-			if (!newattempt) {
-				if (!newtty) args.unshift('-a');
-			} else {
-				fs.copySync(home+'/var/games/'+compgame+'/save/'+compnumber, home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username);
-			}
+			args.push('-u'+compnumber+'-'+user.username);
+		} else {
+			args.push('-u'+user.username);
 		}
-		termdesc = {
-			path:path,
-			args:args,
-			terminfo: terminfo
-		};
-		var term = pty.fork(termdesc.path,termdesc.args,{
-			name: termdesc.terminfo,
-			cols: parseInt(dimensions.cols),
-			rows: parseInt(dimensions.rows),
-			cwd: process.env.HOME
-		});
-		term.on('data', function(data) {
+		if (game=='competition'){
+			args.push('-duser='+home+'/public/user/'+user.username+'/'+compgame);
+		} else if (gameinfo.restrict_paths){
+			args.push('-d'+home+'/public/user/'+user.username+'/'+game);
+		} else {
+			args.push('-duser='+home+'/public/user/'+user.username+'/'+game);
+		}
+		for (var i in gameinfo.data_paths){
+			args.push('-d'+gameinfo.data_paths[i]+'='+home+'/var/games/'+game+'/'+gameinfo.data_paths[i]);
+		}
+		for (var i in gameinfo.args){
+			args.push('-'+gameinfo.args[i]);
+		}
+		args.push('-mgcu');
+		args.push('--');
+		args.push(panelarg);
+	}
+	if (msg.walls) args.push('-a');
+	var termdesc = {};
+	if (game=='competition'){
+		var newattempt = true;
+		var newtty = false;
+		var savegames = fs.readdirSync(home+'/var/games/'+compgame+'/save');
+		if (savegames.includes(compnumber+'-'+user.username)){
+			var playerfile = home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username;
+			newattempt = !isalive(playerfile);
+		}
+		var ttydir = fs.readdirSync(home+'/public/user/'+user.username);
+		var ttyfile = home+'/public/user/'+user.username+'/'+compnumber+'-'+user.username+'.ttyrec';
+		if (ttydir.includes(ttyfile)){
+			newtty=true;
+		}
+		var command = home+'/games/'+compgame+' '+args.join(' ');
+		path = 'ttyrec';
+		args = [
+			'-e',
+			command,
+			ttyfile
+		];
+		if (!newattempt) {
+			if (!newtty) args.unshift('-a');
+		} else {
+			fs.copySync(home+'/var/games/'+compgame+'/save/'+compnumber, home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username);
+		}
+	}
+	termdesc = {
+		path:path,
+		args:args,
+		terminfo: terminfo
+	};
+	var term = pty.fork(termdesc.path,termdesc.args,{
+		name: termdesc.terminfo,
+		cols: parseInt(dimensions.cols),
+		rows: parseInt(dimensions.rows),
+		cwd: process.env.HOME
+	});
+	term.on('data', function(data) {
+		try {
+			metasockets[player].send(JSON.stringify({eventtype:'owngameoutput',content:data}));
+		} catch (ex) {
+			// The WebSocket is not open, ignore
+		}
+		if (typeof(matches[player])!='undefined') for (var i in matches[player].spectators) {
 			try {
-				metasockets[player].send(JSON.stringify({eventtype:'owngameoutput',content:data}));
+				metasockets[matches[player].spectators[i]].send(JSON.stringify({eventtype:'gameoutput',content:{player:player,data:data}}));
 			} catch (ex) {
 				// The WebSocket is not open, ignore
 			}
-			if (typeof(matches[player])!='undefined') for (var i in matches[player].spectators) {
-				try {
-					metasockets[matches[player].spectators[i]].send(JSON.stringify({eventtype:'gameoutput',content:{player:player,data:data}}));
-				} catch (ex) {
-					// The WebSocket is not open, ignore
-				}
-			}
-		});
-		term.on('close', function(data) {
-			closegame(user.username);
-		});
-		var match = {
-			term: term,
-			game: game,
-			idle: false,
-			idletime: 0,
-			spectators: []
 		}
-		matches[user.username] = match;
-	} else {
-		console.log('Using existing process with PID: ' + matches[user.username].term.pid);
+	});
+	term.on('close', function(data) {
+		closegame(user.username);
+	});
+	var match = {
+		term: term,
+		game: game,
+		idle: false,
+		idletime: 0,
+		spectators: []
 	}
+	matches[user.username] = match;
+	
 	for (var i in metasockets){
 		try {
 			metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
@@ -241,12 +242,7 @@ function newgame(user,msg){
 	}
 }
 function closegame(player){
-	try {
-		metasockets[player].send(JSON.stringify({eventtype: 'gameover', content: []}));
-	} catch (ex) {
-		// The WebSocket is not open, ignore
-	}
-	if (typeof(matches.player!='undefined')){
+	if (typeof(matches[player])!='undefined'){
 		//kill the process if it hasn't already
 		//horrific reverse engineering hack here
 		var term = matches[player].term;
@@ -261,21 +257,18 @@ function closegame(player){
 			}
 			var process = resultList[ 0 ];
 			if( process ){
-				ps.kill( gamepid, function( err ) {
-					if (err) {
-						console.log( err );
-					} else {
-						console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
-					}
-				});				
-			}
-			else {
+				term.kill();
+				console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );		
+			} else {
 				console.log( 'Process %s was not found, expect user exited cleanly.',player );
 			}
-			//now kill the pty
-			term.kill();
 			// Clean things up
-			delete matches[player];
+			delete matches[player]; 
+			try {
+				metasockets[player].send(JSON.stringify({eventtype: 'gameover', content: []}));
+			} catch (ex) {
+				// The WebSocket is not open, ignore
+			}
 			for (var i in metasockets){
 				try {
 					metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
