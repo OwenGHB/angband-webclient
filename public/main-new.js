@@ -499,8 +499,6 @@ function loadDefaultGameOptions(game) {
 	var ascii_walls = false;
 	// var font = "monospace";
 	switch (game) {
-			case 'poschengband':
-					rows[0] = 39; break;
 			case 'sangband':
 					rows[0] = 47; break;
 	}
