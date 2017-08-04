@@ -85,14 +85,15 @@ function getfilelist(username){
 		var path = home+'/public/user/'+username+'/';
 		fs.ensureDirSync(path);
 		var ls = fs.readdirSync(path);
-		for (var i in ls){
+		for (var i in games){
 			var dumps = [];
-			if (ls[i].match(/^[a-zA-Z0-9_]+$/)){
-				var varfiles = fs.readdirSync(path+ls[i]);
+			if (games[i].name.match(/^[a-zA-Z0-9_]+$/)){
+				fs.ensureDirSync(path+games[i].name);
+				var varfiles = fs.readdirSync(path+games[i].name);
 				for (var j in varfiles){
 					if (varfiles[j].match(/\.([hH][tT][mM][lL]|[tT][xX][tT])/)) dumps.push(varfiles[j]);
 				}
-				files[ls[i]]=dumps;
+				files[games[i].name]=dumps;
 			}
 		}
 		files.username=username;

@@ -11,6 +11,7 @@ var expressWs     = require('express-ws')(app);
 var mongoose      = require('mongoose');
 var passport      = require('passport');
 var awc           = require('./lib.js');
+var games         = require('./games.js');
 var LocalStrategy = require('passport-local').Strategy;
 var Account       = require('./models/account');
 var fs            = require('fs-extra');
