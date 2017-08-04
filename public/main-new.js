@@ -187,7 +187,11 @@ function cleanSpyGlass(matches){
 			if (i=='default'){
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#"> - your game</a></li>').click(function() {
-						applyTerminal("play", 'dud', panels, walls, d);
+						var panels = $("#subwindows").val();
+						var walls = false;
+						var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
+						var gamename = $("#gameselect").val();
+						applyTerminal("play", gamename, panels, walls, d);
 					});
 				}(i));
 			} else if (players.includes(i)) {
