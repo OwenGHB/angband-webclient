@@ -9,7 +9,7 @@ matches = {};
 metasockets = {};
 chatlog = [];
 
-var home = '/home/angbandlive';
+var home = '/home/roguelikes';
 
 //check player alive status for recording purposes
 function isalive(playerfile){
@@ -141,61 +141,11 @@ function newgame(user,msg){
 	var compnumber = '208';
 	var panelarg = '-b';
 	if (panels>1) panelarg = '-n'+panels;
-	var path = home+'/games/'+game;
+	var path = home+'/src/stone_soup-0.20.1/source/crawl';
 	var args = [];
 	var terminfo='xterm-256color';
-	if (game=='moria'){
-		args.push(home+'/var/games/'+game+'/'+user.username);
-	} else {
-		if (game=='competition'){
-			args.push('-u'+compnumber+'-'+user.username);
-		} else {
-			args.push('-u'+user.username);
-		}
-		if (game=='competition'){
-			args.push('-duser='+home+'/public/user/'+user.username+'/'+compgame);
-		} else if (gameinfo.restrict_paths){
-			args.push('-d'+home+'/public/user/'+user.username+'/'+game);
-		} else {
-			args.push('-duser='+home+'/public/user/'+user.username+'/'+game);
-		}
-		for (var i in gameinfo.data_paths){
-			args.push('-d'+gameinfo.data_paths[i]+'='+home+'/var/games/'+game+'/'+gameinfo.data_paths[i]);
-		}
-		for (var i in gameinfo.args){
-			args.push('-'+gameinfo.args[i]);
-		}
-		args.push('-mgcu');
-		args.push('--');
-		args.push(panelarg);
-	}
-	if (msg.walls) args.push('-a');
-	var termdesc = {};
-	if (game=='competition'){
-		var newattempt = true;
-		var newtty = false;
-		var savegames = fs.readdirSync(home+'/var/games/'+compgame+'/save');
-		if (savegames.includes(compnumber+'-'+user.username)){
-			var playerfile = home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username;
-			newattempt = !isalive(playerfile);
-		}
-		var ttydir = fs.readdirSync(home+'/public/user/'+user.username);
-		var ttyfile = home+'/public/user/'+user.username+'/'+compnumber+'-'+user.username+'.ttyrec';
-		if (ttydir.includes(ttyfile)){
-			newtty=true;
-		}
-		var command = home+'/games/'+compgame+' '+args.join(' ');
-		path = 'ttyrec';
-		args = [
-			'-e',
-			command,
-			ttyfile
-		];
-		if (!newattempt) {
-			if (!newtty) args.unshift('-a');
-		} else {
-			fs.copySync(home+'/var/games/'+compgame+'/save/'+compnumber, home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username);
-		}
+	if (game=='dcss'){
+		args.push();
 	}
 	termdesc = {
 		path:path,
@@ -233,7 +183,7 @@ function newgame(user,msg){
 		spectators: []
 	}
 	matches[user.username] = match;
-	
+	term.write('\r');
 	for (var i in metasockets){
 		try {
 			metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
