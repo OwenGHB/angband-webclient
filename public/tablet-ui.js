@@ -80,7 +80,10 @@ var TU = function(socket) {
             var self = this;
             arrows.map(function(key) {
                 // $("#tu-arrows-"+key).click(function(e) { fireKey(key); });
-                $("#tu-arrows-" + key).on(self.EVENT_TYPE, function(e) { self.fireKey(key); });
+                $("#tu-arrows-" + key).on(self.EVENT_TYPE, function(e) { 
+                    e.preventDefault();
+                    self.fireKey(key); 
+                });
             });
         },
         
@@ -273,6 +276,11 @@ var TU = function(socket) {
             $("#tu-save-quit").on(this.EVENT_TYPE, function() { self.fireKey("\u0018");});
             $("#tu-key-dot").on(this.EVENT_TYPE, function() { self.fireKey(".");});
             $("#tu_key_space").on(this.EVENT_TYPE, function() { self.fireKey(" ");});
+            
+            $('#tu-arrows button').bind('touchend', function(e) {
+                e.preventDefault();
+                $(this).click();
+            });
         }
         
     };
