@@ -9,7 +9,7 @@ matches = {};
 metasockets = {};
 chatlog = [];
 
-var home = '/home/angbandlive';
+var home = process.env.CUSTOM_HOME || '/home/angbandlive';
 
 //check player alive status for recording purposes
 function isalive(playerfile){

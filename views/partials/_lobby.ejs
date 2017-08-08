@@ -1,22 +1,19 @@
 <div class="flex">
 	<div class="pane-main">
 		<div id="games-lobby"><%- include('_games_lobby'); %></div>
-		<div id="terminal-pane" class="hidden"><%- include('_terminal'); %></div>
+		<div id="terminal-pane" class="hidden">
+			<%- include('_terminal'); %>
+		</div>
 		<div id="tester" class="terminal">a</div>
 	</div>
 	<div class="pane-side">
 		<div class="tab-buttons">
-			<!--<a href="#" title="navigation" onClick=showTab(1,this)><i class="material-icons">dashboard</i></a>-->
-			<!--<a href="#" title="chat" class="selected" onClick=showTab(2,this)><i class="material-icons">message</i></a>-->
-			<!--<a href="#" title="people" onClick=showTab(3,this)><i class="material-icons">people</i></a>-->
-			<!--<a href="#" title="files" onClick=showTab(4,this)><i class="material-icons">attach_file</i></a>-->
-			<!--<a href="#" title="settings" onClick=showTab(5,this)><i class="material-icons">settings</i></a>-->
-			<!--<a href="/logout" title="logout" class="float-right"><i class="material-icons">exit_to_app</i></a>-->
 			<a href="#" title="navigation" onClick=showMenu()>home</a>
-			<a href="#" title="chat" class="selected" onClick=showTab(2,this)>chat</a>
-			<a href="#" title="people" onClick=showTab(3,this)>people</a>
-			<a href="#" title="files" onClick=showTab(4,this)>files</a>
-			<a href="#" title="settings" onClick=showTab(5,this)>opts</a>
+			<a href="#" title="chat" class="selected" onClick=showTab('tab-chat',this)>chat</a>
+			<a href="#" title="people" onClick=showTab('tab-people',this)>people</a>
+			<a href="#" title="files" onClick=showTab('tab-files',this)>files</a>
+			<a href="#" title="tablet controls" onClick=showTab('tab-tabletui',this) id="btn-tabletui" class="hidden">UI</a>
+			<a href="#" title="settings" onClick=showTab('tab-settings',this)>opts</a>
 			<a href="/logout" title="logout" class="float-right">exit</a>
 		</div> 
 		<div class="tab-panels">
@@ -24,9 +21,11 @@
 			<div class="tab hidden" id="tab-chat"><%- include('tabs/_tab_chat'); %></div>
 			<div class="tab hidden" id="tab-people"><%- include('tabs/_tab_people'); %></div>
 			<div class="tab hidden" id="tab-files"><%- include('tabs/_tab_files'); %></div>
+			<div class="tab hidden" id="tab-tabletui"><%- include('tabs/_tab_tablet_ui'); %></div>
 			<div class="tab hidden" id="tab-settings"><%- include('tabs/_tab_settings'); %></div>
 		</div>
 	</div>
 </div>
 
+<script type="text/javascript" src="/tablet-ui.js"></script>
 <script type="text/javascript" src="/main-new.js"></script>

@@ -1,0 +1,46 @@
+#tablet-ui {
+    height: 100%;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.flex-button {
+    flex-grow: 1;
+}
+#tu-arrows {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+#tablet-ui button {
+    margin: 0;
+    background-color: #333333;
+    padding: 4px;
+    text-align: center;
+    margin: 2px;
+    border: 1px solid #969696;
+    outline: 0;
+}
+#tablet-ui button.fast {
+    background-color: #092935;
+    border: 1px solid #174b5f;
+}
+#tablet-ui button.edit-mode {
+    background-color: #753c3c;
+     border: 1px solid #ca7575; 
+}
+#tu-arrows button {
+    padding: 15px;
+}
+#tablet-ui h6 {
+    text-align: center;
+    color: #cecece;
+    margin: 10px 0 0 0;
+}
