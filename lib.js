@@ -144,7 +144,7 @@ function newgame(user,msg){
 	var path = home+'/games/'+game;
 	var args = [];
 	var terminfo='xterm-256color';
-	if (game=='moria'){
+	if (game=='umoria'){
 		args.push(home+'/var/games/'+game+'/'+user.username);
 	} else {
 		if (game=='competition'){
@@ -179,6 +179,7 @@ function newgame(user,msg){
 			var playerfile = home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username;
 			newattempt = !isalive(playerfile);
 		}
+		fs.ensureDirSync(home+'/public/user/'+user.username);
 		var ttydir = fs.readdirSync(home+'/public/user/'+user.username);
 		var ttyfile = home+'/public/user/'+user.username+'/'+compnumber+'-'+user.username+'.ttyrec';
 		if (ttydir.includes(ttyfile)){
