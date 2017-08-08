@@ -563,7 +563,13 @@ $(function() {
 	
 	// tablet ui
 	var ua = navigator.userAgent.toLowerCase();
-	if(ua.indexOf("ipad") !== -1) {
+	var tablets = ["ipad", "android 5"];
+	var onTablet = false;
+	tablets.map(function(model) {
+		if(ua.indexOf(model) !== -1)
+			onTablet = true;
+	});
+	if(onTablet) {
 		TU = TU(socket).init();
 	}
 });
