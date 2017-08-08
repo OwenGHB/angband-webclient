@@ -541,7 +541,7 @@ $(function() {
 	loadAndApplyOptions();
 	
 	// init and open chat tab by default
-	initChat(); showTab(2);
+	initChat();
 	
 	// terminal resizer
 	$(window).resize(function() { adjustTerminalFontSize(); });

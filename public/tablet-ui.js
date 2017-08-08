@@ -2,15 +2,7 @@ var TU = function(socket) {
     return {
         config_keys: {
             tu_key_esc:            '\u001b',
-            tu_key_enter:          '\r',
-            // key_up:             '\u001b[A',
-            // key_down:           '\u001b[B',
-            // key_left:           '\u001b[D',
-            // key_right:          '\u001b[C',
-            tu_action_rod:      'z',
-            tu_action_wand:     'a',
-            tu_action_staff:    'u',
-            tu_action_throw:    'f',
+            tu_key_enter:          '\r'
         },
         
         config_shortcuts: {
@@ -58,14 +50,22 @@ var TU = function(socket) {
         },
         
         config_quick: {
-            tu_quick_1: { name: 'equipm', sequence: 'e' },
-            tu_quick_2: { name: 'invent', sequence: 'i' },
-            tu_quick_3: { name: 'wear', sequence: 'w' },
-            tu_quick_4: { name: 'takeoff', sequence: 't' },
-            tu_quick_5: { name: 'monstrs', sequence: '[' },
-            tu_quick_6: { name: 'objects', sequence: ']' },
-            tu_quick_7: { name: 'char', sequence: 'C' },
-            tu_quick_8: { name: 'target', sequence: '*' }
+            tu_quick_1:  { name: 'equipm', sequence: 'e' },
+            tu_quick_2:  { name: 'invent', sequence: 'i' },
+            tu_quick_3:  { name: 'wear', sequence: 'w' },
+            tu_quick_4:  { name: 'takeoff', sequence: 't' },
+            tu_quick_5:  { name: 'monstrs', sequence: '[' },
+            tu_quick_6:  { name: 'objects', sequence: ']' },
+            tu_quick_7:  { name: 'char', sequence: 'C' },
+            tu_quick_8:  { name: '*', sequence: '*' },
+             
+            tu_quick_9:  { name: 'rod', sequence: 'z' },
+            tu_quick_10: { name: 'wand', sequence: 'a' },
+            tu_quick_11: { name: 'staff', sequence: 'u' },
+            tu_quick_12: { name: 'throw', sequence: 'f' },
+            
+            tu_quick_13: { name: 'run', sequence: '.' },
+            tu_quick_14: { name: 'center', sequence: '\u0016' },
         },
         
         // EVENT_TYPE: 'touch',
@@ -271,6 +271,8 @@ var TU = function(socket) {
             $("#tu_key_caps").on(this.EVENT_TYPE, self.toggleCaps.bind(self));
             $("#tu_key_special").on(this.EVENT_TYPE, self.toggleSpecialKeyboardKeys.bind(self));
             $("#tu-save-quit").on(this.EVENT_TYPE, function() { self.fireKey("\u0018");});
+            $("#tu-key-dot").on(this.EVENT_TYPE, function() { self.fireKey(".");});
+            $("#tu_key_space").on(this.EVENT_TYPE, function() { self.fireKey(" ");});
         }
         
     };
