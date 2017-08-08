@@ -220,7 +220,7 @@ html, body, #container {
 	height: 100%;
 }
 .flex .tab-panels .tab .wrapper {
-	height: 100%;
+	/*height: 100%;*/
     overflow-y: auto;
     overflow-x: hidden;
     min-height: 100px;
@@ -273,7 +273,8 @@ html, body, #container {
 
 
 /* TAB CHAT CONTENTS */
-#chatlog {
+#chatlog,
+#fileslog {
     display: flex;
     flex-direction: column-reverse;
     justify-content: flex-end;
