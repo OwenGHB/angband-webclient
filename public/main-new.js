@@ -40,6 +40,7 @@ var fonts = [
 ];
 var font_sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20];
 var localStorage;
+var TU;
 
 function addMessage(msg, extra_class) {
 	var $msg = $(msg);
@@ -78,7 +79,7 @@ function listMatches(matches) {
 	}
 }
 function listFiles(files) {
-	var $tab = $("#tab-files div");
+	var $tab = $("#tab-files .wrapper");
 	var user = files.username;
 	delete files.username;
 	var games = Object.keys(files);
@@ -104,18 +105,12 @@ function showMenu(){
 	$("#terminal-pane").addClass("hidden");
 	$("#games-lobby").removeClass("hidden");
 }
-function showTab(pos, el) {
+function showTab(id, el) {
 	const tabs = $(".tab-panels").children().map(function(i,e){return e.id;});
-	for(var i=0; i<tabs.length; i++) {
-		if(i === pos-1)
-			$("#"+tabs[i]).removeClass("hidden")
-		else 
-			$("#"+tabs[i]).addClass("hidden");
-	}
-	if(el) {
-    	$(".tab-buttons a").removeClass("selected");
-    	$(el).addClass("selected");
-	}
+	$(".tab-panels div.tab").addClass("hidden");
+	$("#" + id).removeClass("hidden");
+	$(".tab-buttons a").removeClass("selected");
+	$(el).addClass("selected");
 }
 
 function createTerminal(dimensions) {
@@ -546,7 +541,7 @@ $(function() {
 	loadAndApplyOptions();
 	
 	// init and open chat tab by default
-	initChat(); showTab(2);
+	initChat();
 	
 	// terminal resizer
 	$(window).resize(function() { adjustTerminalFontSize(); });
@@ -565,4 +560,10 @@ $(function() {
 	
 	// game option change handlers
 	$("#term-cols,#term-rows,#subwindows,#ascii-walls").change(function() { saveGameOptions(); });
+	
+	// tablet ui
+	var ua = navigator.userAgent.toLowerCase();
+	if(ua.indexOf("ipad") !== -1) {
+		TU = TU(socket).init();
+	}
 });
