@@ -160,6 +160,7 @@ input[type="checkbox"] { width: initial; }
 	justify-content: flex-end;
 }
 .height-100p { height: 100%; }
+.invisible { visibility: hidden !important; }
 
 /* LAYOUT */
 html, body, #container {
