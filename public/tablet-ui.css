@@ -22,7 +22,7 @@
 #tablet-ui button {
     margin: 0;
     background-color: #333333;
-    padding: 4px;
+    padding: 8px 4px;
     text-align: center;
     margin: 2px;
     border: 1px solid #969696;
@@ -44,4 +44,27 @@
     color: #cecece;
     margin: 10px 0 0 0;
 }
+#tablet-ui button.num {
+    background-color: #364c38;
+    border: 1px solid #6aa06f;
+}
+#tu-mode-actions,
+#tu-mode-specials,
+#tu-mode-keyboard {
+    margin: 5px 0;
+    border-top: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    padding: 5px 0;
+}
+#tablet-ui button.small {
+    padding: 4px 4px;
+}
 
+#tablet-ui #tu_key_run {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: initial;
+    opacity: 0.5;
+    padding: 20px 16px;
+}

@@ -1,76 +1,87 @@
 <div id="tablet-ui" class="flex-grow panel height-100p">
     
-    <h6>system</h6>
     <div>
         <div class="flex-row">
-            <button id="tu-save-quit" class="flex-button">save & quit</button>
-            <button id="tu-edit-mode" class="flex-button">edit fast skills</button>
+            <button id="tu-save-quit" class="small flex-button">save & quit</button>
+            <button id="tu-edit-mode" class="small flex-button">edit fast skills</button>
         </div>
     </div>
     
-    <h6>fire / throw</h6>
+    <h6>actions / keyboard</h6>
     <div>
-        
+        <div class="flex-row">
+            <button id="tu_select_az" class="flex-button">a-z</button>
+            <button id="tu_select_special" class="flex-button">specials</button>
+            <button id="tu_select_actions" class="flex-button">actions</button>
+        </div>
     </div>
     
-    <h6>keyboard</h6>
-    <div id="tu-keyboard">
-        <div class="flex-row">
-            <button id="tu-key-1" class="flex-button">1</button>
-            <button id="tu-key-2" class="flex-button">2</button>
-            <button id="tu-key-3" class="flex-button">3</button>
-            <button id="tu-key-4" class="flex-button">4</button>
-            <button id="tu-key-5" class="flex-button">5</button>
-            <button id="tu-key-6" class="flex-button">6</button>
-            <button id="tu-key-7" class="flex-button">7</button>
-            <button id="tu-key-8" class="flex-button">8</button>
-            <button id="tu-key-9" class="flex-button">9</button>
-            <button id="tu-key-0" class="flex-button">0</button>
-        </div>
+    <div id="tu-mode-keyboard">
         <div class="flex-row">
             <button id="tu-key-a" class="flex-button">a</button>
             <button id="tu-key-b" class="flex-button">b</button>
             <button id="tu-key-c" class="flex-button">c</button>
             <button id="tu-key-d" class="flex-button">d</button>
             <button id="tu-key-e" class="flex-button">e</button>
+            <button id="tu-key-1" class="num flex-button">1</button>
+            <button id="tu-key-6" class="num flex-button">6</button>
+        </div>
+        <div class="flex-row">
             <button id="tu-key-f" class="flex-button">f</button>
             <button id="tu-key-g" class="flex-button">g</button>
             <button id="tu-key-h" class="flex-button">h</button>
             <button id="tu-key-i" class="flex-button">i</button>
+            <button id="tu-key-j" class="flex-button">j</button>
+            <button id="tu-key-2" class="num flex-button">2</button>
+            <button id="tu-key-7" class="num flex-button">7</button>
         </div>
         <div class="flex-row">
-            <button id="tu-key-j" class="flex-button">j</button>
             <button id="tu-key-k" class="flex-button">k</button>
             <button id="tu-key-l" class="flex-button">l</button>
             <button id="tu-key-m" class="flex-button">m</button>
             <button id="tu-key-n" class="flex-button">n</button>
             <button id="tu-key-o" class="flex-button">o</button>
+            <button id="tu-key-3" class="num flex-button">3</button>
+            <button id="tu-key-8" class="num flex-button">8</button>
+        </div>
+        <div class="flex-row">
             <button id="tu-key-p" class="flex-button">p</button>
             <button id="tu-key-q" class="flex-button">q</button>
             <button id="tu-key-r" class="flex-button">r</button>
-        </div>
-        <div class="flex-row">
             <button id="tu-key-s" class="flex-button">s</button>
             <button id="tu-key-t" class="flex-button">t</button>
+            <button id="tu-key-4" class="num flex-button">4</button>
+            <button id="tu-key-9" class="num flex-button">9</button>
+        </div>
+        <div class="flex-row">
             <button id="tu-key-u" class="flex-button">u</button>
             <button id="tu-key-v" class="flex-button">v</button>
             <button id="tu-key-w" class="flex-button">w</button>
             <button id="tu-key-x" class="flex-button">x</button>
             <button id="tu-key-y" class="flex-button">y</button>
+            <button id="tu-key-5" class="num flex-button">5</button>
+            <button id="tu-key-0" class="num flex-button">0</button>
+        </div>
+        <div class="flex-row">
             <button id="tu-key-z" class="flex-button">z</button>
-            <button id="tu-key-dot" class="flex-button">.</button>
+            <button id="tu_key_caps" class="flex-button">CAPS</button>
+            <button id="" class="invisible flex-button">-</button>
+            <button id="" class="invisible flex-button">-</button>
+            <button id="" class="invisible flex-button">-</button>
+            <button id="tu_special_key_13" class="flex-button"></button>
+            <button id="tu_special_key_14" class="flex-button"></button>
         </div>
         
     </div>
     
-    <div id="tu-keyboard-specials" class="hidden">
+    <div id="tu-mode-specials" class="hidden">
         <div class="flex-row">
             <button id="tu_special_key_1" class="flex-button"></button>
             <button id="tu_special_key_2" class="flex-button"></button>
             <button id="tu_special_key_3" class="flex-button"></button>
             <button id="tu_special_key_4" class="flex-button"></button>
-            <button id="tu_special_key_5" class="flex-button"></button>
-            <button id="tu_special_key_6" class="flex-button"></button>
+            <button id="tu_special_key_15" class="flex-button"></button>
+            <button id="tu_special_key_16" class="flex-button"></button>
         </div>
         <div class="flex-row">
             <button id="tu_special_key_7" class="flex-button"></button>
@@ -81,54 +92,59 @@
             <button id="tu_special_key_12" class="flex-button"></button>
         </div>
         <div class="flex-row">
-            <button id="tu_special_key_15" class="flex-button"></button>
-            <button id="tu_special_key_16" class="flex-button"></button>
+            <button id="tu_special_key_5" class="flex-button"></button>
+            <button id="tu_special_key_6" class="flex-button"></button>
             <button id="tu_special_key_17" class="flex-button"></button>
             <button id="tu_special_key_18" class="flex-button"></button>
             <button id="tu_special_key_19" class="flex-button"></button>
             <button id="tu_special_key_20" class="flex-button"></button>
         </div>
+        <div class="flex-row"><button class="invisible flex-button">-</button></div>
         <div class="flex-row">
-            <button id="tu_special_key_13" class="flex-button"></button>
-            <button id="tu_special_key_14" class="flex-button"></button>
             <button id="tu_special_key_21" class="flex-button"></button>
             <button id="tu_special_key_22" class="flex-button"></button>
+        </div>
+        <div class="flex-row"><button class="invisible flex-button">-</button></div>
+    </div>
+    
+    <div id="tu-mode-actions" class="hidden">
+        <div class="flex-row">
+            <button id="tu_quick_1" class="flex-button"></button>
+            <button id="tu_quick_2" class="flex-button"></button>
+            <button id="tu_quick_3" class="flex-button"></button>
+        </div>
+        <div class="flex-row">
+            <button id="tu_quick_4" class="flex-button"></button>
+            <button id="tu_quick_5" class="flex-button"></button>
+            <button id="tu_quick_6" class="flex-button"></button>
+        </div>
+        <div class="flex-row">
+            <button id="tu_quick_13" class="flex-button"></button>
+            <button id="tu_quick_14" class="flex-button"></button>
+            <button id="tu_quick_15" class="flex-button"></button>
+        </div>
+        <div class="flex-row">
+            <button id="tu_quick_10" class="flex-button"></button>
+            <button id="tu_quick_11" class="flex-button"></button>
+            <button id="tu_quick_12" class="flex-button"></button>
+        </div>
+        <div class="flex-row">
+            <button id="tu_quick_16" class="flex-button"></button>
+            <button id="tu_quick_17" class="flex-button"></button>
+            <button id="tu_quick_9" class="flex-button"></button>
+        </div>
+        <div class="flex-row">
+            <button id="tu_quick_7" class="flex-button"></button>
+            <button id="tu_quick_8" class="flex-button"></button>
+            <button id="tu_quick_18" class="flex-button"></button>
         </div>
     </div>
     
     <div>
         <div class="flex-row">
             <button id="tu_key_esc" class="flex-button">ESC</button>
-            <button id="tu_key_caps" class="flex-button">CAPS</button>
-            <button id="tu_key_special" class="flex-button">SPECIAL</button>
             <button id="tu_key_space" class="flex-button">SPACE</button>
             <button id="tu_key_enter" class="flex-button">ENTER</button>
-        </div>
-    </div>
-    
-    <h6>quick commands</h6>
-    <div>
-        <div class="flex-row">
-            <button id="tu_quick_1" class="flex-button">equipm</button>
-            <button id="tu_quick_2" class="flex-button">invent</button>
-            <button id="tu_quick_3" class="flex-button">wear</button>
-            <button id="tu_quick_4" class="flex-button">takeoff</button>
-        </div>
-        <div class="flex-row">
-            <button id="tu_quick_9" class="flex-button">rod</button>
-            <button id="tu_quick_10" class="flex-button">wand</button>
-            <button id="tu_quick_11" class="flex-button">staff</button>
-            <button id="tu_quick_12" class="flex-button">throw</button>
-        </div>
-        <div class="flex-row">
-            <button id="tu_quick_5" class="flex-button">monsters</button>
-            <button id="tu_quick_6" class="flex-button">objects</button>
-            <button id="tu_quick_7" class="flex-button">wear</button>
-            <button id="tu_quick_8" class="flex-button">char</button>
-        </div>
-        <div class="flex-row">
-            <button id="tu_quick_13" class="flex-button"></button>
-            <button id="tu_quick_14" class="flex-button"></button>
         </div>
     </div>
     
@@ -159,7 +175,6 @@
     
     <div class="flex-grow"></div>
     
-    <h6>movement</h6>
     <div id="tu-arrows">
         <div class="flex-row">
             <button id="tu-arrows-7">7</button>
@@ -177,4 +192,7 @@
             <button id="tu-arrows-3">3</button>
         </div>
     </div>
+    
+    <button id="tu_key_run" class="">run</button>
+    
 </div>

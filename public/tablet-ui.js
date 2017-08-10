@@ -44,35 +44,40 @@ var TU = function(socket) {
             tu_special_key_18: { symbol: '/', sequence: '/' },
             tu_special_key_19: { symbol: '\\',sequence: '\\' },
             tu_special_key_20: { symbol: '|', sequence: '|' },
-            
             tu_special_key_21: { symbol: 'PgUp', sequence: '\u001b[5~' },
             tu_special_key_22: { symbol: 'PgDn', sequence: '\u001b[6~' },
         },
         
         config_quick: {
-            tu_quick_1:  { name: 'equipm', sequence: 'e' },
-            tu_quick_2:  { name: 'invent', sequence: 'i' },
-            tu_quick_3:  { name: 'wear', sequence: 'w' },
-            tu_quick_4:  { name: 'takeoff', sequence: 't' },
-            tu_quick_5:  { name: 'monstrs', sequence: '[' },
-            tu_quick_6:  { name: 'objects', sequence: ']' },
-            tu_quick_7:  { name: 'char', sequence: 'C' },
-            tu_quick_8:  { name: '*', sequence: '*' },
-             
-            tu_quick_9:  { name: 'rod', sequence: 'z' },
-            tu_quick_10: { name: 'wand', sequence: 'a' },
-            tu_quick_11: { name: 'staff', sequence: 'u' },
-            tu_quick_12: { name: 'throw', sequence: 'f' },
+            tu_quick_1:  { name: 'equipment', sequence: 'e' },
+            tu_quick_2:  { name: 'inventory', sequence: 'i' },
+            tu_quick_3:  { name: 'char info', sequence: 'C' },
             
-            tu_quick_13: { name: 'run', sequence: '.' },
-            tu_quick_14: { name: 'center', sequence: '\u0016' },
+            tu_quick_4:  { name: 'wear item', sequence: 'w' },
+            tu_quick_5:  { name: 'take off', sequence: 't' },
+            tu_quick_6:  { name: 'fire', sequence: 'f' },
+
+            tu_quick_7:  { name: 'monsters', sequence: '[' },
+            tu_quick_8:  { name: 'objects', sequence: ']' },
+            tu_quick_9:  { name: 'get item', sequence: 'g' },
+             
+            tu_quick_10: { name: 'zap rod', sequence: 'z' },
+            tu_quick_11: { name: 'aim wand', sequence: 'a' },
+            tu_quick_12: { name: 'use staff', sequence: 'u' },
+            
+            tu_quick_13: { name: 'read', sequence: 'r' },
+            tu_quick_14: { name: 'study', sequence: 'G' },
+            tu_quick_15: { name: 'drop', sequence: 'd' },
+            
+            tu_quick_16: { name: 'search', sequence: 's' },
+            tu_quick_17: { name: '*', sequence: '*' },
+            tu_quick_18: { name: 'center', sequence: '\u0016' },
         },
         
         // EVENT_TYPE: 'touch',
         EVENT_TYPE: 'click', // for debugging
         edit_mode: false,
         isCaps: false,
-        specialKeyboard: false,
         socket: socket,
         
         initArrowKeys: function() {
@@ -205,17 +210,7 @@ var TU = function(socket) {
             this.initLowercaseKeys(this.isCaps);
         },
         
-        toggleSpecialKeyboardKeys: function() {
-            this.specialKeyboard = !this.specialKeyboard;
-            if(this.specialKeyboard) {
-                $("#tu-keyboard-specials").removeClass("hidden");
-                $("#tu-keyboard").addClass("hidden");
-            }
-            else {
-                $("#tu-keyboard-specials").addClass("hidden");
-                $("#tu-keyboard").removeClass("hidden");
-            }
-        },
+        
         
         editShortcut: function(original_sequence, original_key) {
             var name = prompt("Name it (4 chars max)", this.config_shortcuts[original_key].name);
@@ -258,6 +253,14 @@ var TU = function(socket) {
         },
         
         
+        changeTab: function(tab_id) {
+           $("#tu-mode-keyboard").addClass("hidden"); 
+           $("#tu-mode-specials").addClass("hidden"); 
+           $("#tu-mode-actions").addClass("hidden");
+           $("#" + tab_id).removeClass("hidden");
+        },
+        
+        
         init: function() {
             console.log("initializing tablet ui");
             this.unhideControlTab();
@@ -272,10 +275,14 @@ var TU = function(socket) {
             var self = this;
             $("#tu-edit-mode").on(this.EVENT_TYPE, self.toggleShortcutEditMode.bind(self));
             $("#tu_key_caps").on(this.EVENT_TYPE, self.toggleCaps.bind(self));
-            $("#tu_key_special").on(this.EVENT_TYPE, self.toggleSpecialKeyboardKeys.bind(self));
             $("#tu-save-quit").on(this.EVENT_TYPE, function() { self.fireKey("\u0018");});
-            $("#tu-key-dot").on(this.EVENT_TYPE, function() { self.fireKey(".");});
             $("#tu_key_space").on(this.EVENT_TYPE, function() { self.fireKey(" ");});
+            
+            $("#tu_select_az").on(this.EVENT_TYPE, function() { self.changeTab("tu-mode-keyboard");});
+            $("#tu_select_special").on(this.EVENT_TYPE, function() { self.changeTab("tu-mode-specials");});
+            $("#tu_select_actions").on(this.EVENT_TYPE, function() { self.changeTab("tu-mode-actions");});
+            
+            $("#tu_key_run").on(this.EVENT_TYPE, function() { self.fireKey(".");});
             
             $('#tu-arrows button').bind('touchend', function(e) {
                 e.preventDefault();
