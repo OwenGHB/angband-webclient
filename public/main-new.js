@@ -652,12 +652,6 @@ $(function() {
     	$("#games-lobby").removeClass("hidden");
 	});
 	
-    // scroll chat messages
-	// setTimeout(function() {
-	//     $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
-	//     initComplete = true;
-	// }, 1000);
-	
 	// game option change handlers
 	$("#term-cols,#term-rows,#subwindows,#ascii-walls").change(function() { saveGameOptions(); });
 	
