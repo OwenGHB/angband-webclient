@@ -4,19 +4,14 @@ var initComplete = false    // used to do some stuff only after this will be tru
 var protocol = location.protocol === "https:" ? "wss" : "ws";
 var socketURL = protocol + '://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
 var socket;
+var user_list = [];
+var matched_user_list = [];
+var isAutocompleteOpened = false;
+var currentAutocompletePos = 0;
 
 var spyglass = {};
 var playing = false;
 var dimensions= {};
-// var terminfo = 'xterm-256color';
-// var term = new Terminal({
-// 	termName: terminfo,
-// 	colors: Terminal.xtermColors,
-// 	cols: dimensions.cols,
-// 	rows: dimensions.rows,
-// 	cursorBlink: false
-// });
-// term.applicationCursor=true;
 
 var fonts = [
 	"Share Tech Mono",
@@ -41,8 +36,20 @@ var fonts = [
 var font_sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20];
 var localStorage;
 var TU;
+var notify_sound = $("#notification").get(0);
 
-function addMessage(msg, extra_class) {
+
+function populateChat(messages) {
+	var keys = Object.keys(messages);
+	for(var i=keys.length-1; i>=0; i--) {
+		var m = JSON.parse(messages[keys[i]]);
+		addMessage(m.content, false, false);
+	}
+	$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+    initComplete = true;
+}
+
+function addMessage(msg, extra_class, shouldNotify) {
 	var $msg = $(msg);
 	var classes = [];
 	if(msg.extra) 
@@ -51,15 +58,23 @@ function addMessage(msg, extra_class) {
 		var $m = $('<div class="message"><span class="user '+classes+'">'+msg.user+'</span>: <span class="msg"></span></div>');
 		$m.find("span.msg").text(msg.message);
 		$("#chatlog .wrapper").append($m);
+		if(shouldNotify) notifyIfNeeded(msg.user, msg.message);
 	}
 	else 
 		$("#chatlog .wrapper").append('<div class="message"><span class="system">' + msg + '</span></div>');
 }
+
+function notifyIfNeeded(user, message) {
+	if(message.indexOf("@" + user) !== -1)
+		notify_sound.play();
+}
+
 function updateUserCount(users) { 
 	$("#peoplelist .info").html("<p>there " + (users.length>1?"are":"is") + " <b>" + users.length + "</b> user" + (users.length>1?"s":"") + " online");
 	$("#peoplelist .people").html("");
 	for(var i=0; i<users.length; i++)
 		$("#peoplelist .people").append("<div> - " + users[i] + "</div>");
+	user_list = users;
 }
 function listMatches(matches) {
 	$("#watchmenu ul").html("");
@@ -266,12 +281,16 @@ function initChat() {
 	socket.addEventListener('message', function (ev) {
 		var data = JSON.parse(ev.data);
 		switch(data.eventtype) {
+			case "populate_chat":
+				populateChat(data.content); 
+				initComplete = true; 
+				break;
 			case "gamelist":
-				// init angband variants list box
-				initGameList(data.content); loadSelectedGameName();
+				initGameList(data.content); 
+				loadSelectedGameName();
 				break;
 			case "chat":
-				addMessage(data.content); 
+				addMessage(data.content, false, initComplete); 
 				if(initComplete)
 				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 				break;
@@ -313,15 +332,60 @@ function initChat() {
 	socket.addEventListener('open', function () {
 		addMessage("***Connected to chat***", "system");
 	});
-	$("#new-message-input input").keypress(function(e) {
+	
+	$("#new-message-input input").on("keyup", function(e) {
+		if(e.keyCode !== 13) {
+			var current_input = (" " + e.target.value);
+			var last_block = current_input.split(" ");
+			last_block = last_block[last_block.length-1];
+			if(last_block[0] === "@" && last_block.split("@").length === 2 && last_block.length > 1) {
+				var name_part = last_block.substring(1);
+				matched_user_list = [];
+				var highlight_counter = 0;
+				for(var i in user_list) {
+					if(user_list[i].toLowerCase().indexOf(name_part.toLowerCase()) !== -1) {
+						var cl = "";
+						var $l = $('<li onclick=insertName("' + user_list[i] + '")>' + user_list[i] + '</li>');
+						$l.on("mouseover", highlightUser)
+						if(highlight_counter === currentAutocompletePos) {
+							$l.addClass("selected");
+						}
+						matched_user_list.push($l);
+						highlight_counter++;
+					}
+				}
+				if(matched_user_list.length > 0) 
+					showAutoCompleteBox(matched_user_list);
+				else 
+					hideAutoCompleteBox();
+			}
+			else 
+				hideAutoCompleteBox();
+		}
+	});
+	
+	$("#new-message-input input").on("keydown", function(e) {
 		if (!e) e = window.event;
 		var keyCode = e.keyCode || e.which;
-		if (keyCode == '13') {
-		    if($(this).val().length > 0) {
+		if (keyCode === 13) {
+			if(isAutocompleteOpened) {
+				insertName(matched_user_list[currentAutocompletePos].text());
+			}
+		    else if($(this).val().length > 0) {
     			socket.send(JSON.stringify({eventtype:'chat', content:$(this).val()}));
     			$(this).val("");
     			$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 1000);
 		    }
+		}
+		else {
+			if(isAutocompleteOpened) {
+				if(keyCode === 38) {  // up
+					changeSelectedMatch(false); e.preventDefault();
+				}
+				else if(keyCode === 40) { // down
+					changeSelectedMatch(true); e.preventDefault();
+				}
+			}
 		}
 	});
 }
@@ -445,12 +509,12 @@ function loadAndApplyOptions() {
 	}
 }
 
-
 function saveSelectedGameName(game) {
 	if(localStorage) {
 		localStorage.setItem("aw_selected_game", game);
 	}
 }
+
 function loadSelectedGameName() {
 	if(localStorage) {
 		var g = localStorage.getItem("aw_selected_game");
@@ -458,6 +522,7 @@ function loadSelectedGameName() {
 		else $("#gameselect").val("angband").trigger("change");
 	}
 }
+
 function saveGameOptions() {
 	if(localStorage) {
 		var game = $("#gameselect").val();
@@ -507,6 +572,41 @@ function loadDefaultGameOptions(game) {
 	$("#ascii-walls").val(ascii_walls);
 }
 
+
+// ========================================================
+// chat autocomplete
+// ========================================================
+function showAutoCompleteBox(items) {
+	$("#users-popup ul").html(items);
+	$("#users-popup").removeClass("hidden");
+	isAutocompleteOpened = true;
+}
+function hideAutoCompleteBox(force) {
+	$("#users-popup ul").html("");
+	$("#users-popup").addClass("hidden");
+	currentAutocompletePos = 0;
+	isAutocompleteOpened = false;
+}
+function insertName(name) {
+	var $input = $("#new-message-input input");
+	var v = $input.val();
+	v = v.split(" ");
+	v[v.length-1] = "@" + name + " ";
+	$input.val(v.join(" "));
+	hideAutoCompleteBox();
+	$input.focus();
+}
+function changeSelectedMatch(goDown) {
+	if(goDown && currentAutocompletePos < matched_user_list.length-1)
+		currentAutocompletePos++;
+	else if(!goDown && currentAutocompletePos > 0)
+		currentAutocompletePos--;
+}
+function highlightUser(e) {
+	$("#users-popup ul li").removeClass("selected");
+	$(this).addClass("selected");
+}
+
 $(function() {
 	localStorage = window.localStorage;
 	
@@ -551,12 +651,6 @@ $(function() {
     	$("#terminal-pane").addClass("hidden");
     	$("#games-lobby").removeClass("hidden");
 	});
-	
-    // scroll chat messages
-	setTimeout(function() {
-	    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
-	    initComplete = true;
-	}, 1000);
 	
 	// game option change handlers
 	$("#term-cols,#term-rows,#subwindows,#ascii-walls").change(function() { saveGameOptions(); });

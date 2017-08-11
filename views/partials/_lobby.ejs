@@ -1,4 +1,5 @@
 <div class="flex">
+	<audio id="notification" src="/notify.mp3" autostart="false" ></audio>
 	<div class="pane-main">
 		<div id="games-lobby"><%- include('_games_lobby'); %></div>
 		<div id="terminal-pane" class="hidden">
@@ -27,5 +28,8 @@
 	</div>
 </div>
 
+<script>
+	var username = "<%= user.username %>";
+</script>
 <script type="text/javascript" src="/tablet-ui.js"></script>
 <script type="text/javascript" src="/main-new.js"></script>
