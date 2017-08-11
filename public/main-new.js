@@ -65,7 +65,7 @@ function addMessage(msg, extra_class, shouldNotify) {
 }
 
 function notifyIfNeeded(user, message) {
-	if(message.indexOf("@" + user) !== -1)
+	if(message.indexOf("@" + username) !== -1)
 		notify_sound.play();
 }
 
