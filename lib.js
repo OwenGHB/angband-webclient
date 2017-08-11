@@ -1,15 +1,15 @@
-var pty = require('pty.js');
-var ps = require('ps-node');
-var fs = require('fs-extra');
-var mongoose = require('mongoose');
-var games = require('./games.js');
+var pty         = require('pty.js');
+var ps          = require('ps-node');
+var fs          = require('fs-extra');
+var mongoose    = require('mongoose');
+var games       = require('./games.js');
 
-var lib = {};
-matches = {};
+var lib         = {};
+matches     = {};
 metasockets = {};
-chatlog = [];
+chatlog     = [];
+var home        = process.env.CUSTOM_HOME || '/home/angbandlive';
 
-var home = process.env.CUSTOM_HOME || '/home/angbandlive';
 
 //check player alive status for recording purposes
 function isalive(playerfile){
@@ -301,9 +301,7 @@ lib.welcome = function(user,ws) {
 	//send some info to the user upon connecting
 	try {
 		metasockets[user.username].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist()}));
-		for (var i in chatlog){
-			metasockets[user.username].send(chatlog[chatlog.length-i-1]);
-		}
+		metasockets[user.username].send(JSON.stringify({eventtype: 'populate_chat', content: chatlog}));
 		metasockets[user.username].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
 		metasockets[user.username].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.username)}));
 		metasockets[user.username].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));

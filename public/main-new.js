@@ -4,6 +4,7 @@ var initComplete = false    // used to do some stuff only after this will be tru
 var protocol = location.protocol === "https:" ? "wss" : "ws";
 var socketURL = protocol + '://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
 var socket;
+var user_list = [];
 
 var spyglass = {};
 var playing = false;
@@ -41,8 +42,20 @@ var fonts = [
 var font_sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20];
 var localStorage;
 var TU;
+var notify_sound = $("#notification").get(0);
 
-function addMessage(msg, extra_class) {
+
+function populateChat(messages) {
+	var keys = Object.keys(messages);
+	for(var i=keys.length-1; i>=0; i--) {
+		var m = JSON.parse(messages[keys[i]]);
+		addMessage(m.content, false, false);
+	}
+	$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+    initComplete = true;
+}
+
+function addMessage(msg, extra_class, shouldNotify) {
 	var $msg = $(msg);
 	var classes = [];
 	if(msg.extra) 
@@ -51,15 +64,23 @@ function addMessage(msg, extra_class) {
 		var $m = $('<div class="message"><span class="user '+classes+'">'+msg.user+'</span>: <span class="msg"></span></div>');
 		$m.find("span.msg").text(msg.message);
 		$("#chatlog .wrapper").append($m);
+		if(shouldNotify) notifyIfNeeded(msg.user, msg.message);
 	}
 	else 
 		$("#chatlog .wrapper").append('<div class="message"><span class="system">' + msg + '</span></div>');
 }
+
+function notifyIfNeeded(user, message) {
+	if(message.indexOf("@" + user) !== -1)
+		notify_sound.play();
+}
+
 function updateUserCount(users) { 
 	$("#peoplelist .info").html("<p>there " + (users.length>1?"are":"is") + " <b>" + users.length + "</b> user" + (users.length>1?"s":"") + " online");
 	$("#peoplelist .people").html("");
 	for(var i=0; i<users.length; i++)
 		$("#peoplelist .people").append("<div> - " + users[i] + "</div>");
+	user_list = users;
 }
 function listMatches(matches) {
 	$("#watchmenu ul").html("");
@@ -266,12 +287,16 @@ function initChat() {
 	socket.addEventListener('message', function (ev) {
 		var data = JSON.parse(ev.data);
 		switch(data.eventtype) {
+			case "populate_chat":
+				populateChat(data.content); 
+				initComplete = true; 
+				break;
 			case "gamelist":
-				// init angband variants list box
-				initGameList(data.content); loadSelectedGameName();
+				initGameList(data.content); 
+				loadSelectedGameName();
 				break;
 			case "chat":
-				addMessage(data.content); 
+				addMessage(data.content, false, initComplete); 
 				if(initComplete)
 				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 				break;
@@ -553,10 +578,10 @@ $(function() {
 	});
 	
     // scroll chat messages
-	setTimeout(function() {
-	    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
-	    initComplete = true;
-	}, 1000);
+	// setTimeout(function() {
+	//     $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+	//     initComplete = true;
+	// }, 1000);
 	
 	// game option change handlers
 	$("#term-cols,#term-rows,#subwindows,#ascii-walls").change(function() { saveGameOptions(); });
