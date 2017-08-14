@@ -52,10 +52,11 @@ function populateChat(messages) {
 function addMessage(msg, extra_class, shouldNotify) {
 	var $msg = $(msg);
 	var classes = [];
+	var ts = moment(msg.timestamp).format("HH:mm");
 	if(msg.extra) 
 		classes = msg.extra.join(" ");
 	if(!extra_class) {
-		var $m = $('<div class="message"><span class="user '+classes+'">'+msg.user+'</span>: <span class="msg"></span></div>');
+		var $m = $('<div class="message"><span class="time">['+ts+'] </span><span class="user '+classes+'">'+msg.user+'</span>: <span class="msg"></span></div>');
 		$m.find("span.msg").text(msg.message);
 		$("#chatlog .wrapper").append($m);
 		if(shouldNotify) notifyIfNeeded(msg.user, msg.message);
