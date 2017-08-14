@@ -3,6 +3,7 @@ var ps          = require('ps-node');
 var fs          = require('fs-extra');
 var mongoose    = require('mongoose');
 var games       = require('./games.js');
+var terminal    = require('term.js');
 
 var lib         = {};
 matches     = {};
@@ -222,16 +223,28 @@ function newgame(user,msg){
 				// The WebSocket is not open, ignore
 			}
 		}
+		if (typeof(matches[player].termcache)!='undefined') {
+			matches[player].termcache.write(data);
+		}
 	});
 	term.on('close', function(data) {
 		closegame(user.username);
+	});
+	var termcache = new Terminal({
+		termName: 'xterm-256color',
+		colors: Terminal.xtermColors,
+		cols: dimensions.cols,
+		rows: dimensions.rows,
+		cursorBlink: false,
+		scrollBottom: dimensions.rows
 	});
 	var match = {
 		term: term,
 		game: game,
 		idle: false,
 		idletime: 0,
-		spectators: []
+		spectators: [],
+		termcache: termcache
 	}
 	matches[user.username] = match;
 	
@@ -259,14 +272,14 @@ function closegame(player){
 			}
 			var process = resultList[ 0 ];
 			if( process ){
-				ps.kill( gamepid, function( err ) {
+				setTimeout(function(){ps.kill( gamepid, function( err ) {
 					if (err) {
 						console.log( err );
 					} else {
 						term.kill();
 						console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
 					}
-				});			
+				})},200);			
 			} else {
 				console.log( 'Process %s was not found, expect user exited cleanly.',player );
 			}
@@ -293,6 +306,11 @@ function subscribe(user,message){
 	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.username)!='undefined') {
 		metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator + " is now watching"}));
 		matches[player].spectators.push(spectator);
+		try {
+			metasockets[spectator].send(JSON.stringify({eventtype: 'gameoutputcache', content: {player:player,term:matches[player].termcache}}));
+		} catch (ex) {
+			// The WebSocket is not open, ignore
+		}
 	}
 }
 lib.welcome = function(user,ws) {

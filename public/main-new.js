@@ -134,7 +134,8 @@ function createTerminal(dimensions) {
 		colors: Terminal.xtermColors,
 		cols: dimensions.cols,
 		rows: dimensions.rows,
-		cursorBlink: false
+		cursorBlink: false,
+		scrollBottom: dimensions.rows
 	});
 }
 function applyTerminal(mode, qualifier, panels, walls, d) {
@@ -320,6 +321,9 @@ function initChat() {
 					});
 					spyglass[data.content.player].write(data.content.data);
 				}
+				break;
+			case "gameoutputcache":
+				spyglass[data.content.player]=data.content.term;
 				break;
 			default:
 				console.warn("unknown socket event occured", data.eventtype); break;
