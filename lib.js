@@ -224,28 +224,27 @@ function newgame(user,msg){
 				// The WebSocket is not open, ignore
 			}
 		}
-		if (typeof(matches[player].termcache)!='undefined') {
+/* 		if (typeof(matches[player].termcache)!='undefined') {
 			matches[player].termcache.write(data);
-		}
+		} */
 	});
 	term.on('close', function(data) {
 		closegame(user.username);
 	});
-	var termcache = new Terminal({
+	/*var termcache = new terminal.Terminal({
 		termName: 'xterm-256color',
-		colors: Terminal.xtermColors,
+		colors: terminal.Terminal.xtermColors,
 		cols: dimensions.cols,
 		rows: dimensions.rows,
 		cursorBlink: false,
 		scrollBottom: dimensions.rows
-	});
+	});*/
 	var match = {
 		term: term,
 		game: game,
 		idle: false,
 		idletime: 0,
-		spectators: [],
-		termcache: termcache
+		spectators: []
 	}
 	matches[user.username] = match;
 	
@@ -307,11 +306,11 @@ function subscribe(user,message){
 	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.username)!='undefined') {
 		metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator + " is now watching"}));
 		matches[player].spectators.push(spectator);
-		try {
+		/* try {
 			metasockets[spectator].send(JSON.stringify({eventtype: 'gameoutputcache', content: {player:player,term:matches[player].termcache}}));
 		} catch (ex) {
 			// The WebSocket is not open, ignore
-		}
+		} */
 	}
 }
 lib.welcome = function(user,ws) {

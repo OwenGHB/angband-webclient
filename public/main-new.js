@@ -323,9 +323,9 @@ function initChat() {
 					spyglass[data.content.player].write(data.content.data);
 				}
 				break;
-			case "gameoutputcache":
+			/* case "gameoutputcache":
 				spyglass[data.content.player]=data.content.term;
-				break;
+				break; */
 			default:
 				console.warn("unknown socket event occured", data.eventtype); break;
 		}
