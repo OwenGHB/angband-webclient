@@ -51,7 +51,8 @@ function chat(user,message){
 		content: { 
 			user: user.username,
 			message: message,
-			extra: user.roles
+			extra: user.roles,
+			timestamp: new Date()
 		}
 	});
 	chatlog.unshift(response);
