@@ -205,12 +205,16 @@ function newgame(user,msg){
 		args:args,
 		terminfo: terminfo
 	};
-	var term = pty.fork(termdesc.path,termdesc.args,{
-		name: termdesc.terminfo,
-		cols: parseInt(dimensions.cols),
-		rows: parseInt(dimensions.rows),
-		cwd: process.env.HOME
-	});
+	try {
+		var term = pty.fork(termdesc.path,termdesc.args,{
+			name: termdesc.terminfo,
+			cols: parseInt(dimensions.cols),
+			rows: parseInt(dimensions.rows),
+			cwd: process.env.HOME
+		});
+	} catch(ex) {
+		console.log('averted crash');
+	}
 	term.on('data', function(data) {
 		try {
 			metasockets[player].send(JSON.stringify({eventtype:'owngameoutput',content:data}));

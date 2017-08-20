@@ -136,7 +136,7 @@ function createTerminal(dimensions) {
 		cols: dimensions.cols,
 		rows: dimensions.rows,
 		cursorBlink: false,
-		scrollBottom: dimensions.rows
+		applicationCursor: true
 	});
 }
 function applyTerminal(mode, qualifier, panels, walls, d) {
