@@ -133,8 +133,8 @@ function createTerminal(dimensions) {
 	return new Terminal({
 		termName: 'xterm-256color',
 		colors: Terminal.xtermColors,
-		cols: dimensions.cols,
-		rows: dimensions.rows,
+		cols: parseInt(dimensions.cols)+1,
+		rows: parseInt(dimensions.rows)+1,
 		cursorBlink: false,
 		applicationCursor: true
 	});

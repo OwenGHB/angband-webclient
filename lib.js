@@ -139,8 +139,8 @@ function newgame(user,msg){
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.username;
-	var compgame = 'faangband';
-	var compnumber = '208';
+	var compgame = 'poschengband_new';
+	var compnumber = '209';
 	var panelarg = '-b';
 	if (panels>1) panelarg = '-n'+panels;
 	var path = home+'/games/'+game;
@@ -150,7 +150,8 @@ function newgame(user,msg){
 		args.push(home+'/var/games/'+game+'/'+user.username);
 	} else {
 		if (game=='competition'){
-			args.push('-u'+compnumber+'-'+user.username);
+			//args.push('-u'+compnumber+'-'+user.username);
+			args.push('-u'+user.username);
 		} else {
 			args.push('-u'+user.username);
 		}
@@ -174,7 +175,7 @@ function newgame(user,msg){
 	if (msg.walls) args.push('-a');
 	var termdesc = {};
 	if (game=='competition'){
-		var newattempt = true;
+		/* var newattempt = true;
 		var newtty = false;
 		var savegames = fs.readdirSync(home+'/var/games/'+compgame+'/save');
 		if (savegames.includes(compnumber+'-'+user.username)){
@@ -198,7 +199,8 @@ function newgame(user,msg){
 			if (!newtty) args.unshift('-a');
 		} else {
 			fs.copySync(home+'/var/games/'+compgame+'/save/'+compnumber, home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username);
-		}
+		} */
+		fs.copySync(home+'/var/games/'+compgame+'/save/'+compnumber, home+'/var/games/'+compgame+'/save/'+user.username);
 	}
 	termdesc = {
 		path:path,
@@ -210,7 +212,8 @@ function newgame(user,msg){
 			name: termdesc.terminfo,
 			cols: parseInt(dimensions.cols),
 			rows: parseInt(dimensions.rows),
-			cwd: process.env.HOME
+			cwd: process.env.HOME,
+			applicationCursor: true
 		});
 	} catch(ex) {
 		console.log('averted crash');
@@ -276,14 +279,20 @@ function closegame(player){
 			}
 			var process = resultList[ 0 ];
 			if( process ){
-				setTimeout(function(){ps.kill( gamepid, function( err ) {
-					if (err) {
-						console.log( err );
-					} else {
-						term.kill();
-						console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
+				setTimeout(function(){
+					try {
+						ps.kill( gamepid, function( err ) {
+							if (err) {
+								console.log( err );
+							} else {
+								term.kill();
+								console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
+							}
+						});
+					} catch(ex) {
+						
 					}
-				})},200);			
+				},500);
 			} else {
 				console.log( 'Process %s was not found, expect user exited cleanly.',player );
 			}
