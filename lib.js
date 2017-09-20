@@ -278,19 +278,20 @@ function closegame(player){
 				console.log( err );
 			}
 			var process = resultList[ 0 ];
-			if( process ){
+			if( !process ){
 				setTimeout(function(){
 					try {
 						ps.kill( gamepid, function( err ) {
-							if (err) {
-								console.log( err );
-							} else {
+							if (err) 
+								return console.log( err );
+							try {
 								term.kill();
 								console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
 							}
+							catch(e) { console.error(e); }
 						});
 					} catch(ex) {
-						
+						console.error(ex);
 					}
 				},500);
 			} else {
