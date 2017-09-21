@@ -278,7 +278,7 @@ function closegame(player){
 				console.log( err );
 			}
 			var process = resultList[ 0 ];
-			if( !process ){
+			if( process ){
 				setTimeout(function(){
 					try {
 						ps.kill( gamepid, function( err ) {
