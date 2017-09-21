@@ -282,15 +282,16 @@ function closegame(player){
 				setTimeout(function(){
 					try {
 						ps.kill( gamepid, function( err ) {
-							if (err) {
-								console.log( err );
-							} else {
+							if (err) 
+								return console.log( err );
+							try {
 								term.kill();
 								console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
 							}
+							catch(e) { console.error(e); }
 						});
 					} catch(ex) {
-						
+						console.error(ex);
 					}
 				},500);
 			} else {
@@ -317,8 +318,10 @@ function subscribe(user,message){
 	var player = message.player;
 	var spectator = user.username;
 	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.username)!='undefined') {
-		metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator + " is now watching"}));
-		matches[player].spectators.push(spectator);
+		if(metasockets[player]) {
+			metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator + " is now watching"}));
+			matches[player].spectators.push(spectator);
+		}
 		/* try {
 			metasockets[spectator].send(JSON.stringify({eventtype: 'gameoutputcache', content: {player:player,term:matches[player].termcache}}));
 		} catch (ex) {
