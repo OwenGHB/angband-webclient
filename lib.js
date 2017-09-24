@@ -71,15 +71,37 @@ function chat(user,message){
 function getmatchlist(matches){
 	var livematches = {};
 	for (var i in matches){
+		var charinfo=getcharinfo(i,matches[i].game);
 		livematches[i] = {
 			game: matches[i].game,
 			idletime: matches[i].idletime,
+			cLvl: charinfo.cLvl,
+			race: charinfo.race,
+			class: charinfo.class,
 			dimensions:{rows:matches[i].term.rows,cols:matches[i].term.cols} 
 		};
 	}
 	return livematches;
 }
-
+function getcharinfo(user,game){
+	var dirpath = home+'/public/user/'+user+'/'+game;
+	var files=fs.readdirSync(dirpath);
+	var charinfo = {};
+	if (files.includes('CharOutput.txt')){
+		var json=fs.readFileSync(dirpath+'/CharOutput.txt','utf8');
+		json=json.replace(/\n/gm,"\n\"");
+		json=json.replace(/:/gm,'":');
+		json=json.replace(/"{/gm,'{');
+		json=json.replace(/"}/gm,'}');
+		try {
+			charinfo=JSON.parse(json);
+		} catch (ex) {
+			console.log('parse failed');
+			console.log(json);
+		}
+	}
+	return charinfo;
+}
 function getfilelist(username){
 	var files = {};
 	var users = fs.readdirSync(home+'/public/user/');

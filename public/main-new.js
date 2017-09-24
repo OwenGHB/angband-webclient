@@ -84,7 +84,11 @@ function listMatches(matches) {
 		for(var i=0; i<players.length; i++) {
 			var idle = matches[players[i]].idletime > 0 ? ', idle for <span>'+matches[players[i]].idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append(function(i) {
-			    return $('<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>'+idle+'</li>').click(function() {
+				var outputstring = '<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>';
+				if (typeof(matches[players[i]].cLvl)!='undefined'){
+					outputstring+='as a <span>Level '+matches[players[i]].cLvl+' '+matches[players[i]].race+' '+matches[players[i]].class+'</span>'+idle+'</li>';
+				}
+			    return $(outputstring).click(function() {
 			        applyTerminal("spectate", players[i], 1, "no", matches[players[i]].dimensions);
 			    });
 			}(i));			
