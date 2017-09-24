@@ -85,6 +85,7 @@ function getmatchlist(matches){
 }
 function getcharinfo(user,game){
 	var dirpath = home+'/public/user/'+user+'/'+game;
+	fs.ensureDirSync(dirpath);
 	var files=fs.readdirSync(dirpath);
 	var charinfo = {};
 	if (files.includes('CharOutput.txt')){
