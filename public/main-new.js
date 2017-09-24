@@ -86,7 +86,7 @@ function listMatches(matches) {
 			$("#watchmenu ul").append(function(i) {
 				var outputstring = '<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>';
 				if (typeof(matches[players[i]].cLvl)!='undefined'){
-					outputstring+='as a <span>Level '+matches[players[i]].cLvl+' '+matches[players[i]].race+' '+matches[players[i]].class+'</span>'+idle+'</li>';
+					outputstring+=' as a <span>Level '+matches[players[i]].cLvl+' '+matches[players[i]].race+' '+matches[players[i]].class+'</span>'+idle+'</li>';
 				}
 			    return $(outputstring).click(function() {
 			        applyTerminal("spectate", players[i], 1, "no", matches[players[i]].dimensions);
