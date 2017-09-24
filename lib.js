@@ -164,8 +164,14 @@ function newgame(user,msg){
 	var player = user.username;
 	var compgame = 'poschengband_new';
 	var compnumber = '209';
-	var panelarg = '-b';
-	if (panels>1) panelarg = '-n'+panels;
+	var panelargs = ['-b'];
+	if (panels>1) {
+		if (game=='poschengband'||game=='elliposchengband'||game=='poschengband_new'){
+			panelargs = ['-right','30x27,*','-bottom','*x7'];
+		} else {
+			panelargs = ['-n'+panels];
+		}
+	}
 	var path = home+'/games/'+game;
 	var args = [];
 	var terminfo='xterm-256color';
@@ -193,7 +199,9 @@ function newgame(user,msg){
 		}
 		args.push('-mgcu');
 		args.push('--');
-		args.push(panelarg);
+		for (var i in panelargs){
+			args.push(panelargs[i]);
+		}
 	}
 	if (msg.walls) args.push('-a');
 	var termdesc = {};
@@ -230,6 +238,7 @@ function newgame(user,msg){
 		args:args,
 		terminfo: terminfo
 	};
+	console.log(args);
 	try {
 		var term = pty.fork(termdesc.path,termdesc.args,{
 			name: termdesc.terminfo,
