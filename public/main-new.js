@@ -306,8 +306,11 @@ function initChat() {
 				listMatches(data.content); cleanSpyGlass(data.content); break;
 			case "fileupdate":
 				listFiles(data.content); break;
-			case "spectatorinfo":
-				addMessage(data.content,"system"); break;
+			case "systemannounce":
+				addMessage(data.content, "system", initComplete);
+				if(initComplete)
+				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+				break;
 			case "owngameoutput":
 				spyglass['default'].write(data.content); break;
 			case "gameover":
@@ -339,7 +342,7 @@ function initChat() {
 		// todo: attempt to reconnect!
 	});
 	socket.addEventListener('open', function () {
-		addMessage("***Connected to chat***", "system");
+		addMessage("***Connected***", "system");
 	});
 	
 	$("#new-message-input input").on("keyup", function(e) {
@@ -667,7 +670,7 @@ $(function() {
 	// tablet ui
 	var ua = navigator.userAgent.toLowerCase();
 	var tablets = ["ipad", "android 5"];
-	var onTablet = false;
+	var onTablet = true;
 	tablets.map(function(model) {
 		if(ua.indexOf(model) !== -1)
 			onTablet = true;

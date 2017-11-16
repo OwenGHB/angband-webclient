@@ -3,35 +3,22 @@ var ps          = require('ps-node');
 var fs          = require('fs-extra');
 var mongoose    = require('mongoose');
 var games       = require('./games.js');
-var terminal    = require('term.js');
+var terminal = require('term.js');
+var lib      = {};
+matches      = {};
+metasockets  = {};
+chatlog      = [];
+var home     = process.env.CUSTOM_HOME || '/home/angbandlive';
 
-var lib         = {};
-matches     = {};
-metasockets = {};
-chatlog     = [];
-var home        = process.env.CUSTOM_HOME || '/home/angbandlive';
 
 
-//check player alive status for recording purposes
-function isalive(playerfile){
-	var alive = true;
-	var file = fs.openSync(playerfile, 'r');
-	var buffer = new Buffer(36);
-	fs.readSync(file, buffer, 0, 36, 36);
-	var headertext = buffer.toString('utf8');
-	if (headertext.match(/\sdead\s/)!=null){
-		alive = false;
-	}
-	console.log(headertext);
-	return alive;
-}
 lib.respond=function(user,msg){
 	if (msg.eventtype=='chat'){
 		chat(user,msg.content);
 	} else if (msg.eventtype=='newgame'){
 		if (typeof(matches[user.username])!='undefined'){
 			closegame(user.username);
-		} else {
+		} else if (user.username!='anthon') {
 			newgame(user,msg.content);
 		}
 	} else if (msg.eventtype=='connectplayer'){
@@ -50,7 +37,7 @@ function chat(user,message){
 		eventtype: "chat",
 		content: { 
 			user: user.username,
-			message: message,
+			message: message.replace("ould of","ould've"),
 			extra: user.roles,
 			timestamp: new Date()
 		}
@@ -77,11 +64,21 @@ function getmatchlist(matches){
 			idletime: matches[i].idletime,
 			cLvl: charinfo.cLvl,
 			race: charinfo.race,
+			subrace: charinfo.subrace,
 			class: charinfo.class,
 			dimensions:{rows:matches[i].term.rows,cols:matches[i].term.cols} 
 		};
 	}
 	return livematches;
+}
+//check player alive status for recording purposes
+function isalive(user,game){
+	var alive = true;
+	var charinfo = getcharinfo(user,game);
+	if (charinfo.isAlive=="0"||charinfo.isDead=="1"){
+		alive = false;
+	}
+	return alive;
 }
 function getcharinfo(user,game){
 	var dirpath = home+'/public/user/'+user+'/'+game;
@@ -97,8 +94,7 @@ function getcharinfo(user,game){
 		try {
 			charinfo=JSON.parse(json);
 		} catch (ex) {
-			console.log('parse failed');
-			console.log(json);
+
 		}
 	}
 	return charinfo;
@@ -162,12 +158,12 @@ function newgame(user,msg){
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.username;
-	var compgame = 'poschengband_new';
-	var compnumber = '209';
+	var compgame = 'kangband';
+	var compnumber = '211';
 	var panelargs = ['-b'];
 	if (panels>1) {
 		if (game=='poschengband'||game=='elliposchengband'||game=='poschengband_new'){
-			panelargs = ['-right','30x27,*','-bottom','*x7'];
+			panelargs = ['-right','40x*','-bottom','*x8'];
 		} else {
 			panelargs = ['-n'+panels];
 		}
@@ -179,8 +175,7 @@ function newgame(user,msg){
 		args.push(home+'/var/games/'+game+'/'+user.username);
 	} else {
 		if (game=='competition'){
-			//args.push('-u'+compnumber+'-'+user.username);
-			args.push('-u'+user.username);
+			args.push('-u'+compnumber+''+user.username);
 		} else {
 			args.push('-u'+user.username);
 		}
@@ -206,16 +201,15 @@ function newgame(user,msg){
 	if (msg.walls) args.push('-a');
 	var termdesc = {};
 	if (game=='competition'){
-		/* var newattempt = true;
+		var newattempt = true;
 		var newtty = false;
-		var savegames = fs.readdirSync(home+'/var/games/'+compgame+'/save');
-		if (savegames.includes(compnumber+'-'+user.username)){
-			var playerfile = home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username;
-			newattempt = !isalive(playerfile);
+		var savegames = fs.readdirSync(home+'/etc/'+compgame+'/save');
+		if (savegames.includes(compnumber+''+user.username)){
+			newattempt = !isalive(user.username,compgame);
 		}
 		fs.ensureDirSync(home+'/public/user/'+user.username);
-		var ttydir = fs.readdirSync(home+'/public/user/'+user.username);
-		var ttyfile = home+'/public/user/'+user.username+'/'+compnumber+'-'+user.username+'.ttyrec';
+		var ttydir = fs.readdirSync(home+'/ttyrec');
+		var ttyfile = home+'/ttyrec/'+compnumber+'-'+user.username+'.ttyrec';
 		if (ttydir.includes(ttyfile)){
 			newtty=true;
 		}
@@ -229,9 +223,8 @@ function newgame(user,msg){
 		if (!newattempt) {
 			if (!newtty) args.unshift('-a');
 		} else {
-			fs.copySync(home+'/var/games/'+compgame+'/save/'+compnumber, home+'/var/games/'+compgame+'/save/'+compnumber+'-'+user.username);
-		} */
-		fs.copySync(home+'/var/games/'+compgame+'/save/'+compnumber, home+'/var/games/'+compgame+'/save/'+user.username);
+			fs.copySync(home+'/etc/'+compgame+'/save/'+compnumber, home+'/etc/'+compgame+'/save/'+compnumber+''+user.username);
+		}
 	}
 	termdesc = {
 		path:path,
@@ -351,7 +344,7 @@ function subscribe(user,message){
 	var spectator = user.username;
 	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.username)!='undefined') {
 		if(metasockets[player]) {
-			metasockets[player].send(JSON.stringify({eventtype: 'spectatorinfo', content: spectator + " is now watching"}));
+			metasockets[player].send(JSON.stringify({eventtype: 'systemannounce', content: spectator + " is now watching"}));
 			matches[player].spectators.push(spectator);
 		}
 		/* try {
