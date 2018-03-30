@@ -37,7 +37,7 @@ function chat(user,message){
 		eventtype: "chat",
 		content: { 
 			user: user.username,
-			message: message.replace("ould of","ould've"),
+			message: message,
 			extra: user.roles,
 			timestamp: new Date()
 		}
@@ -46,12 +46,16 @@ function chat(user,message){
 	while (chatlog.length>100) {
 		chatlog.pop();
 	}
-	for (var i in metasockets){
-		try {
-			metasockets[i].send(response);
-		} catch (ex) {
-			// The WebSocket is not open, ignore
+	if (user.username!="Sirfurnace") {
+		for (var i in metasockets){
+			try {
+				metasockets[i].send(response);
+			} catch (ex) {
+				// The WebSocket is not open, ignore
+			}
 		}
+	} else {
+		metasockets[user.username].send(response);
 	}
 }
 //some get functions
@@ -158,11 +162,11 @@ function newgame(user,msg){
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.username;
-	var compgame = 'kangband';
-	var compnumber = '211';
+	var compgame = 'oangband';
+	var compnumber = '215';
 	var panelargs = ['-b'];
 	if (panels>1) {
-		if (game=='poschengband'||game=='elliposchengband'||game=='poschengband_new'){
+		if (game=='poschengband'||game=='elliposchengband'||game=='composband'){
 			panelargs = ['-right','40x*','-bottom','*x8'];
 		} else {
 			panelargs = ['-n'+panels];
@@ -175,7 +179,7 @@ function newgame(user,msg){
 		args.push(home+'/var/games/'+game+'/'+user.username);
 	} else {
 		if (game=='competition'){
-			args.push('-u'+compnumber+''+user.username);
+			args.push('-u'+compnumber+'-'+user.username);
 		} else {
 			args.push('-u'+user.username);
 		}
@@ -204,7 +208,7 @@ function newgame(user,msg){
 		var newattempt = true;
 		var newtty = false;
 		var savegames = fs.readdirSync(home+'/etc/'+compgame+'/save');
-		if (savegames.includes(compnumber+''+user.username)){
+		if (savegames.includes('1002.'+compnumber+''+user.username)){
 			newattempt = !isalive(user.username,compgame);
 		}
 		fs.ensureDirSync(home+'/public/user/'+user.username);
@@ -223,7 +227,7 @@ function newgame(user,msg){
 		if (!newattempt) {
 			if (!newtty) args.unshift('-a');
 		} else {
-			fs.copySync(home+'/etc/'+compgame+'/save/'+compnumber, home+'/etc/'+compgame+'/save/'+compnumber+''+user.username);
+			fs.copySync(home+'/etc/'+compgame+'/save/1002.'+compnumber, home+'/etc/'+compgame+'/save/1002.'+compnumber+''+user.username);
 		}
 	}
 	termdesc = {
@@ -241,7 +245,7 @@ function newgame(user,msg){
 			applicationCursor: true
 		});
 	} catch(ex) {
-		console.log('averted crash');
+		console.log('we usually crash here');
 	}
 	term.on('data', function(data) {
 		try {
