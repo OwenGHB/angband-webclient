@@ -162,11 +162,11 @@ function newgame(user,msg){
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.username;
-	var compgame = 'oangband';
-	var compnumber = '215';
+	var compgame = 'frogcomposband';
+	var compnumber = '217';
 	var panelargs = ['-b'];
 	if (panels>1) {
-		if (game=='poschengband'||game=='elliposchengband'||game=='composband'){
+		if (["poschengband","elliposchengband","composband","composband-alpha","frogcomposband"].includes(game)){
 			panelargs = ['-right','40x*','-bottom','*x8'];
 		} else {
 			panelargs = ['-n'+panels];
