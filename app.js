@@ -93,14 +93,17 @@ app.ws('/meta', function (ws, req) {
 
 app.post('/enter', passport.authenticate("local"), function(req, res) {
    console.log("sign in step 3", req.user);
-   return res.redirect("/tavern");
+   return res.redirect("/hall");
 });
 
-app.get("/tavern", localdb.isLoggedIn, function(req, res) {
-   console.log("rendering tavern");
-   return res.render("tavern.pug");
+app.get("/hall", function(req, res) {
+   console.log("rendering hall");
+   return res.render("hall.pug");
 });
-
+app.post("/hall", localdb.isLoggedIn, function(req, res) {
+   console.log("post rendering hall");
+   return res.render("hall.pug");
+});
 
 
 
@@ -181,4 +184,22 @@ app.use(function(err, req, res, next) {
 // });
 
 
-module.exports = app;
+var IP = process.env.C9_IP || process.env.IP || "127.0.0.1";
+var PORT = process.env.C9_PORT || process.env.PORT || 3000;
+var server = app.listen(PORT, IP, function() {
+  console.log(`angband.live is is up and running at ${IP} port ${PORT}`);
+});
+
+
+process.on('SIGTERM', function onSigterm() {
+   console.info('Got SIGTERM. Graceful shutdown started at', new Date().toISOString());
+   // start graceul shutdown here
+   server.close(function(err) {
+      if (err) {
+         console.error(err);
+         process.exit(1);
+      }
+      console.log("..process can now be stopped");
+      process.exit();
+   });
+});
