@@ -9,28 +9,28 @@ html
       link(rel='stylesheet', href='/css/index.css')
       script(type='text/javascript', src='/js/jquery-3.2.1.min.js')
    body
-   
+
       .logo
          img(src="/img/logo.png")
          p home of brave andventurers
-         
+
       section.login
          include partials/login_form.pug
-         
-      
+
+
       section.news
          header ...:: [ Latest news ] ::...
-         
+
          each item in news
             article
-               header 
+               header
                   div.timestamp #{item.timestamp}
                   | #{item.title}
                | !{item.content}
-               
-         
-         
-         
-      
-      
-      
+
+
+
+
+
+
+

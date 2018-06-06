@@ -1,6 +1,6 @@
 {
-  "name": "angband-webclient",
-  "version": "0.0.0",
+  "name": "angband.live",
+  "version": "0.9.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -14,12 +14,15 @@
     "ejs": "~2.5.6",
     "es6-promise": "^4.1.1",
     "express": "~4.15.2",
+    "express-nedb-session": "^0.1.1",
+    "express-session": "^1.15.6",
     "express-ws": "^3.0.0",
     "fs-extra": "^3.0.1",
     "lowdb": "^1.0.0",
     "mongoose": "^4.9.7",
     "mongoose-integer": "^0.1.1",
     "morgan": "~1.8.1",
+    "nedb-session-store": "^1.1.2",
     "node-pty": "^0.6.4",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",

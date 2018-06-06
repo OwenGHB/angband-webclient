@@ -2,17 +2,17 @@
 var app = require('../app');
 var pkg = require('../package.json');
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.C9_PORT || process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function() {
-  console.log(pkg.name, 'listening on port ', server.address().port);
+  console.log(pkg.name, 'is online at port ', server.address().port);
 });
 
 
 // gracefully exit
-process.on("SIGTERM", function () {
-   console.log("SIGTERM terminating http server");
-   server.close(function () {
-      process.exit(0);
-   });
-});
+// process.on("SIGTERM", function () {
+//    console.log("SIGTERM terminating http server");
+//    server.close(function () {
+//       process.exit(0);
+//    });
+// });

@@ -1,20 +1,22 @@
 var express       = require('express');
 var path          = require('path');
-var favicon       = require('serve-favicon');
+// var favicon       = require('serve-favicon');
 var logger        = require('morgan');
 var cookieParser  = require('cookie-parser');
-var session       = require('cookie-session');
+var session       = require('express-session');
+// var store = require('connect-nedb-session')(session);
+var NedbStore     = require('nedb-session-store')(session);
 var bodyParser    = require('body-parser');
 var terminal      = require('term.js');
 var app           = express();
 var expressWs     = require('express-ws')(app);
-var mongoose      = require('mongoose');
+// var mongoose      = require('mongoose');
 var passport      = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var fs            = require('fs-extra');
+// var fs            = require('fs-extra');
 var localdb       = require("./localdb");
 var awc           = require('./lib.js');
-var Account       = require('./models/account');
+// var Account       = require('./models/account');
 
 //set up our pinging
 setInterval(function() { awc.keepalive(); }, 10000);
@@ -24,13 +26,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 // app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public. Not needed
-//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(session({name: 'session',keys: ['air', 'fire', 'water']}));
+app.use(session({
+   name: 'session',
+   store: new NedbStore({ filename: "./db/sessions.json"}),
+   resave: false,
+   secret: process.env.SESSION_SECRET,
+   saveUninitialized: false,
+   keys: ['air', 'fire', 'water']}
+));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('/home/angbandlive/public/user'));
@@ -90,7 +97,8 @@ app.post('/enter', passport.authenticate("local"), function(req, res) {
 });
 
 app.get("/tavern", localdb.isLoggedIn, function(req, res) {
-   res.render("tavern.pug");
+   console.log("rendering tavern");
+   return res.render("tavern.pug");
 });
 
 
@@ -134,11 +142,9 @@ app.get('/logout', function(req, res) {
 });
 
 
-// last route in all routes will be treated as "not found"
+// last route in all routes will be treated as "not found" or 404 page
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+  return res.render("404.pug");
 });
 
 // error handlers
@@ -167,12 +173,12 @@ app.use(function(err, req, res, next) {
 
 
 // gracefully exit
-process.on("SIGTERM", function () {
-   console.log("SIGTERM terminating app");
-   app.close(function () {
-      process.exit(0);
-   });
-});
+// process.on("SIGTERM", function () {
+//    console.log("SIGTERM terminating app");
+//    app.close(function () {
+//       process.exit(0);
+//    });
+// });
 
 
 module.exports = app;

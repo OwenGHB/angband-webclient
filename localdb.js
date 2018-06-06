@@ -6,7 +6,7 @@ var bcrypt   = require("bcrypt");
 var db       = {
    games    : lowdb(new FileSync("./db/games.json")),
    news     : lowdb(new FileSync("./db/news.json")),
-   sessions : lowdb(new FileSync("./db/sessions.json")),
+   // sessions : lowdb(new FileSync("./db/sessions.json")),
    users    : lowdb(new FileSync("./db/users.json"))
 };
 
@@ -42,7 +42,7 @@ var DEFAULT_ROLES = ["user"];
 // set default data if db files are empty
 db.games.defaults({data:[]}).write();
 db.news.defaults({data:[]}).write();
-db.sessions.defaults({data:[]}).write();
+// db.sessions.defaults({data:[]}).write();
 db.users.defaults({data:[]}).write();
 
 
@@ -111,7 +111,7 @@ module.exports.refresh = function() {
    db.games.read();
    db.news.read();
    db.users.read();
-   db.sessions.read();
+   // db.sessions.read();
 };
 
 
