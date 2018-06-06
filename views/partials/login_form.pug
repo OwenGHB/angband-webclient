@@ -1,0 +1,20 @@
+form(method="post", action="/enter")
+    div
+        label nickname
+        input#username(type="text", name="username", placeholder="min 3 characters..")
+    div
+        label password
+        input#password(type="password", name="password")
+    div
+        input(type="submit", name="name", value="Enter")
+        
+        
+    script.
+        function enter() {
+            
+        }
+        
+        function onInput(event) {
+        
+            enter();
+        }

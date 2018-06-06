@@ -1,0 +1,36 @@
+doctype html
+html
+   head
+      meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
+      title Angband Live
+      meta(name='description', content='Web based client for playing Angband and variants remotely. Supports recording and live spectating.')
+      link(rel='icon', type='image/png', href='/favicon.png')
+      link(href='https://fonts.googleapis.com/css?family=Ubuntu+Mono', rel='stylesheet')
+      link(rel='stylesheet', href='/css/index.css')
+      script(type='text/javascript', src='/js/jquery-3.2.1.min.js')
+   body
+   
+      .logo
+         img(src="/img/logo.png")
+         p home of brave andventurers
+         
+      section.login
+         include partials/login_form.pug
+         
+      
+      section.news
+         header ...:: [ Latest news ] ::...
+         
+         each item in news
+            article
+               header 
+                  div.timestamp #{item.timestamp}
+                  | #{item.title}
+               | !{item.content}
+               
+         
+         
+         
+      
+      
+      

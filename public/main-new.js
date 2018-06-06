@@ -1,8 +1,8 @@
 var safety = 10;            // for font size calculation
 var initComplete = false    // used to do some stuff only after this will be true
 
-var protocol = location.protocol === "https:" ? "wss" : "ws";
-var socketURL = protocol + '://' + location.hostname + ((location.port) ? (':' + location.port) : '') + '/meta';
+var protocol = window.location.protocol === "https:" ? "wss" : "ws";
+var socketURL = protocol + '://' + window.location.hostname + ((window.location.port) ? (':' + window.location.port) : '') + '/meta';
 var socket;
 var user_list = [];
 var matched_user_list = [];
@@ -66,7 +66,7 @@ function addMessage(msg, extra_class, shouldNotify) {
 }
 
 function notifyIfNeeded(user, message) {
-	if(message.indexOf("@" + username) !== -1)
+	if(message.indexOf("@" + user) !== -1)
 		notify_sound.play();
 }
 

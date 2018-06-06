@@ -10,17 +10,19 @@ var app           = express();
 var expressWs     = require('express-ws')(app);
 var mongoose      = require('mongoose');
 var passport      = require('passport');
-var awc           = require('./lib.js');
 var LocalStrategy = require('passport-local').Strategy;
-var Account       = require('./models/account');
 var fs            = require('fs-extra');
+var localdb       = require("./localdb");
+var awc           = require('./lib.js');
+var Account       = require('./models/account');
 
 //set up our pinging
-setInterval(function(){awc.keepalive()},10000);
+setInterval(function() { awc.keepalive(); }, 10000);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
+// app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public. Not needed
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -41,24 +43,38 @@ app.use(passport.session());
 app.use(terminal.middleware());
 
 // Configure passport-local to use account model for authentication
-var Account = require('./models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
+// var Account = require('./models/account');
 
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
+
+passport.use(new LocalStrategy(localdb.verifyWithLocalDb));
+passport.serializeUser(localdb.serializeUser);
+passport.deserializeUser(localdb.deserializeUser);
+
+// passport.use(new LocalStrategy(Account.authenticate()));
+// passport.serializeUser(Account.serializeUser());
+// passport.deserializeUser(Account.deserializeUser());
 
 // Connect mongoose
-const db_url = process.env.MONGODB_URL || 'mongodb://localhost/bandit';
-mongoose.connect(db_url, function(err) {
-  if (err) {
-    return console.error("Could not connect to mongodb. Ensure that you have mongodb running on localhost and mongodb accepts connections on standard ports!");
-  }
-  console.log("database connection established");
-});
+// const db_url = process.env.MONGODB_URL || 'mongodb://localhost/bandit';
+// mongoose.connect(db_url, function(err) {
+//  if (err) {
+//     return console.error("Could not connect to mongodb. Ensure that you have mongodb running on localhost and mongodb accepts connections on standard ports!");
+//  }
+//  console.log("database connection established");
+// });
 
 // Register routes
 app.get('/', function(req, res) {
-	res.render('index', {user: req.user});
+   var news = localdb.getNews();
+	res.render('index.pug', {
+	   user: req.user ? req.user.name : null, 
+	   news: news
+	});
+});
+
+app.get("/refresh", function(req, res) {
+    localdb.refresh();
+    res.send("ok");
 });
 
 app.ws('/meta', function (ws, req) {
@@ -67,46 +83,58 @@ app.ws('/meta', function (ws, req) {
 	}
 });
 
-app.post('/signin', 
-	function(req, res, next) {
-		Account.find({username:req.body.username}, function(err, result) {
-			if (result.length>0){
-				next();
-			} 
-			else {
-			   if(req.body.username.length < 3)
-			      return res.json({error: true, msg:"username too short"});
-			   if(req.body.username.length > 20)
-			      return res.json({error: true, msg:"username too long"});
-				if (req.body.username.match(/^[a-zA-Z_]+$/) != null) {
-					Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
-						if (err) {
-							console.log('error while user register!', err);
-							return next(err);
-						}
-						console.log('user registered!');
-						next();
-					});
-				} 
-				else {
-					return res.json({error: true, msg:"username must contain only letters and no spaces"});
-				}
-			}
-		});
-	},
-	passport.authenticate('local'),
-	function(req, res) {
-		// res.redirect('/');
-		return res.json({error: false, mgs: "ok"});
-	}
-);
+
+app.post('/enter', passport.authenticate("local"), function(req, res) {
+   console.log("sign in step 3", req.user);
+   return res.redirect("/tavern");
+});
+
+app.get("/tavern", localdb.isLoggedIn, function(req, res) {
+   res.render("tavern.pug");
+});
+
+
+
+
+// app.post('/signin', function(req, res, next) {
+// 	Account.find({username:req.body.username}, function(err, result) {
+// 		if (result.length>0){
+// 			next();
+// 		} 
+// 		else {
+// 		   if(req.body.username.length < 3)
+// 		      return res.json({error: true, msg:"username too short"});
+// 		   if(req.body.username.length > 20)
+// 		      return res.json({error: true, msg:"username too long"});
+// 			if (req.body.username.match(/^[a-zA-Z_]+$/) != null) {
+// 				Account.register(new Account({username: req.body.username}), req.body.password, function(err) {
+// 					if (err) {
+// 						console.log('error while user register!', err);
+// 						return next(err);
+// 					}
+// 					console.log('user registered!');
+// 					next();
+// 				});
+// 			} 
+// 			else {
+// 				return res.json({error: true, msg:"username must contain only letters and no spaces"});
+// 			}
+// 		}
+// 	});},
+// 	passport.authenticate('local'),
+// 	function(req, res) {
+// 		// res.redirect('/');
+// 		return res.json({error: false, mgs: "ok"});
+// 	}
+// );
 
 app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
 
-// catch 404 and forward to error handler
+
+// last route in all routes will be treated as "not found"
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
@@ -136,5 +164,15 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+// gracefully exit
+process.on("SIGTERM", function () {
+   console.log("SIGTERM terminating app");
+   app.close(function () {
+      process.exit(0);
+   });
+});
+
 
 module.exports = app;
