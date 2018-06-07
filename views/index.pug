@@ -8,26 +8,29 @@ html
       link(href='https://fonts.googleapis.com/css?family=Ubuntu+Mono', rel='stylesheet')
       link(rel='stylesheet', href='/css/index.css')
       script(type='text/javascript', src='/js/jquery-3.2.1.min.js')
+   
+
    body
 
-      .logo
-         img(src="/img/logo.png")
-         p home of brave andventurers
+      #grid
+         #logo
+            img(src="/img/logo.png")
+            p home of brave andventurers
+            
+         #login
+            include blocks/block_user_login.pug
 
-      section.login
-         include partials/login_form.pug
+         #games
+            include blocks/block_games.pug
 
+         #news
+            include blocks/block_news.pug
 
-      section.news
-         header ...:: [ Latest news ] ::...
+         #donate
+            include blocks/block_donate.pug
 
-         each item in news
-            article
-               header
-                  div.timestamp #{item.timestamp}
-                  | #{item.title}
-               | !{item.content}
-
+         #footer
+            include blocks/block_footer.pug
 
 
 

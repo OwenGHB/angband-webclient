@@ -1,0 +1,8 @@
+each n in news
+   section
+      .title #{n.title}
+      .content 
+         each p in n.content
+            p !{p}
+      .footer published at 
+         span #{n.timestamp}

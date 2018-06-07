@@ -2,15 +2,12 @@ var lowdb    = require("lowdb");
 var FileSync = require("lowdb/adapters/FileSync");
 var bcrypt   = require("bcrypt");
 
-//var adapter  = ;
+
 var db       = {
    games    : lowdb(new FileSync("./db/games.json")),
    news     : lowdb(new FileSync("./db/news.json")),
-   // sessions : lowdb(new FileSync("./db/sessions.json")),
    users    : lowdb(new FileSync("./db/users.json"))
 };
-
-var SALT          = "aaa";
 var SALT_ROUNDS   = 5;
 var DEFAULT_ROLES = ["user"];
 
@@ -22,11 +19,12 @@ var DEFAULT_ROLES = ["user"];
       password_hash : string,
       role          : [string]
    }]
-   
-   sessions: [{
-      session_id: string,
-      user: string
-   }],
+
+   news: [{
+      title: string,
+      timestamp: string,
+      content: string
+   }]
    
    games: [{
       name: String,
@@ -42,7 +40,6 @@ var DEFAULT_ROLES = ["user"];
 // set default data if db files are empty
 db.games.defaults({data:[]}).write();
 db.news.defaults({data:[]}).write();
-// db.sessions.defaults({data:[]}).write();
 db.users.defaults({data:[]}).write();
 
 
@@ -51,56 +48,53 @@ module.exports.db = db;
 
 
 
-
-
-
-
-// module.exports.createUser = function(name, password, roles, callback) {
-//    var password_hash = encrypt(password, function(error, hashed_password) {
-//       db.get("users").push({
-//          name: name,
-//          password: password_hash,
-//          roles: roles
-//       }).write();
-//       callback();
-//    });
-// };
-
-
 // AUTEHNTICATION
 module.exports.verifyWithLocalDb = function(username, password, done) {
    console.log("localdb verifyWithLocalDb: checking with", username, password);
    authenticate(username, password, function(error, user, more_info) {
-      done(error, user, more_info);
+      console.log("..verified as", more_info);
+      return done(error, user, more_info);
    });
-};
-
-module.exports.isLoggedIn = function(req, res, next) {
-   console.log("is user logged in?");
-   return next(); 
 };
 
 
 module.exports.serializeUser = function(user, done) {
-   done(null, user.name);
+   console.log("serializing", user.name);
+   return done(null, user.name);
 };
+
 
 module.exports.deserializeUser = function(name, done) {
-   findUserByName(name, function(err, user) {
-      done(err, user);
-   });
+   console.log("attempting to deserialize user", name);
+   var user = findUserByName(name);
+   console.log("..deserialized", user.name);
+   return done(null, user);
+};
+
+
+
+// middlewares
+module.exports.isUserLoggedIn = function(req, res, next) {
+   if(req.user) {
+      console.log("is user logged in? yes,", req.user.name);
+      return next(); 
+   }
+   console.log("is user logged in? no, redirecting to /");
+   res.redirect("/");
 };
 
 
 
 
 
-// NEWS
+
+
+// get last 10 news
 function getNews() {
    return db.news
       .get("data")
-      .sortBy("-timestamp")
-      .take(10)
+      .orderBy("timestamp", "desc")
+      .take(20)
       .value();
 }
 module.exports.getNews = getNews;
@@ -138,7 +132,6 @@ function findUserByName(name) {
  *       "new" when username was not found in db and new user was created
  *       "ok" when username and password matched ones in db
  *       "no match" when username/password pair had no match in db or password was incorrect
- *       can be `new`, `ok` or `no match`
  * */
 function authenticate(username, password, callback) {
    var user = db.users.get("data").find({name: username}).value();
@@ -171,8 +164,3 @@ function authenticate(username, password, callback) {
       });
    }
 }
-
-// test
-// authenticate("me", "my wrong password", function(error, user, info) {
-//    console.log("authentication check:", error, user, info);
-// });

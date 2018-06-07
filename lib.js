@@ -1,31 +1,36 @@
-var pty         = require('pty.js');
+// var pty         = require('pty.js');
+var pty         = require('node-pty');
 var ps          = require('ps-node');
 var fs          = require('fs-extra');
-var mongoose    = require('mongoose');
 var games       = require('./games.js');
-var terminal = require('term.js');
-var lib      = {};
-matches      = {};
-metasockets  = {};
-chatlog      = [];
-var home     = process.env.CUSTOM_HOME || '/home/angbandlive';
+var terminal    = require('term.js');
+var lib         = {};
+var matches     = {};
+var metasockets = {};
+var chatlog     = [];
+var home        = process.env.CUSTOM_HOME || '/home/angbandlive';
 
 
 
-lib.respond=function(user,msg){
+lib.respond = function(user, msg) {
 	if (msg.eventtype=='chat'){
 		chat(user,msg.content);
-	} else if (msg.eventtype=='newgame'){
+	} 
+	else if (msg.eventtype=='newgame'){
 		if (typeof(matches[user.username])!='undefined'){
 			closegame(user.username);
-		} else if (user.username!='anthon') {
+		} 
+		else if (user.username!='anthon') {
 			newgame(user,msg.content);
 		}
-	} else if (msg.eventtype=='connectplayer'){
+	} 
+	else if (msg.eventtype=='connectplayer'){
 		connectplayer(user.username);
-	} else if (msg.eventtype=='subscribe'){
+	} 
+	else if (msg.eventtype=='subscribe'){
 		subscribe(user,msg.content);
-	} else if (msg.eventtype=='gameinput'){
+	} 
+	else if (msg.eventtype=='gameinput'){
 		if (typeof(matches[user.username])!='undefined'){
 			matches[user.username].term.write(msg.content);
 			matches[user.username].idle=false;

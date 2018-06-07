@@ -12,3 +12,11 @@ Beyond this, several more modifications were made to Sil in order to have it beh
 You can find download links for variants known to work in the wiki
 
 As for the actual server, you need a mongodb service running in the background, but aside from that just npm install npm start and you should be good to go on port 3000 (subject to inevitable complications).
+
+
+
+## database and sessions
+
+This build uses file-based databases. All files are in `./db` and for security reasons are kept in private repository. If you want to use existing data make sure you checkout from that repository before you run angband.live client. Otherwise new empty files will be created.
+
+`SESSION_SECRET` environment variable must be set before you launch this client. If you use existing files in `./db` make sure you set the same `SESSION_SECRET` value as was used before, otherwise sessions will be invalid and users will have to relogin.

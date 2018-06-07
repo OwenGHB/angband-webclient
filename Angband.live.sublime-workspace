@@ -1,0 +1,1180 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"per",
+				"period"
+			],
+			[
+				"new",
+				"new_props"
+			],
+			[
+				"compo",
+				"componentWillReceiveProps"
+			],
+			[
+				"date",
+				"date_from"
+			],
+			[
+				"is",
+				"isRequired"
+			],
+			[
+				"items",
+				"items_ids"
+			],
+			[
+				"Props",
+				"PropTypes"
+			],
+			[
+				"ne2",
+				"ne2_config"
+			],
+			[
+				"ne1",
+				"ne1_config"
+			],
+			[
+				"chan",
+				"changeAlias"
+			],
+			[
+				"edit",
+				"editMode"
+			],
+			[
+				"to",
+				"toISOString"
+			],
+			[
+				"pero",
+				"period_to"
+			],
+			[
+				"peo",
+				"period_from"
+			],
+			[
+				"id",
+				"id_set"
+			],
+			[
+				"get",
+				"getMultiData"
+			],
+			[
+				"_date",
+				"_date_to"
+			],
+			[
+				"perio",
+				"period_to"
+			],
+			[
+				"cha",
+				"changePeriod"
+			],
+			[
+				"remainin",
+				"remainingIDs"
+			],
+			[
+				"conte",
+				"content_interfaces"
+			],
+			[
+				"S",
+				"SimpleSpinner"
+			],
+			[
+				"viw",
+				"view_mode"
+			],
+			[
+				"sort",
+				"sortList"
+			],
+			[
+				"view",
+				"view_mode"
+			],
+			[
+				"o",
+				"other_devices"
+			],
+			[
+				"me",
+				"metadata"
+			],
+			[
+				"metada",
+				"metadata_block"
+			],
+			[
+				"en",
+				"encodeURIComponent"
+			],
+			[
+				"meta",
+				"meta_block"
+			],
+			[
+				"class",
+				"className"
+			],
+			[
+				"job",
+				"job_name"
+			],
+			[
+				"graphi",
+				"graphite"
+			],
+			[
+				"text",
+				"text-center"
+			],
+			[
+				"margin",
+				"margin-bottom"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"border",
+				"border-radius"
+			],
+			[
+				"font",
+				"font-family"
+			],
+			[
+				"change",
+				"changeFont"
+			],
+			[
+				"op",
+				"option\tTag"
+			],
+			[
+				"se",
+				"select\tTag"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"font-s",
+				"font-size"
+			],
+			[
+				"my",
+				"mykeywords"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "app.js",
+			"settings":
+			{
+				"buffer_size": 5708,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "db/users.json",
+			"settings":
+			{
+				"buffer_size": 500,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "localdb.js",
+			"settings":
+			{
+				"buffer_size": 4482,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "db/sessions.json",
+			"settings":
+			{
+				"buffer_size": 3738,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib.js",
+			"settings":
+			{
+				"buffer_size": 12273,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "package.json",
+			"settings":
+			{
+				"buffer_size": 863,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 353.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"color",
+				"UI: Select Color Scheme"
+			],
+			[
+				"re",
+				"Rename File"
+			],
+			[
+				"rena",
+				"Rename File"
+			],
+			[
+				"rename",
+				"Rename File"
+			],
+			[
+				"Snippet: ",
+				"Snippet: if … else"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"update",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"theme",
+				"UI: Select Theme"
+			]
+		],
+		"width": 450.0
+	},
+	"console":
+	{
+		"height": 482.0,
+		"history":
+		[
+			"eslint"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": false,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": true,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/vadimamo/dev/angband.live",
+		"/C/Users/vadimamo/dev/angband.live/db"
+	],
+	"file_history":
+	[
+		"/C/Users/vadimamo/dev/angband-webclient/.gitignore",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/DoubleGraph.js",
+		"/C/Users/vadimamo/dev/instat/src/app/server.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/OtherDevicesList.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/GraphPeriodPicker.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/ManyMeasurements.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Views/Info/ViewDevice.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Views/Info/ViewNetworkElements.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/WeatherMap.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/Configurator/ModeNE.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Views/Weathermaps.js",
+		"/C/Users/vadimamo/dev/instat/src/styles/_components/Weathermaps.scss",
+		"/C/Users/vadimamo/dev/instat/src/app/tools.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/WeathermapLegend.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/InterfacesDetailedList.js",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/Logbook/New equipment import/2018-05-27/Import SQL.sql",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/SearchResults/NetworkElementList.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/Configurator/ModeMap.js",
+		"/C/Users/vadimamo/dev/instat/.eslintrc.js",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/User/ColorHighlighter.sublime-settings",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/Color Highlighter/ColorHighlighter.sublime-settings",
+		"/C/Users/vadimamo/dev/instat/src/styles/modules/various.scss",
+		"/C/Users/vadimamo/dev/instat/src/styles/global/_tables.scss",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/User/React create class.sublime-snippet",
+		"/C/Users/vadimamo/dev/instat/src/app/router_public_api.js",
+		"/C/Users/vadimamo/dev/instat/src/app/app_client.js",
+		"/C/Users/vadimamo/dev/instat/src/app/api/api_data.js",
+		"/C/Users/vadimamo/dev/instat/src/app/controllers/data.controller.js",
+		"/C/Users/vadimamo/dev/instat/src/styles/styles.scss",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/User/snippets.sublime-snippet",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/Emmet/Emmet.sublime-settings",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/User/Emmet.sublime-settings",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/Alignment/Base File.sublime-settings",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/User/Base File.sublime-settings",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/User/JavaScript (Babel).sublime-settings",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/Alignment/Default (Windows).sublime-keymap",
+		"/C/Users/vadimamo/dev/instat/doc/health checks.md",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/Javascript Beautify/Default (Windows).sublime-keymap",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/UserToolbar.js",
+		"/C/Users/vadimamo/dev/instat/src/app/api/api_user.js",
+		"/C/Users/vadimamo/dev/instat/src/app/api/api_weathermaps.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/CustomMeasurements.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/OneInputDialog.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/MetaInformation.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/NumberOfDevicesForNE.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/ViewModeSelector.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Reducers/UserReducer.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Reducers/LoginDialogReducer.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/YesNoDialog.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Reducers/SmartGraphReducer.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Reducers/ViewInformationReducer.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Views/Home.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Views/Search.js",
+		"/C/Users/vadimamo/dev/instat/src/app/controllers/weathermaps.controller.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/AddNetworkElementDialog.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/PinnedGraphs/PinnedGraphPresaveModal.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/Help.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/DraggableNode.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/DummyData.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/HoverGraph.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/LinkEditDialog.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/UtilizationLabelSet.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/Wmlink.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/Reports/Report.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/SearchResults/SiteList.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/SearchResults/MeasurmentList.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/WeatherMaps/Configurator/ModeLink.js",
+		"/C/Users/vadimamo/dev/instat/Instat_backend.sublime-project",
+		"/C/Users/vadimamo/dev/instat/src/app/Views/Info/ViewMeasurement.js",
+		"/C/Users/vadimamo/dev/instat/gulpfile.babel.js",
+		"/C/Users/vadimamo/dev/instat/src/app/sagas.js",
+		"/C/Users/vadimamo/dev/instat/src/app/api/api_reports.js",
+		"/C/Users/vadimamo/dev/instat/src/app/InsaneLogger.js",
+		"/C/Users/vadimamo/dev/instat/src/app/router_universal.js",
+		"/C/Users/vadimamo/dev/instat/.gitignore",
+		"/C/Users/vadimamo/dev/instat/jsons/wm_configs/instat_converter.js",
+		"/C/Users/vadimamo/dev/instat/src/app/config.js",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/HeaderNext.js",
+		"/C/Users/vadimamo/dev/instat/src/styles/_components/OneSmartGraph.scss",
+		"/C/Users/vadimamo/dev/instat/src/styles/modules/meta-block.scss",
+		"/C/Users/vadimamo/dev/instat/src/app/Components/SearchResults/DeviceList.js",
+		"/C/Users/vadimamo/dev/instat/src/styles/_components/HoverGraph.scss",
+		"/C/Users/vadimamo/dev/instat/src/styles/_components/_old_and_unsorted.scss",
+		"/C/Users/vadimamo/dev/instat-backend-nodejs/docker/Nodejs.dockerfile",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/snippets.md",
+		"/C/Users/vadimamo/dev/instat-backend-nodejs/src/app/Components/WeatherMaps/WeatherMap.js",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/ESLint/ESLint.sublime-settings",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/User/ESLint.sublime-settings",
+		"/C/Users/vadimamo/dev/instat-backend-nodejs/Instat_backend.sublime-project",
+		"/C/Users/vadimamo/soft/st3/Data/Packages/Default/Preferences.sublime-settings",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/good music.txt",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/InStat/InStat changelog.md",
+		"/C/Users/vadimamo/dev/instat-backend-nodejs/jsons/wm_configs/instat_converter.js",
+		"/C/Users/vadimamo/dev/instat-backend-nodejs/build_server/controllers/weathermaps.controller.js",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/ASM/mount points 2.md",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/ASM/crontab jobs 2.crontab",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/ASM/crontab jobs.crontab",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/ASM/mount points.md",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/InStat/Concept Stuff to poll.md",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/InStat/Concept Indexer.md",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/ASM/backup table_name.md",
+		"/C/Users/vadimamo/dev/instat-backend-nodejs/jsons/wm_configs/copy_from_asm.sh",
+		"/C/Users/vadimamo/dev/daedra/docker-compose.yml",
+		"/C/Users/vadimamo/dev/daedra/configs/prometheus.yml",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/GDPR tips.md",
+		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/InStat/Inventory.json",
+		"/C/Users/vadimamo/dev/daedra/standalone/start.cmd",
+		"/C/Users/vadimamo/Desktop/msgs.json",
+		"/C/Users/vadimamo/dev/daedra/snmp_exporter/generator/main.go",
+		"/C/Users/vadimamo/dev/daedra/snmp_exporter/generator/generator.yml",
+		"/C/Users/vadimamo/dev/daedra/snmp_exporter/generator/docker-compose.yml",
+		"/C/Users/vadimamo/dev/daedra/snmp_exporter/generator/mibs/IF-MIB.mib",
+		"/C/Users/vadimamo/dev/cenarius/src/pypickle.js",
+		"/C/Users/vadimamo/dev/cenarius/fff",
+		"/C/Users/vadimamo/dev/netstat4/start_instat_secure.sh",
+		"/C/Users/vadimamo/dev/cenarius/src/send.js",
+		"/C/Users/vadimamo/dev/dotfiles/vim/.vimrc",
+		"/C/Users/vadimamo/dev/InStat todo.md",
+		"/C/Users/vadimamo/dev/instat-backend-nodejs/certs/make.sh",
+		"/C/Users/vadimamo/dev/instat-ha-proxy/Dockerfile",
+		"/C/Users/vadimamo/dev/instat-ha-proxy/config.cfg",
+		"/C/Users/vadimamo/dev/instat-ha-proxy/Dockerfile.",
+		"/C/Users/vadimamo/dev/cenarius/test-poll.sh",
+		"/C/Users/vadimamo/dev/cenarius/docker-compose.yml",
+		"/C/Users/vadimamo/dev/cenarius/graphite-pollers/ifstats_to_graphite.rb",
+		"/C/Users/vadimamo/dev/cenarius/test-poll.rb",
+		"/C/Users/vadimamo/dev/.dotfiles/install",
+		"/C/Users/vadimamo/dev/.dotfiles/aliases/others"
+	],
+	"find":
+	{
+		"height": 55.0
+	},
+	"find_in_files":
+	{
+		"height": 132.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"mongoose",
+			"router",
+			"id_set",
+			"Help",
+			"determineD",
+			"getMultiData",
+			".ideal",
+			"interfaces",
+			"d",
+			"h5",
+			"div",
+			"memory.",
+			"context",
+			"onElementClick",
+			"context",
+			"router",
+			"react.prop",
+			"setRefStart",
+			"\t",
+			"determineGranularity",
+			"regist",
+			"index",
+			"`"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"response.memory.",
+			"   "
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "app.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5708,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2903,
+								2903
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1361.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "db/users.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 500,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "localdb.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2231,
+								2231
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1500.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "db/sessions.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3738,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "lib.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12273,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								72,
+								72
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "package.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 863,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								781,
+								781
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/zzz A File Icon zzz/aliases/JSON (NPM).sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.CSS Extended Completions":
+	{
+		"height": 0.0
+	},
+	"output.SublimeLinter":
+	{
+		"height": 142.0
+	},
+	"output.SublimeLinter Messages":
+	{
+		"height": 154.0
+	},
+	"output.exec":
+	{
+		"height": 418.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 142.0
+	},
+	"pinned_build_system": "",
+	"project": "Angband.live.sublime-project",
+	"replace":
+	{
+		"height": 94.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"gra",
+				"src\\app\\Components\\GraphPeriodPicker.js"
+			],
+			[
+				"other",
+				"src\\app\\Components\\OtherDevicesList.js"
+			],
+			[
+				" view nw",
+				"src\\app\\Views\\Info\\ViewNetworkElements.js"
+			],
+			[
+				"view ne",
+				"src\\app\\Views\\Info\\ViewNetworkElements.js"
+			],
+			[
+				"manyme",
+				"src\\app\\Components\\ManyMeasurements.js"
+			],
+			[
+				"double",
+				"src\\app\\Components\\DoubleGraph.js"
+			],
+			[
+				"weathermap",
+				"src\\app\\Views\\Weathermaps.js"
+			],
+			[
+				"net li",
+				"src\\app\\Components\\SearchResults\\NetworkElementList.js"
+			],
+			[
+				"modema",
+				"src\\app\\Components\\WeatherMaps\\Configurator\\ModeMap.js"
+			],
+			[
+				"net ele",
+				"src\\app\\Components\\SearchResults\\NetworkElementList.js"
+			],
+			[
+				"interface",
+				"src\\app\\Components\\InterfacesDetailedList.js"
+			],
+			[
+				"wea",
+				"src\\styles\\_components\\Weathermaps.scss"
+			],
+			[
+				"too",
+				"src\\app\\tools.js"
+			],
+			[
+				"weather",
+				"src\\app\\Components\\WeatherMaps\\WeatherMap.js"
+			],
+			[
+				"viewdev",
+				"src\\app\\Views\\Info\\ViewDevice.js"
+			],
+			[
+				"many",
+				"src\\app\\Components\\ManyMeasurements.js"
+			],
+			[
+				"view de",
+				"src\\app\\Views\\Info\\ViewDevice.js"
+			],
+			[
+				"view",
+				"src\\app\\Views\\Info\\ViewNetworkElements.js"
+			],
+			[
+				"viewde",
+				"src\\app\\Views\\Info\\ViewDevice.js"
+			],
+			[
+				"route",
+				"src\\app\\router_public_api.js"
+			],
+			[
+				"data contr",
+				"src\\app\\controllers\\data.controller.js"
+			],
+			[
+				"app cli",
+				"src\\app\\app_client.js"
+			],
+			[
+				"tool",
+				"src\\app\\tools.js"
+			],
+			[
+				"api user",
+				"src\\app\\api\\api_user.js"
+			],
+			[
+				"api wea",
+				"src\\app\\api\\api_weathermaps.js"
+			],
+			[
+				"customme",
+				"src\\app\\Components\\CustomMeasurements.js"
+			],
+			[
+				"metai",
+				"src\\app\\Components\\MetaInformation.js"
+			],
+			[
+				"number de",
+				"src\\app\\Components\\NumberOfDevicesForNE.js"
+			],
+			[
+				"onein",
+				"src\\app\\Components\\OneInputDialog.js"
+			],
+			[
+				"usert",
+				"src\\app\\Components\\UserToolbar.js"
+			],
+			[
+				"view sel",
+				"src\\app\\Components\\ViewModeSelector.js"
+			],
+			[
+				"yes",
+				"src\\app\\Components\\YesNoDialog.js"
+			],
+			[
+				"log red",
+				"src\\app\\Reducers\\LoginDialogReducer.js"
+			],
+			[
+				"use red",
+				"src\\app\\Reducers\\UserReducer.js"
+			],
+			[
+				"sma red",
+				"src\\app\\Reducers\\SmartGraphReducer.js"
+			],
+			[
+				"user red",
+				"src\\app\\Reducers\\UserReducer.js"
+			],
+			[
+				"redu view",
+				"src\\app\\Reducers\\ViewInformationReducer.js"
+			],
+			[
+				"home",
+				"src\\app\\Views\\Home.js"
+			],
+			[
+				"sear",
+				"src\\app\\Views\\Search.js"
+			],
+			[
+				"data contro",
+				"src\\app\\controllers\\data.controller.js"
+			],
+			[
+				"wea contr",
+				"src\\app\\controllers\\weathermaps.controller.js"
+			],
+			[
+				"pinned",
+				"src\\app\\Components\\PinnedGraphs\\PinnedGraphPresaveModal.js"
+			],
+			[
+				"add dialog",
+				"src\\app\\Components\\WeatherMaps\\AddNetworkElementDialog.js"
+			],
+			[
+				"dragg",
+				"src\\app\\Components\\WeatherMaps\\DraggableNode.js"
+			],
+			[
+				"dummyda",
+				"src\\app\\Components\\WeatherMaps\\DummyData.js"
+			],
+			[
+				"help",
+				"src\\app\\Components\\WeatherMaps\\Help.js"
+			],
+			[
+				"hovergr",
+				"src\\app\\Components\\WeatherMaps\\HoverGraph.js"
+			],
+			[
+				"linkedit",
+				"src\\app\\Components\\WeatherMaps\\LinkEditDialog.js"
+			],
+			[
+				"labelset",
+				"src\\app\\Components\\WeatherMaps\\UtilizationLabelSet.js"
+			],
+			[
+				"weathermap.",
+				"src\\app\\Components\\WeatherMaps\\WeatherMap.js"
+			],
+			[
+				"weathermaple",
+				"src\\app\\Components\\WeatherMaps\\WeathermapLegend.js"
+			],
+			[
+				"weathermapl",
+				"src\\app\\Components\\WeatherMaps\\WeathermapLegend.js"
+			],
+			[
+				"wmlink",
+				"src\\app\\Components\\WeatherMaps\\Wmlink.js"
+			],
+			[
+				"report",
+				"src\\app\\Components\\Reports\\Report.js"
+			],
+			[
+				"sitelis",
+				"src\\app\\Components\\SearchResults\\SiteList.js"
+			],
+			[
+				"weathermapL",
+				"src\\app\\Components\\WeatherMaps\\WeathermapLegend.js"
+			],
+			[
+				"measurementl",
+				"src\\app\\Components\\SearchResults\\MeasurmentList.js"
+			],
+			[
+				"elementlist",
+				"src\\app\\Components\\SearchResults\\NetworkElementList.js"
+			],
+			[
+				"siteli",
+				"src\\app\\Components\\SearchResults\\SiteList.js"
+			],
+			[
+				"modelink",
+				"src\\app\\Components\\WeatherMaps\\Configurator\\ModeLink.js"
+			],
+			[
+				"mode",
+				"src\\app\\Components\\WeatherMaps\\Configurator\\ModeNE.js"
+			],
+			[
+				"modene",
+				"src\\app\\Components\\WeatherMaps\\Configurator\\ModeNE.js"
+			],
+			[
+				"viewnetw",
+				"src\\app\\Views\\Info\\ViewNetworkElements.js"
+			],
+			[
+				"viewmeas",
+				"src\\app\\Views\\Info\\ViewMeasurement.js"
+			],
+			[
+				"viewDe",
+				"src\\app\\Views\\Info\\ViewDevice.js"
+			],
+			[
+				"weathermps",
+				"src\\app\\Views\\Weathermaps.js"
+			],
+			[
+				"viewDevice",
+				"src\\app\\Views\\Info\\ViewDevice.js"
+			],
+			[
+				"config",
+				"src\\app\\config.js"
+			],
+			[
+				"header",
+				"src\\app\\Components\\HeaderNext.js"
+			],
+			[
+				"converter",
+				"jsons\\wm_configs\\instat_converter.js"
+			],
+			[
+				"hover",
+				"src\\app\\Components\\WeatherMaps\\HoverGraph.js"
+			],
+			[
+				"interfa",
+				"src\\app\\Components\\InterfacesDetailedList.js"
+			],
+			[
+				"conf",
+				"src\\app\\config.js"
+			],
+			[
+				"meta-block",
+				"src\\styles\\modules\\meta-block.scss"
+			],
+			[
+				"viewN",
+				"src\\app\\Views\\Info\\ViewNetworkElements.js"
+			],
+			[
+				"MetaIn",
+				"src\\app\\Components\\MetaInformation.js"
+			],
+			[
+				"device",
+				"src\\app\\Components\\SearchResults\\DeviceList.js"
+			],
+			[
+				"onesma",
+				"src\\styles\\_components\\OneSmartGraph.scss"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+		"last_automatic_layout":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		]
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 336.0,
+	"status_bar_visible": false,
+	"template_settings":
+	{
+	}
+}

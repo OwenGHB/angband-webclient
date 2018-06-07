@@ -1,12 +1,26 @@
+html {
+   background-image: url("/img/bgr1.jpg");
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: top center;
+
+}
+body {
+   background-color: rgba(17,17,17,0.6)
+}
 html, body {
    line-height: initial;
-   background-color: #171717;
+   height: 100%;
 }
 
 html,body,h1,h2,h3,h4,h5,h6,div,p {
    margin:  0;
    padding: 0;
    border:  0;
+}
+h1,h2,h3,h4,h5,h6 {
+   font-size: 1rem;
+   font-weight: 400;
 }
 
 html,body,input,button {
@@ -21,74 +35,97 @@ input, button {
    padding: 0.2rem 0.4rem;
 }
 
-.logo {
-   margin-top: 2rem;
-   text-align: center;
-}
-.logo img {
-   width: 100%;
-   max-width: 370px;
+input[type=submit] { cursor: pointer; color: coral; }
+
+
+section:not(:last-of-type) {
+   margin-bottom: 2rem;
 }
 
 
-section.login {
-   text-align: center;
-   margin-top: 2rem;
+section {
+   border: 2px solid #323232;
 }
-section.login form {
+
+section .title, section .footer {
+   padding-left: 1rem;
+   padding-right: 1rem;
+}
+section .content { padding: 1rem; }
+section .title {
+   background-color: #434242;
+   padding-top: 0.3rem;
+   padding-bottom: 0.3rem;
+   color: #bada55;
+}
+section .content { background-color: #171717 }
+section .content a { color: coral; text-decoration: none; }
+section .content b, section .content strong
+   { color: white; font-weight: 400; }
+section .content p:not(:last-of-type) { margin-bottom: 0.5rem; }
+section .footer { background-color: #212121; text-align: right; color: #5e5e5e; padding-top: 2px; padding-bottom: 2px; }
+section .footer span { color: coral; }
+
+#grid {
+   min-height: 100%;
    margin: 0 auto;
-   display: inline-block;
-}
-section.login div {
-   margin-bottom: 0.5rem;
-}
-section.login label {
-   margin-right: 10px;
-}
-section.login button {
-   width: 100%;
-   cursor: pointer;
-}
-section.login button:hover {
-   color: coral;
 }
 
+#logo, #footer { text-align: center; }
 
-section.news                            { width: 100%; margin: 4rem auto 0 auto; }
-section.news header                     { font-size: 1.8rem; font-weight: 500; text-align: center; }
-section.news article                    { margin-top: 1rem; background-color: #303030; padding: 0.5rem; }
-section.news article header             { font-size: 1rem; color: #bada55; text-align: left; }
-section.news article header .timestamp  { color: #a5a5a5; float: right; font-size: 1rem; }
+#login form label { display: block; }
+#login form input { width: 100%; box-sizing: border-box; }
+#login form div:not(:last-of-type) { margin-bottom: 1rem; } 
+
+/* lgog */
+#logo { padding: 3rem; }
 
 
+/* donations block */
+#donate input {
+   border: 0;
+   padding: 0;
+}
+#donate form { margin-top: 1rem; }
+#donate h6 { color: #bada55; margin-top: 1rem; }
+#donate .summ { float: right; }
+#donate .sign { color: #555; }
 
-/*  mobile-first by design, then media queries */
-/* 600px and up */
-@media only screen and (min-width: 600px) {
-   html,body,input,button {
-      font-size: 16px;
+/* games */
+#games span { color: #bada55; }
+
+/* footer */
+#footer { padding: 1rem; }
+#footer span {color: coral;}
+
+/* utility classes */
+.text-center { text-align: center; }
+
+@supports (display: grid) {
+
+   #grid {
+      width: 1200px;
    }
-   section.news { width: 500px; }
-}
 
-
-@media only screen and (min-width: 1000px) {
-   html,body,input,button {
-      font-size: 16px;
+   #grid {
+      display: grid;
+      grid-row-gap: 1rem;
+      grid-column-gap: 2rem;
+      grid-template-columns: 4fr 1fr;
+      grid-template-rows: min-content min-content min-content min-content auto min-content;
+      grid-template-areas: 
+         "logo logo"
+         "news login"
+         "news games"
+         "news donate"
+         "news empty"
+         "footer footer"
    }
-   section.news { width: 700px; }
-}
 
-@media only screen and (min-width: 1600px) {
-   html,body,input,button {
-      font-size: 16px;
-   }
-   section.news { width: 1000px; }
-}
-
-@media only screen and (min-width: 1900px) {
-   html,body,input,button {
-      font-size: 18px;
-   }
-   section.news { width: 1200px; }
+   #grid #logo   {grid-area: logo;}
+   #grid #news   {grid-area: news;}
+   #grid #login  {grid-area: login;}
+   #grid #games  {grid-area: games;}
+   #grid #donate {grid-area: donate;}
+   #grid #footer {grid-area: footer;}
 }
