@@ -3,79 +3,97 @@ var pty         = require('node-pty');
 var ps          = require('ps-node');
 var fs          = require('fs-extra');
 var games       = require('./games.js');
+var config      = require("./config");
 var terminal    = require('term.js');
-var lib         = {};
-var matches     = {};
-var metasockets = {};
-var chatlog     = [];
-var home        = process.env.CUSTOM_HOME || '/home/angbandlive';
 
+var lib         = {};
+
+// holds current games played. User.name is the key
+var matches     = {};
+
+// holds current socket connections
+var metasockets = {};
+
+
+var home        = process.env.CUSTOM_HOME || '/home/angbandlive';
+var localdb     = require("./localdb");
+
+
+
+lib.stats = function() {
+	return {
+		players: Object.keys(metasockets).length,
+		games: Object.keys(matches).length
+	}
+}
 
 
 lib.respond = function(user, msg) {
-	if (msg.eventtype=='chat'){
+	if(msg.eventtype == 'chat') {
 		chat(user,msg.content);
 	} 
-	else if (msg.eventtype=='newgame'){
-		if (typeof(matches[user.username])!='undefined'){
-			closegame(user.username);
+	else if(msg.eventtype == 'newgame'){
+		if (typeof(matches[user.name]) != 'undefined') {
+			closegame(user.name);
 		} 
-		else if (user.username!='anthon') {
+		else if(user.name != 'anthon') {
 			newgame(user,msg.content);
 		}
 	} 
-	else if (msg.eventtype=='connectplayer'){
-		connectplayer(user.username);
+	else if(msg.eventtype == 'connectplayer') {
+		connectplayer(user.name);
 	} 
-	else if (msg.eventtype=='subscribe'){
+	else if(msg.eventtype == 'subscribe') {
 		subscribe(user,msg.content);
 	} 
-	else if (msg.eventtype=='gameinput'){
-		if (typeof(matches[user.username])!='undefined'){
-			matches[user.username].term.write(msg.content);
-			matches[user.username].idle=false;
+	else if(msg.eventtype == 'gameinput') {
+		if(typeof(matches[user.name])!='undefined'){
+			matches[user.name].term.write(msg.content);
+			matches[user.name].idle=false;
 		}
 	}
 }
-function chat(user,message){
+function chat(user, message){
 	var response = JSON.stringify({ 
 		eventtype: "chat",
 		content: { 
-			user: user.username,
+			user: user.name,
 			message: message,
 			extra: user.roles,
 			timestamp: new Date()
 		}
 	});
-	chatlog.unshift(response);
-	while (chatlog.length>100) {
-		chatlog.pop();
-	}
-	if (user.username!="Sirfurnace") {
+
+	// todo: check against banned users, if user is ok then push message
+	localdb.pushMessage(user, message);
+
+	if (user.name!="Sirfurnace") {
 		for (var i in metasockets){
 			try {
 				metasockets[i].send(response);
-			} catch (ex) {
+			} 
+			catch (ex) {
 				// The WebSocket is not open, ignore
 			}
 		}
-	} else {
-		metasockets[user.username].send(response);
+	} 
+	else {
+		metasockets[user.name].send(response);
 	}
 }
 //some get functions
-function getmatchlist(matches){
+function getmatchlist(matches) {
 	var livematches = {};
-	for (var i in matches){
-		var charinfo=getcharinfo(i,matches[i].game);
+	for (var i in matches) {
+		var charinfo = getcharinfo(i, matches[i].game);
 		livematches[i] = {
-			game: matches[i].game,
-			idletime: matches[i].idletime,
-			cLvl: charinfo.cLvl,
-			race: charinfo.race,
-			subrace: charinfo.subrace,
-			class: charinfo.class,
-			dimensions:{rows:matches[i].term.rows,cols:matches[i].term.cols} 
+			game       : matches[i].game,
+			idletime   : matches[i].idletime,
+			cLvl       : charinfo.cLvl,
+			race       : charinfo.race,
+			subrace    : charinfo.subrace,
+			class      : charinfo.class,
+			dimensions : {rows: matches[i].term.rows, cols:matches[i].term.cols} 
 		};
 	}
 	return livematches;
@@ -108,11 +126,11 @@ function getcharinfo(user,game){
 	}
 	return charinfo;
 }
-function getfilelist(username){
+function getfilelist(name){
 	var files = {};
 	var users = fs.readdirSync(home+'/public/user/');
-	if (users.includes(username)){
-		var path = home+'/public/user/'+username+'/';
+	if (users.includes(name)){
+		var path = home+'/public/user/'+name+'/';
 		fs.ensureDirSync(path);
 		var ls = fs.readdirSync(path);
 		for (var i in games){
@@ -126,7 +144,7 @@ function getfilelist(username){
 				files[games[i].name]=dumps;
 			}
 		}
-		files.username=username;
+		files.name=name;
 	}
 	return files;
 }
@@ -166,14 +184,15 @@ function newgame(user,msg){
 	var panels = msg.panels;
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
-	var player = user.username;
+	var player = user.name;
 	var compgame = 'oangband';
 	var compnumber = '215';
 	var panelargs = ['-b'];
-	if (panels>1) {
-		if (game=='poschengband'||game=='elliposchengband'||game=='composband'){
+	if(panels > 1) {
+		if (game == 'poschengband' || game == 'elliposchengband' || game == 'composband') {
 			panelargs = ['-right','40x*','-bottom','*x8'];
-		} else {
+		} 
+		else {
 			panelargs = ['-n'+panels];
 		}
 	}
@@ -181,19 +200,19 @@ function newgame(user,msg){
 	var args = [];
 	var terminfo='xterm-256color';
 	if (game=='umoria'){
-		args.push(home+'/var/games/'+game+'/'+user.username);
+		args.push(home+'/var/games/'+game+'/'+user.name);
 	} else {
 		if (game=='competition'){
-			args.push('-u'+compnumber+'-'+user.username);
+			args.push('-u'+compnumber+'-'+user.name);
 		} else {
-			args.push('-u'+user.username);
+			args.push('-u'+user.name);
 		}
 		if (game=='competition'){
-			args.push('-duser='+home+'/public/user/'+user.username+'/'+compgame);
+			args.push('-duser='+home+'/public/user/'+user.name+'/'+compgame);
 		} else if (gameinfo.restrict_paths){
-			args.push('-d'+home+'/public/user/'+user.username+'/'+game);
+			args.push('-d'+home+'/public/user/'+user.name+'/'+game);
 		} else {
-			args.push('-duser='+home+'/public/user/'+user.username+'/'+game);
+			args.push('-duser='+home+'/public/user/'+user.name+'/'+game);
 		}
 		for (var i in gameinfo.data_paths){
 			args.push('-d'+gameinfo.data_paths[i]+'='+home+'/var/games/'+game+'/'+gameinfo.data_paths[i]);
@@ -207,18 +226,19 @@ function newgame(user,msg){
 			args.push(panelargs[i]);
 		}
 	}
-	if (msg.walls) args.push('-a');
+	if (msg.walls) 
+		args.push('-a');
 	var termdesc = {};
-	if (game=='competition'){
+	if (game == 'competition') {
 		var newattempt = true;
 		var newtty = false;
 		var savegames = fs.readdirSync(home+'/etc/'+compgame+'/save');
-		if (savegames.includes('1002.'+compnumber+''+user.username)){
-			newattempt = !isalive(user.username,compgame);
+		if (savegames.includes('1002.'+compnumber+''+user.name)){
+			newattempt = !isalive(user.name,compgame);
 		}
-		fs.ensureDirSync(home+'/public/user/'+user.username);
+		fs.ensureDirSync(home+'/public/user/'+user.name);
 		var ttydir = fs.readdirSync(home+'/ttyrec');
-		var ttyfile = home+'/ttyrec/'+compnumber+'-'+user.username+'.ttyrec';
+		var ttyfile = home+'/ttyrec/'+compnumber+'-'+user.name+'.ttyrec';
 		if (ttydir.includes(ttyfile)){
 			newtty=true;
 		}
@@ -230,48 +250,78 @@ function newgame(user,msg){
 			ttyfile
 		];
 		if (!newattempt) {
-			if (!newtty) args.unshift('-a');
-		} else {
-			fs.copySync(home+'/etc/'+compgame+'/save/1002.'+compnumber, home+'/etc/'+compgame+'/save/1002.'+compnumber+''+user.username);
+			if (!newtty) 
+				args.unshift('-a');
+		} 
+		else {
+			fs.copySync(home+'/etc/'+compgame+'/save/1002.'+compnumber, home+'/etc/'+compgame+'/save/1002.'+compnumber+''+user.name);
 		}
 	}
 	termdesc = {
-		path:path,
-		args:args,
-		terminfo: terminfo
+		path     : path,
+		args     : args,
+		terminfo : terminfo
 	};
 	console.log(args);
 	try {
-		var term = pty.fork(termdesc.path,termdesc.args,{
-			name: termdesc.terminfo,
-			cols: parseInt(dimensions.cols),
-			rows: parseInt(dimensions.rows),
-			cwd: process.env.HOME,
-			applicationCursor: true
+		var term = pty.fork(termdesc.path,termdesc.args, {
+			name              : termdesc.terminfo,
+			cols              : parseInt(dimensions.cols),
+			rows              : parseInt(dimensions.rows),
+			cwd               : process.env.HOME,
+			applicationCursor : true
 		});
-	} catch(ex) {
-		console.log('we usually crash here');
-	}
-	term.on('data', function(data) {
-		try {
-			metasockets[player].send(JSON.stringify({eventtype:'owngameoutput',content:data}));
-		} catch (ex) {
-			// The WebSocket is not open, ignore
-		}
-		if (typeof(matches[player])!='undefined') for (var i in matches[player].spectators) {
+		term.on('data', function(data) {
 			try {
-				metasockets[matches[player].spectators[i]].send(JSON.stringify({eventtype:'gameoutput',content:{player:player,data:data}}));
-			} catch (ex) {
+				metasockets[player].send(JSON.stringify({eventtype: 'owngameoutput', content: data}));
+			} 
+			catch (ex) {
+				// The WebSocket is not open, ignore
+			}
+			if (typeof(matches[player])!='undefined') 
+				for (var i in matches[player].spectators) {
+					try {
+						metasockets[matches[player].spectators[i]].send(JSON.stringify({
+							eventtype: 'gameoutput',
+							content: {
+								player :player,
+								data   :data
+							}
+						}));
+					} 
+					catch (ex) {
+						// The WebSocket is not open, ignore
+					}
+				}
+	/* 		if (typeof(matches[player].termcache)!='undefined') {
+				matches[player].termcache.write(data);
+			} */
+		});
+		term.on('close', function(data) {
+			closegame(user.name);
+		});
+
+		matches[user.name] = {
+			term: term,
+			game: game,
+			idle: false,
+			idletime: 0,
+			spectators: []
+		};
+		
+		for (var i in metasockets) {
+			try {
+				metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
+			} 
+			catch (ex) {
 				// The WebSocket is not open, ignore
 			}
 		}
-/* 		if (typeof(matches[player].termcache)!='undefined') {
-			matches[player].termcache.write(data);
-		} */
-	});
-	term.on('close', function(data) {
-		closegame(user.username);
-	});
+	} 
+	catch(ex) {
+		console.log('we usually crash here, now we should not any more.');
+		console.error(ex);
+	}
 	/*var termcache = new terminal.Terminal({
 		termName: 'xterm-256color',
 		colors: terminal.Terminal.xtermColors,
@@ -280,31 +330,16 @@ function newgame(user,msg){
 		cursorBlink: false,
 		scrollBottom: dimensions.rows
 	});*/
-	var match = {
-		term: term,
-		game: game,
-		idle: false,
-		idletime: 0,
-		spectators: []
-	}
-	matches[user.username] = match;
-	
-	for (var i in metasockets){
-		try {
-			metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
-		} catch (ex) {
-			// The WebSocket is not open, ignore
-		}
-	}
 }
 function closegame(player){
 	if (typeof(matches[player])!='undefined'){
 		//kill the process if it hasn't already
 		//horrific reverse engineering hack here
 		var term = matches[player].term;
-		if (matches[player].game=='competition'){
-			var gamepid=parseInt(term.pid)+3;
-		} else {
+		if (matches[player].game == 'competition'){
+			var gamepid = parseInt(term.pid) + 3;
+		} 
+		else {
 			var gamepid=term.pid;
 		}
 		ps.lookup({ pid: gamepid }, function(err, resultList ) {
@@ -324,24 +359,28 @@ function closegame(player){
 							}
 							catch(e) { console.error(e); }
 						});
-					} catch(ex) {
+					} 
+					catch(ex) {
 						console.error(ex);
 					}
 				},500);
-			} else {
+			} 
+			else {
 				console.log( 'Process %s was not found, expect user exited cleanly.',player );
 			}
 			// Clean things up
 			delete matches[player]; 
 			try {
 				metasockets[player].send(JSON.stringify({eventtype: 'gameover', content: []}));
-			} catch (ex) {
+			} 
+			catch (ex) {
 				// The WebSocket is not open, ignore
 			}
 			for (var i in metasockets){
 				try {
 					metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
-				} catch (ex) {
+				} 
+				catch (ex) {
 					// The WebSocket is not open, ignore
 				}
 			}
@@ -350,8 +389,8 @@ function closegame(player){
 }
 function subscribe(user,message){
 	var player = message.player;
-	var spectator = user.username;
-	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.username)!='undefined') {
+	var spectator = user.name;
+	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.name)!='undefined') {
 		if(metasockets[player]) {
 			metasockets[player].send(JSON.stringify({eventtype: 'systemannounce', content: spectator + " is now watching"}));
 			matches[player].spectators.push(spectator);
@@ -364,15 +403,16 @@ function subscribe(user,message){
 	}
 }
 lib.welcome = function(user,ws) {
-	metasockets[user.username] = ws;
-	var player = user.username;
+	metasockets[user.name] = ws;
+	var player = user.name;
 	//send some info to the user upon connecting
 	try {
-		metasockets[user.username].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist()}));
-		metasockets[user.username].send(JSON.stringify({eventtype: 'populate_chat', content: chatlog}));
-		metasockets[user.username].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
-		metasockets[user.username].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.username)}));
-		metasockets[user.username].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
+		var last_chat_messages = localdb.readMessages(config.chat_last_messages);
+		metasockets[user.name].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist()}));
+		metasockets[user.name].send(JSON.stringify({eventtype: 'populate_chat', content: last_chat_messages}));
+		metasockets[user.name].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
+		metasockets[user.name].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.name)}));
+		metasockets[user.name].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
 	} catch (ex) {
 		// The WebSocket is not open, ignore
 	}
@@ -383,36 +423,49 @@ lib.welcome = function(user,ws) {
 			metasockets[i].send(JSON.stringify({
 				eventtype: 'usercount', content: Object.keys(metasockets)
 			}));
-		} catch (ex) {
+			if(i !== user.name) {
+				metasockets[i].send(JSON.stringify({
+					eventtype: 'systemannounce', content: `${user.name} has joined chat`
+				}));
+			}
+		} 
+		catch (ex) {
 			// The WebSocket is not open, ignore
 		}
 	}
 	
 	//listen for inputs
-	metasockets[user.username].on('message', function(message) {
+	metasockets[user.name].on('message', function(message) {
 		var msg = JSON.parse(message);
 		lib.respond(user,msg);
 	});
 	
 	//bid farewell
-	metasockets[user.username].once('close', function() {
+	metasockets[user.name].once('close', function() {
 		if (player!='borg'){
 			console.log('Closing socket for ' + player);
 			//we need to check there's a match in the first place
 			if (typeof(matches[player])!='undefined'){
 				closegame(player);
-			} for (var i in matches) {
-				if (typeof(matches[i])!='undefined'&&matches[i].spectators.includes(user.username)) {
-					delete matches[i].spectators[matches[i].spectators.indexOf(user.username)];
+			} 
+			for (var i in matches) {
+				if (typeof(matches[i])!='undefined'&&matches[i].spectators.includes(user.name)) {
+					delete matches[i].spectators[matches[i].spectators.indexOf(user.name)];
 				}
 			}
 		}
-		delete metasockets[user.username];
+		delete metasockets[user.name];
 		//announce the departure
 		for (var i in metasockets){
 			try {
 				metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
-			} catch (ex) {
+				if(i !== user.name) {
+					metasockets[i].send(JSON.stringify({
+						eventtype: 'systemannounce', content: `${user.name} has left chat`
+					}));
+				}
+			} 
+			catch (ex) {
 				// The WebSocket is not open, ignore
 			}
 		}
@@ -441,4 +494,4 @@ lib.keepalive=function(){
 	}
 }
 
-module.exports=lib;
+module.exports = lib;

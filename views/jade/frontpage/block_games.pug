@@ -1,0 +1,10 @@
+section
+   .title GAMES
+   - var pl = players === 1 ? "user" : "users";
+   - var g = games === 1 ? "game" : "games";
+   - verb = players === 1 ? "is" : "are";
+   .content Currently there #{verb} 
+      span #{players} 
+      | #{pl} online playing 
+      span #{games} 
+      | #{g}

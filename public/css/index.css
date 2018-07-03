@@ -35,7 +35,7 @@ input, button {
    padding: 0.2rem 0.4rem;
 }
 
-input[type=submit] { cursor: pointer; color: coral; }
+input[type=submit], a { cursor: pointer; color: coral; }
 
 
 section:not(:last-of-type) {
@@ -119,7 +119,7 @@ section .footer span { color: coral; }
          "news games"
          "news donate"
          "news empty"
-         "footer footer"
+         "footer footer";
    }
 
    #grid #logo   {grid-area: logo;}
@@ -128,4 +128,6 @@ section .footer span { color: coral; }
    #grid #games  {grid-area: games;}
    #grid #donate {grid-area: donate;}
    #grid #footer {grid-area: footer;}
+
+
 }

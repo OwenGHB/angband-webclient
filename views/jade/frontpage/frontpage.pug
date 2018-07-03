@@ -18,19 +18,23 @@ html
             p home of brave andventurers
             
          #login
-            include blocks/block_user_login.pug
+            if user
+               include block_user_welcome.pug
+            else 
+               include block_user_login.pug
+
 
          #games
-            include blocks/block_games.pug
+            include block_games.pug
 
          #news
-            include blocks/block_news.pug
+            include block_news.pug
 
          #donate
-            include blocks/block_donate.pug
+            include block_donate.pug
 
          #footer
-            include blocks/block_footer.pug
+            include block_footer.pug
 
 
 

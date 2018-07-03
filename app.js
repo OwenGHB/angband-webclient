@@ -43,11 +43,11 @@ app.use(session({
    store: new FileStore({ 
       path         : "./db/sessions",              // folder where to store sessions
       secret       : process.env.SESSION_SECRET,   // must be set as environment variable
+      retries      : 2,                            // number of retries to read a session file
       ttl          : 60 * 60 * 24 * 7,             // sessions TTS in seconds, 7 days
       reapInterval : 60 * 60 * 1,                  // in seconds, clean expired sessions every hour
-
    }),
-   resave: false,
+   resave: true,
    secret: process.env.SESSION_SECRET,
    saveUninitialized: false,
    // keys: ['air', 'fire', 'water']
@@ -78,30 +78,40 @@ passport.deserializeUser(localdb.deserializeUser);
 // =============================================================================
 app.get('/', function(req, res) {
    var news = localdb.getNews();
-	res.render('index.pug', {
+   var stats = awc.stats();
+	res.render('jade/frontpage/frontpage.pug', {
 	   user: req.user ? req.user.name : null, 
-	   news: news
+	   news: news,
+      games: stats.games,
+      players: stats.players
 	});
 });
 
 app.get("/db/refresh", function(req, res) {
-    localdb.refresh();
-    res.send("database refreshed");
+   localdb.refresh();
+   res.send("database refreshed");
 });
 
-app.post('/enter', passport.authenticate("local"), function(req, res) {
-   console.log("user authenticated, redirecting to hall", req.user);
-   return res.redirect("/hall");
+app.post('/enter', passport.authenticate("local",{failureRedirect: '/forbidden'}), function(req, res) {
+   console.log("user authenticated, redirecting to lobby", req.user);
+   return res.redirect("/lobby");
 });
 
-app.get("/hall", localdb.isUserLoggedIn, function(req, res) {
-   console.log("rendering hall");
-   return res.render("hall.pug");
+app.get("/lobby", localdb.isUserLoggedIn, function(req, res) {
+   console.log("rendering lobby");
+   return res.render("jade/lobby/lobby.pug", {user: req.user});
 });
 
 app.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
+   var user = req.user ? req.user.name : "unknown!!";
+   console.log(`logging user ${user} out`);
+   req.logout();
+   res.clearCookie('session');
+   res.redirect('/');
+});
+
+app.get("/forbidden", function(req, res) {
+  return res.send("invalid username/password pair");
 });
 
 
@@ -112,7 +122,7 @@ app.get('/logout', function(req, res) {
 //  W E B S O C K E T   R O U T E S
 // =============================================================================
 app.ws('/meta', function (ws, req) {
-   if (typeof(req.user.username)!='undefined'){
+   if (typeof(req.user.name) !== 'undefined'){
       awc.welcome(req.user, ws);
    }
 });

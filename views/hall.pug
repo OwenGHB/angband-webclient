@@ -1,4 +1,34 @@
 html
     head
+      meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
+      title Angband Live | play
+      meta(name='description', content='Web based client for playing Angband and variants remotely. Supports recording and live spectating.')
+      link(rel='icon', type='image/png', href='/favicon.png')
+      link(href='https://fonts.googleapis.com/css?family=Anonymous+Pro|Cousine|Cutive+Mono|Droid+Sans+Mono|Fira+Mono|Inconsolata|Nova+Mono|Overpass+Mono|Oxygen+Mono|PT+Mono|Roboto+Mono|Share+Tech+Mono|Source+Code+Pro|Space+Mono|Ubuntu+Mono|VT323')
+      link(rel='stylesheet', href='/css/play.css')
+      script(type='text/javascript', src='/js/jquery-3.2.1.min.js')
+      script(type='text/javascript', src='/js/moment.min.js')
+      script(type='text/javascript', src='/tablet-ui.js')
+      script(type='text/javascript', src='/js/play.js')
+      script(type='text/javascript', src='term.js')
+
     body
-        h1 tavern
+        
+      #game
+         #terminal term
+         #info info
+         #lobby.hidden
+            include play/lobby.pug
+
+      #side
+         #tab-switcher
+            include play/block_tabs.pug
+         #tab-content
+            #tab-chat.tab
+               include play/tabs/tab_chat.pug
+            #tab-people.tab.hidden
+               include play/tabs/tab_ppl_online.pug
+            #tab-files.tab.hidden
+               include play/tabs/tab_files.pug
+            #tab-options.tab.hidden
+               include play/tabs/tab_options.pug

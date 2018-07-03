@@ -1,0 +1,48 @@
+html
+   head
+      meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0")
+      title Angband Live
+      link(rel="icon", type="image/png", href="/favicon.png")
+      link(href="https://fonts.googleapis.com/css?family=Anonymous+Pro|Cousine|Cutive+Mono|Droid+Sans+Mono|Fira+Mono|Inconsolata|Nova+Mono|Overpass+Mono|Oxygen+Mono|PT+Mono|Roboto+Mono|Share+Tech+Mono|Source+Code+Pro|Space+Mono|Ubuntu+Mono|VT323", rel="stylesheet")
+      link(rel="stylesheet", href="/css/style.css")
+      link(rel="stylesheet", href="/css/tablet-ui.css")
+      script(type="text/javascript", src="/js/jquery-3.2.1.min.js")
+      script(type="text/javascript", src="/js/moment.min.js")
+      script(src="term.js")
+   body
+      #container
+         .flex
+            audio#notification(src="/notify.mp3", autostart="false")
+            .pane-main
+               #games-lobby
+                  include game_lobby.pug
+               #terminal-pane.hidden
+                  include game_terminal.pug
+               #tester.terminal A
+            .pane-side
+               .tab-buttons
+                  a(href="#", title="navigation", onclick="showMenu()") home
+                  a.selected(href="#", title="chat", onclick="showTab('tab-chat',this)") chat
+                  a(href="#", title="people", onclick="showTab('tab-people',this)") people
+                  a(href="#", title="files", onclick="showTab('tab-files',this)") files
+                  a#btn-tabletui.hidden(href="#", title="tablet controls", onclick="showTab('tab-tabletui',this)") UI
+                  a(href="#", title="settings", onclick="showTab('tab-settings',this)") opts
+                  a.float-right(href="/logout", title="logout") exit
+               .tab-panels
+                  #tab-navigation.tab.hidden
+                     include tab_navigation.pug
+                  #tab-chat.tab
+                     include tab_chat.pug
+                  #tab-people.tab.hidden
+                     include tab_people.pug
+                  #tab-files.tab.hidden
+                     include tab_files.pug
+                  #tab-tabletui.tab.hidden
+                     include tab_tabletui.pug
+                  #tab-settings.tab.hidden
+                     include tab_settings.pug
+      script.
+         var username = "#{user.name}";
+         console.log("username", username);
+      script(type="text/javascript", src="/js/tablet-ui.js")
+      script(type="text/javascript", src="/js/main-new.js")

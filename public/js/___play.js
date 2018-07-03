@@ -36,20 +36,34 @@ var fonts = [
 var font_sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20];
 var localStorage;
 var TU;
-var notify_sound = $("#notification").get(0);
+// var notify_sound = $("#notification").get(0);
 
 
+// done
+function openTab(name) {
+	// activate tab
+	$("#nav-tabs a").removeClass("active");
+	$("#nav-tabs a#nav-" + name).addClass("active");
+
+	// show tab content
+	$("#tab-content .tab").addClass("hidden");
+	$("#tab-content #tab-" + name).removeClass("hidden");
+}
+
+// done
 function populateChat(messages) {
 	var keys = Object.keys(messages);
 	for(var i=keys.length-1; i>=0; i--) {
 		var m = JSON.parse(messages[keys[i]]);
 		addMessage(m.content, false, false);
 	}
-	$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
-    initComplete = true;
+	$("#chatlog").animate({ scrollTop: $('#chatlog .wrapper').height()}, 300);
+   initComplete = true;
 }
 
+// done
 function addMessage(msg, extra_class, shouldNotify) {
+	console.log('adding', msg)
 	var $msg = $(msg);
 	var classes = [];
 	var ts = moment(msg.timestamp).format("HH:mm");
@@ -65,18 +79,20 @@ function addMessage(msg, extra_class, shouldNotify) {
 		$("#chatlog .wrapper").append('<div class="message"><span class="system">' + msg + '</span></div>');
 }
 
+// done
 function notifyIfNeeded(user, message) {
 	if(message.indexOf("@" + user) !== -1)
-		notify_sound.play();
+		$("#notification").get(0).play();
 }
 
 function updateUserCount(users) { 
-	$("#peoplelist .info").html("<p>there " + (users.length>1?"are":"is") + " <b>" + users.length + "</b> user" + (users.length>1?"s":"") + " online");
-	$("#peoplelist .people").html("");
+	$("#tab-people .info").html("<p>there " + (users.length>1?"are":"is") + " <b>" + users.length + "</b> user" + (users.length>1?"s":"") + " online");
+	$("#tab-people .people").html("");
 	for(var i=0; i<users.length; i++)
-		$("#peoplelist .people").append("<div> - " + users[i] + "</div>");
+		$("#tab-people .people").append("<div> - " + users[i] + "</div>");
 	user_list = users;
 }
+
 function listMatches(matches) {
 	$("#watchmenu ul").html("");
 	var players = Object.keys(matches);
@@ -98,6 +114,7 @@ function listMatches(matches) {
 		$("#watchmenu ul").append('<li>there are no live games right now</li>');
 	}
 }
+
 function listFiles(files) {
 	var $tab = $("#tab-files .wrapper");
 	var user = files.username;
@@ -118,13 +135,13 @@ function listFiles(files) {
 			$game.append('<span>no files</span>');
 		$tab.append($game);
 	}
-	
 }
 
 function showMenu(){
 	$("#terminal-pane").addClass("hidden");
 	$("#games-lobby").removeClass("hidden");
 }
+
 function showTab(id, el) {
 	const tabs = $(".tab-panels").children().map(function(i,e){return e.id;});
 	$(".tab-panels div.tab").addClass("hidden");
@@ -143,6 +160,7 @@ function createTerminal(dimensions) {
 		applicationCursor: true
 	});
 }
+
 function applyTerminal(mode, qualifier, panels, walls, d) {
 	$terminal = $("#terminal-container");
 	dimensions = d;
@@ -192,6 +210,7 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 	$("#games-lobby").addClass("hidden");
 	$("#terminal-pane").removeClass("hidden");
 }
+
 function cleanSpyGlass(matches){
 	$("#navigation ul").html("");
 	$("#navigation ul").append(function() {
@@ -286,6 +305,7 @@ function initChat() {
 	socket = new WebSocket(socketURL);
 	socket.addEventListener('message', function (ev) {
 		var data = JSON.parse(ev.data);
+		console.log("socker event", ev.data);
 		switch(data.eventtype) {
 			case "populate_chat":
 				populateChat(data.content); 
@@ -296,6 +316,7 @@ function initChat() {
 				loadSelectedGameName();
 				break;
 			case "chat":
+				console.log("chat event")
 				addMessage(data.content, false, initComplete); 
 				if(initComplete)
 				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
@@ -345,7 +366,7 @@ function initChat() {
 		addMessage("***Connected***", "system");
 	});
 	
-	$("#new-message-input input").on("keyup", function(e) {
+	$("#newmsg input").on("keyup", function(e) {
 		if(e.keyCode !== 13) {
 			var current_input = (" " + e.target.value);
 			var last_block = current_input.split(" ");
@@ -376,7 +397,7 @@ function initChat() {
 		}
 	});
 	
-	$("#new-message-input input").on("keydown", function(e) {
+	$("#newmsg input").on("keydown", function(e) {
 		if (!e) e = window.event;
 		var keyCode = e.keyCode || e.which;
 		if (keyCode === 13) {
@@ -467,7 +488,6 @@ function changeUIFontSize(size, skipSaving) {
 
 function changeBorderStyle(borderstyle, skipSaving) {
 	$(".pane-main .pane-side").css("border-style", borderstyle);
-	
 }
 
 function changeBackgroundColor(bgcolor, skipSaving) {
@@ -547,6 +567,7 @@ function saveGameOptions() {
 		localStorage.setItem("aw_options_" + game, JSON.stringify(opts));
 	}
 }
+
 function loadGameOptions(game) {
 	if(localStorage) {
 		var opts = localStorage.getItem("aw_options_" + game);
@@ -562,6 +583,7 @@ function loadGameOptions(game) {
 	else
 		loadDefaultGameOptions(game);
 }
+
 function loadDefaultGameOptions(game) {
 	$("#term-rows").html(""); 
 	$("#term-cols").html(""); 
@@ -600,7 +622,7 @@ function hideAutoCompleteBox(force) {
 	isAutocompleteOpened = false;
 }
 function insertName(name) {
-	var $input = $("#new-message-input input");
+	var $input = $("#newmsg input");
 	var v = $input.val();
 	v = v.split(" ");
 	v[v.length-1] = "@" + name + " ";
@@ -619,6 +641,12 @@ function highlightUser(e) {
 	$(this).addClass("selected");
 }
 
+
+
+
+// ========================================================
+// S T A R T U P
+// ========================================================
 $(function() {
 	localStorage = window.localStorage;
 	
@@ -630,7 +658,7 @@ $(function() {
 	$("#extra-fonts").change(function(e) { changeTerminalFont(e.target.value); });
 	
 	// add bottom sidebar force option
-	$("#opt-sidebar-bottom").change(function(e) { changeSidebarOnBottom(e.target.checked); });
+	// $("#opt-sidebar-bottom").change(function(e) { changeSidebarOnBottom(e.target.checked); });
 	
 	// add ui font size options
 	font_sizes.map(function(f,i) {
@@ -640,14 +668,14 @@ $(function() {
 	$("#opt-ui-font-size").val($("html").css("font-size"));
 	
 	// add more options
-	var borderstyles = ['solid','inset','outset','ridge','groove','none'];
-	for (var i in borderstyles){
-		$("#opt-ui-border-style").append('<option value="' + borderstyles[i] + '">' + borderstyles[i] + '</option>');
-	}
-	$("#opt-ui-border-style").change(function() { changeBorderStyle($("#opt-ui-border-style").val()); });
-	$("#opt-ui-body-color").val($("body").css("background-color"));
-	$("#opt-ui-chat-color").val($(".panel").css("background-color"));
-	$("#opt-ui-chat-color").change(function() { changeMenuColor($("#opt-ui-border-style").val()); });
+	// var borderstyles = ['solid','inset','outset','ridge','groove','none'];
+	// for (var i in borderstyles){
+	// 	$("#opt-ui-border-style").append('<option value="' + borderstyles[i] + '">' + borderstyles[i] + '</option>');
+	// }
+	// $("#opt-ui-border-style").change(function() { changeBorderStyle($("#opt-ui-border-style").val()); });
+	// $("#opt-ui-body-color").val($("body").css("background-color"));
+	// $("#opt-ui-chat-color").val($(".panel").css("background-color"));
+	// $("#opt-ui-chat-color").change(function() { changeMenuColor($("#opt-ui-border-style").val()); });
 	
 	// restore and apply options from local storage
 	loadAndApplyOptions();
@@ -660,12 +688,13 @@ $(function() {
 	
 	// navigation to home button
 	$("#navigation-home").click(function() {
-    	$("#terminal-pane").addClass("hidden");
-    	$("#games-lobby").removeClass("hidden");
+    	$("#terminal").addClass("hidden");
+    	$("#info").addClass("hidden");
+    	$("#lobby").removeClass("hidden");
 	});
 	
 	// game option change handlers
-	$("#term-cols,#term-rows,#subwindows,#ascii-walls").change(function() { saveGameOptions(); });
+	// $("#term-cols,#term-rows,#subwindows,#ascii-walls").change(function() { saveGameOptions(); });
 	
 	// tablet ui
 	var ua = navigator.userAgent.toLowerCase();

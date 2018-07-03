@@ -1,15 +1,17 @@
 var lowdb    = require("lowdb");
 var FileSync = require("lowdb/adapters/FileSync");
 var bcrypt   = require("bcrypt");
+var config   = require("./config");
 
 
 var db       = {
    games    : lowdb(new FileSync("./db/games.json")),
    news     : lowdb(new FileSync("./db/news.json")),
+   chat     : lowdb(new FileSync("./db/chat.json")),
    users    : lowdb(new FileSync("./db/users.json"))
 };
 var SALT_ROUNDS   = 5;
-var DEFAULT_ROLES = ["user"];
+var DEFAULT_ROLES = ["basic"];
 
 
 /* SHEMAS
@@ -38,9 +40,10 @@ var DEFAULT_ROLES = ["user"];
 
 */
 // set default data if db files are empty
-db.games.defaults({data:[]}).write();
-db.news.defaults({data:[]}).write();
-db.users.defaults({data:[]}).write();
+db.games .defaults({data:[]}).write();
+db.news  .defaults({data:[]}).write();
+db.users .defaults({data:[]}).write();
+db.chat  .defaults({data:[]}).write();
 
 
 // export db object
@@ -52,7 +55,7 @@ module.exports.db = db;
 module.exports.verifyWithLocalDb = function(username, password, done) {
    console.log("localdb verifyWithLocalDb: checking with", username, password);
    authenticate(username, password, function(error, user, more_info) {
-      console.log("..verified as", more_info);
+      console.log("..verified as", error, user, more_info);
       return done(error, user, more_info);
    });
 };
@@ -67,8 +70,11 @@ module.exports.serializeUser = function(user, done) {
 module.exports.deserializeUser = function(name, done) {
    console.log("attempting to deserialize user", name);
    var user = findUserByName(name);
-   console.log("..deserialized", user.name);
-   return done(null, user);
+   console.log("..deserialized", user ? user.name : "user not found!!!");
+   if(user)
+      return done(null, user);
+   else
+      return done(null, null);
 };
 
 
@@ -76,12 +82,44 @@ module.exports.deserializeUser = function(name, done) {
 // middlewares
 module.exports.isUserLoggedIn = function(req, res, next) {
    if(req.user) {
-      console.log("is user logged in? yes,", req.user.name);
       return next(); 
    }
-   console.log("is user logged in? no, redirecting to /");
+   req.logout();
+   res.clearCookie('session');
    res.redirect("/");
 };
+
+
+// CHAT RELATED FUNCTIONS
+module.exports.pushMessage = function(user, message) {
+
+   // check and trim if there are too many messages already
+   var messages = db.chat.get("data").orderBy("timestamp", "asc").value();
+   if(messages.length > config.chat_max_messages) {
+      db.chat
+         .set("data", messages.slice(config.chat_max_messages - 10, messages.length))
+         .write();
+   }
+
+   // get last N messages
+   return db.chat
+      .get("data")
+      .push({
+         user      : user.name,
+         extra     : user.roles,
+         message   : message,
+         timestamp : + new Date()
+      })
+      .write();
+}
+
+module.exports.readMessages = function(limit) {
+   return db.chat.get("data")
+      .orderBy("timestamp", "desc")
+      .take(limit)
+      .orderBy("timestamp", "asc")
+      .value();
+}
 
 
 
@@ -160,7 +198,7 @@ function authenticate(username, password, callback) {
          if(they_match)
             return callback(null, user, "ok");
          else
-            return callback(null, null, "no match");
+            return callback(null, null, "wrong password");
       });
    }
 }

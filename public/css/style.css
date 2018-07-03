@@ -1,54 +1,9 @@
+
+
 a {
 	color: #00B7FF;
 }
-/*@font-face {*/
-/*	font-family:AmstradPC1512;*/
-/*	src: url(fonts/PxPlus_AmstradPC1512.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:IBM_BIOS;*/
-/*	src: url(fonts/PxPlus_IBM_BIOS.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:IBM_CGA;*/
-/*	src: url(fonts/PxPlus_IBM_CGA.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:IBM_CGAthin;*/
-/*	src: url(fonts/PxPlus_IBM_CGAthin.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:IBM_EGA8;*/
-/*	src: url(fonts/PxPlus_IBM_EGA8.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:IBM_EGA9;*/
-/*	src: url(fonts/PxPlus_IBM_EGA9.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:IBM_MDA;*/
-/*	src: url(fonts/PxPlus_IBM_MDA.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:IBM_VGA8;*/
-/*	src: url(fonts/PxPlus_IBM_VGA8.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:IBM_VGA9;*/
-/*	src: url(fonts/PxPlus_IBM_VGA9.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:TandyNew_225;*/
-/*	src: url(fonts/PxPlus_TandyNew_225.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:TandyNew_TV;*/
-/*	src: url(fonts/PxPlus_TandyNew_TV.ttf);*/
-/*}*/
-/*@font-face {*/
-/*	font-family:VGA_SquarePx;*/
-/*	src: url(fonts/PxPlus_VGA_SquarePx.ttf);*/
-/*}*/
+
 @font-face {
 	font-family:YOz14s;
 	src: url("/YOz14s.ttf");
@@ -60,23 +15,35 @@ a {
 
 
 
-body {	
-
+html {
+   background-image: url("/img/bgr1.jpg");
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: top center;
+   font-size: 14px;
+   font-family: 'Ubuntu Mono', monospace;
+   line-height: initial;
+}
+body {
+   background-color: rgba(17,17,17,0.6)
 }
 body,input,button,select,option {	
-    font-family: monospace;
+   font-family: monospace;
 	margin: 0;
 	padding: 0;
 	outline-offset: -1px;
-	background: black;
-	color: lightgray;
-	border: none;
+   color: lightgray;
+   border: none;
 }
-input,button,select {
-	background: transparent;
-	outline-style: solid;
-	width: 100%;
-	outline-color: #353535;
+
+input,button, select {
+   background: transparent;
+   outline-style: solid;
+   width: 100%;
+   outline-color: #353535;
+}
+select {
+	background: black;
 }
 input:hover,button:hover,select:hover,option:hover {
 	/*background: lightgray;*/
@@ -93,7 +60,7 @@ input[type="checkbox"] { width: initial; }
     outline-width: 1px;
 }
 #container {
-    background: black;
+    /*background: black;*/
 	color: lightgray;
 }
 
@@ -113,9 +80,9 @@ input[type="checkbox"] { width: initial; }
 #terminal-container {
 	display: none;
 	background-color: black;
-	float: left;
+	/*float: left;*/
 }
-#mainmenu {
+/*#mainmenu {
 	float: left;
 }
 #menu {
@@ -137,7 +104,7 @@ input[type="checkbox"] { width: initial; }
 }
 #chat {
 	float: left;
-}
+}*/
 #chatlog {
 	overflow-y: hidden;
 }
@@ -167,7 +134,7 @@ html, body, #container {
 	height: 100%;
 	/*overflow: hidden;*/
 	min-width: 768px;
-	font-size: 12px;
+	/*font-size: 12px;*/
 }
 .flex {
 	display: flex;
@@ -249,6 +216,12 @@ html, body, #container {
 	color: #778990;
 	text-decoration: none;
 }
+.tab-buttons a {
+   margin-right: 5px;
+}
+.tab-buttons a:last-of-type {
+   margin-right: 0;  
+}
 .tab-buttons a:hover, .tab-buttons a.selected {
 	color: #00B7FF;
 	text-decoration: underline;
@@ -310,6 +283,12 @@ html, body, #container {
 }
 
 
+/* TAB SETTINGS */
+#settings table td.label { white-space: nowrap; }
+#settings table td.value { width: 100%; }
+
+
+
 /* LOGIN FORM */
 .login-form img {
 	padding: 3em 0;
@@ -362,6 +341,10 @@ html, body, #container {
 	min-width: 200px; 
 	padding: 0 0.5rem; 
 }
+#games-lobby .new-game .row input,
+#games-lobby .new-game .row select {
+   width: 300px;
+}
 #game-description {
 	max-width: 400px;
     text-align: center;
@@ -412,7 +395,7 @@ html, body, #container {
 }
 #terminal-container,
 #tester {
-	line-height: 100%;
+	line-height: initial;
 }
 #tester {
 	display: inline-block;
