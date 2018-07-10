@@ -63,7 +63,8 @@ function addMessage(msg, extra_class, shouldNotify) {
 		var $m = $('<div class="message"><span class="time">['+ts+'] </span><span class="user '+classes+'">'+msg.user+'</span>: <span class="msg"></span></div>');
 		$m.find("span.msg").text(msg.message);
 		$("#chatlog .wrapper").append($m);
-		if(shouldNotify) notifyIfNeeded(msg.user, msg.message);
+		if(shouldNotify) 
+			notifyIfNeeded(msg.user, msg.message);
 	}
 	else 
 		$("#chatlog .wrapper").append('<div class="message"><span class="time">['+ts+'] </span><span class="system">' + msg + '</span></div>');

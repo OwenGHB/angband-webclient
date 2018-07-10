@@ -90,14 +90,14 @@ app.get("/db/refresh", function(req, res) {
    res.send("database refreshed");
 });
 
-app.post('/enter', passport.authenticate("local",{failureRedirect: '/forbidden'}), function(req, res) {
-   console.log("user authenticated, redirecting to lobby", req.user);
-   return res.redirect("/lobby");
+app.post('/enter', passport.authenticate("local", {failureRedirect: '/forbidden'}), function(req, res) {
+   console.log("user authenticated, redirecting to play", req.user);
+   return res.redirect("/play");
 });
 
-app.get("/lobby", localdb.isUserLoggedIn, function(req, res) {
-   console.log("rendering lobby");
-   return res.render("jade/lobby/lobby.pug", {user: req.user});
+app.get("/play", localdb.isUserLoggedIn, function(req, res) {
+   console.log("rendering play");
+   return res.render("jade/play/play.pug", {user: req.user});
 });
 
 app.get('/logout', function(req, res) {
@@ -109,7 +109,7 @@ app.get('/logout', function(req, res) {
 });
 
 app.get("/forbidden", function(req, res) {
-  return res.send("invalid username/password pair");
+  return res.render("error.pug");
 });
 
 

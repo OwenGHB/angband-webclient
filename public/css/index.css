@@ -60,11 +60,26 @@ section .title {
 }
 section .content { background-color: #171717 }
 section .content a { color: coral; text-decoration: none; }
-section .content b, section .content strong
+section .content b, 
+section .content strong
    { color: white; font-weight: 400; }
 section .content p:not(:last-of-type) { margin-bottom: 0.5rem; }
-section .footer { background-color: #212121; text-align: right; color: #5e5e5e; padding-top: 2px; padding-bottom: 2px; }
+section .footer { 
+   background-color: #212121; 
+   text-align: right; 
+   color: #5e5e5e; 
+   padding-top: 2px; 
+   padding-bottom: 2px; 
+}
 section .footer span { color: coral; }
+section .content ul {
+   margin: 0.5rem 0;
+   padding-left: 2rem;
+}
+section .content ul li {
+   list-style-type: square;
+}
+
 
 #grid {
    min-height: 100%;

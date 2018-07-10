@@ -90,18 +90,24 @@ module.exports.isUserLoggedIn = function(req, res, next) {
 };
 
 
+
+// ============================================================================
 // CHAT RELATED FUNCTIONS
+// ============================================================================
+
+// add new message
 module.exports.pushMessage = function(user, message) {
 
    // check and trim if there are too many messages already
    var messages = db.chat.get("data").orderBy("timestamp", "asc").value();
    if(messages.length > config.chat_max_messages) {
+      console.log("localdb: chat is too big, trimming messages");
       db.chat
          .set("data", messages.slice(config.chat_max_messages - 10, messages.length))
          .write();
    }
 
-   // get last N messages
+   // add new message
    return db.chat
       .get("data")
       .push({
@@ -113,6 +119,8 @@ module.exports.pushMessage = function(user, message) {
       .write();
 }
 
+
+// gets last N messages
 module.exports.readMessages = function(limit) {
    return db.chat.get("data")
       .orderBy("timestamp", "desc")
@@ -172,10 +180,25 @@ function findUserByName(name) {
  *       "no match" when username/password pair had no match in db or password was incorrect
  * */
 function authenticate(username, password, callback) {
+
+
+   // find user
    var user = db.users.get("data").find({name: username}).value();
    
    // user does not exist, create one
    if(!user) {
+      // abort if username is too short
+      if(username.length < 3)
+         return callback(null, null, "bad username/password");
+      
+      // username should have only english a-zA-Z0-9 characters
+      if(!new RegExp(/^[a-zA-Z0-9]*$/).test(username))
+         return callback(null, null, "bad username/password");
+
+      // abort if password is too short
+      if(password.length < 8)
+         return callback(null, null, "bad username/password");
+
       bcrypt.hash(password, SALT_ROUNDS, function(error, hashed_password) {
          if(error)
             return callback(error, null);

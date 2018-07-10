@@ -17,6 +17,7 @@
     "express-session": "^1.15.6",
     "express-ws": "^3.0.0",
     "fs-extra": "^3.0.1",
+    "jstransformer-markdown-it": "^2.1.0",
     "lowdb": "^1.0.0",
     "mongoose": "^4.9.7",
     "mongoose-integer": "^0.1.1",
