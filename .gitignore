@@ -54,3 +54,5 @@ sync.sh
 todo.md
 _ggg
 home
+package-lock.json
+yarn.lock
