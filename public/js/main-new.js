@@ -475,10 +475,14 @@ function initGameList(games) {
 
 function calculateIdealTerminalDimensions() {
 	var desired_font_size = $("#games-font-size").val();
+	var desired_font_family = $("#extra-fonts").val();
+
 	// apply desired font size to tester and get its new dimensions
 	$("#tester").css("display", "initial");
 	$("#tester").css("visibility", "hidden");
 	$("#tester").css("font-size", desired_font_size);
+	$("#tester").css("font-family", desired_font_family);
+	
 	var tester_width = $("#tester").width();
 	var tester_height = $("#tester").height();
 	
@@ -487,6 +491,7 @@ function calculateIdealTerminalDimensions() {
 
 	// apply selected font settings to terminal pane
 	$("#terminal-container").css("font-size", desired_font_size);
+	$("#terminal-container").css("font-family", desired_font_family);
 	$("#terminal-container").css("line-height", "initial");
 
 	// calculate how many testers can we fit into pane-main
