@@ -111,8 +111,8 @@ module.exports.pushMessage = function(user, message) {
    return db.chat
       .get("data")
       .push({
-         user      : user.name,
-         extra     : user.roles,
+         user      : typeof user === "string" ? user : user.name,
+         extra     : typeof user === "string" ? []   : user.roles,
          message   : message,
          timestamp : + new Date()
       })

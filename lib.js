@@ -444,6 +444,10 @@ lib.welcome = function(user,ws) {
 		// The WebSocket is not open, ignore
 	}
 	
+
+	// push arrival event to chat database
+	localdb.pushMessage("--system--", `${user.name} has joined the chat`);
+
 	//announce their arrival
 	for (var i in metasockets){
 		try {
@@ -452,7 +456,7 @@ lib.welcome = function(user,ws) {
 			}));
 			if(i !== user.name) {
 				metasockets[i].send(JSON.stringify({
-					eventtype: 'systemannounce', content: `${user.name} has joined chat`
+					eventtype: 'systemannounce', content: `${user.name} has joined the chat`
 				}));
 			}
 		} 
@@ -482,13 +486,17 @@ lib.welcome = function(user,ws) {
 			}
 		}
 		delete metasockets[user.name];
+
+		// push departure event to chat database
+		localdb.pushMessage("--system--", `${user.name} has left the chat`);
+
 		//announce the departure
 		for (var i in metasockets){
 			try {
 				metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
 				if(i !== user.name) {
 					metasockets[i].send(JSON.stringify({
-						eventtype: 'systemannounce', content: `${user.name} has left chat`
+						eventtype: 'systemannounce', content: `${user.name} has left the chat`
 					}));
 				}
 			} 
