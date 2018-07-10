@@ -52,12 +52,13 @@ function populateChat(messages) {
     initComplete = true;
 }
 
+
 function addMessage(msg, extra_class, shouldNotify) {
 	var $msg = $(msg);
 	var classes = [];
 	var ts = moment(msg.timestamp).format("HH:mm");
 	if(msg.extra) 
-		classes = msg.extra.join(" ");
+		classes = msg.extra.join(" ") + " " + msg.user;
 	if(!extra_class) {
 		var $m = $('<div class="message"><span class="time">['+ts+'] </span><span class="user '+classes+'">'+msg.user+'</span>: <span class="msg"></span></div>');
 		$m.find("span.msg").text(msg.message);
@@ -68,10 +69,12 @@ function addMessage(msg, extra_class, shouldNotify) {
 		$("#chatlog .wrapper").append('<div class="message"><span class="time">['+ts+'] </span><span class="system">' + msg + '</span></div>');
 }
 
+
 function notifyIfNeeded(user, message) {
 	if(message.indexOf("@" + user) !== -1)
 		notify_sound.play();
 }
+
 
 function updateUserCount(users) { 
 	$("#peoplelist .info").html("<p>there " + (users.length>1?"are":"is") + " <b>" + users.length + "</b> user" + (users.length>1?"s":"") + " online");
@@ -80,6 +83,8 @@ function updateUserCount(users) {
 		$("#peoplelist .people").append("<div> - " + users[i] + "</div>");
 	user_list = users;
 }
+
+
 function listMatches(matches) {
 	$("#watchmenu ul").html("");
 	var players = Object.keys(matches);
@@ -101,6 +106,8 @@ function listMatches(matches) {
 		$("#watchmenu ul").append('<li>there are no live games right now</li>');
 	}
 }
+
+
 function listFiles(files) {
 	var $tab = $("#tab-files .wrapper");
 	var user = files.username;
@@ -124,10 +131,13 @@ function listFiles(files) {
 	
 }
 
+
 function showMenu(){
 	$("#terminal-pane").addClass("hidden");
 	$("#games-lobby").removeClass("hidden");
 }
+
+
 function showTab(id, el) {
 	const tabs = $(".tab-panels").children().map(function(i,e){return e.id;});
 	$(".tab-panels div.tab").addClass("hidden");
@@ -135,6 +145,7 @@ function showTab(id, el) {
 	$(".tab-buttons a").removeClass("selected");
 	$(el).addClass("selected");
 }
+
 
 function createTerminal(dimensions) {
 	return new Terminal({
@@ -146,6 +157,8 @@ function createTerminal(dimensions) {
 		applicationCursor: true
 	});
 }
+
+
 function applyTerminal(mode, qualifier, panels, walls, d) {
 	console.log(`applying terminal: mode=${mode}, qualifier=${qualifier}, panels=${panels}, walls=${walls}, dimensions=${d.rows}x${d.cols}`);
 	$terminal = $("#terminal-container");
@@ -189,9 +202,6 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 		spyglass[qualifier].open($terminal.get(0));
 	}
 	
-	// resize terminal container to fit remaining space nicely
-	// adjustTerminalFontSize(); // this should be before we launch this function
-	
 	// hide lobby and unhide terminal
 	$("#games-lobby").addClass("hidden");
 	$("#terminal-pane").removeClass("hidden");
@@ -230,6 +240,8 @@ function cleanSpyGlass(matches){
 		}
 	}
 }
+
+
 function closeGame(){
 	$("#navigation ul").html("");
 	$("#navigation ul").append(function() {
@@ -255,6 +267,7 @@ function closeGame(){
 	$("#games-lobby").removeClass("hidden");
 	playing=false;
 }
+
 
 function adjustTerminalFontSize() {
 	// $("#terminal-container").css("font-size", 6);
@@ -305,6 +318,7 @@ function adjustTerminalFontSize() {
 	// $("#terminal-container").css("font-size", selected_size + "px");
 
 }
+
 
 function initChat() {
 	socket = new WebSocket(socketURL);
@@ -426,6 +440,7 @@ function initChat() {
 	});
 }
 
+
 function initGameList(games) {
 	// populate select
 	for(var i=0; i<games.length; i++) {
@@ -452,6 +467,7 @@ function initGameList(games) {
 	});
 }
 
+
 function calculateIdealTerminalDimensions() {
 	var desired_font_size = $("#games-font-size").val();
 	// apply desired font size to tester and get its new dimensions
@@ -477,7 +493,10 @@ function calculateIdealTerminalDimensions() {
 	$("#tester").css("display", "none");
 
 
-	return {rows: _height, cols: _width};
+	return {
+		rows: _height - 1, 
+		cols: _width - 1
+	};
 }
 
 

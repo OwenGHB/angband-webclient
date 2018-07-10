@@ -53,6 +53,8 @@ lib.respond = function(user, msg) {
 		}
 	}
 }
+
+
 function chat(user, message){
 	var response = JSON.stringify({ 
 		eventtype: "chat",
@@ -81,6 +83,8 @@ function chat(user, message){
 		metasockets[user.name].send(response);
 	}
 }
+
+
 //some get functions
 function getmatchlist(matches) {
 	var livematches = {};
@@ -98,35 +102,41 @@ function getmatchlist(matches) {
 	}
 	return livematches;
 }
+
+
 //check player alive status for recording purposes
 function isalive(user,game){
 	var alive = true;
 	var charinfo = getcharinfo(user,game);
-	if (charinfo.isAlive=="0"||charinfo.isDead=="1"){
+	if (charinfo.isAlive == "0" || charinfo.isDead == "1") {
 		alive = false;
 	}
 	return alive;
 }
-function getcharinfo(user,game){
+
+
+function getcharinfo(user, game) {
 	var dirpath = home+'/user/'+user+'/'+game;
 	fs.ensureDirSync(dirpath);
 	var files=fs.readdirSync(dirpath);
 	var charinfo = {};
 	if (files.includes('CharOutput.txt')){
 		var json=fs.readFileSync(dirpath+'/CharOutput.txt','utf8');
-		json=json.replace(/\n/gm,"\n\"");
-		json=json.replace(/:/gm,'":');
-		json=json.replace(/"{/gm,'{');
-		json=json.replace(/"}/gm,'}');
+		json = json.replace(/\n/gm,"\n\"");
+		json = json.replace(/:/gm,'":');
+		json = json.replace(/"{/gm,'{');
+		json = json.replace(/"}/gm,'}');
 		try {
 			charinfo=JSON.parse(json);
-		} catch (ex) {
-
+		} 
+		catch (ex) {
 		}
 	}
 	return charinfo;
 }
-function getfilelist(name){
+
+
+function getfilelist(name) {
 	var files = {};
 	var users = fs.readdirSync(home+'/user/');
 	if (users.includes(name)){
@@ -148,7 +158,9 @@ function getfilelist(name){
 	}
 	return files;
 }
-function getgamelist(){
+
+
+function getgamelist() {
 	var gamelist = [];
 	for (var i in games){
 		gamelist.push({name:games[i].name,longname:games[i].longname,desc:games[i].desc});
@@ -167,7 +179,9 @@ function getgamelist(){
 	});
 	return gamelist;
 }
-function getgameinfo(game){
+
+
+function getgameinfo(game) {
 	var info = {};
 	for (var i in games){
 		if (games[i].name==game) {
@@ -178,7 +192,9 @@ function getgameinfo(game){
 	}
 	return info;
 }
-function newgame(user,msg){
+
+
+function newgame(user,msg) {
 	var game = msg.game;
 	var gameinfo = getgameinfo(game);
 	var panels = msg.panels;
@@ -202,19 +218,22 @@ function newgame(user,msg){
 	if (game=='umoria'){
 		args.push(home+'/games/'+game+'/'+user.name);
 	} else {
-		if (game=='competition'){
+		if (game == 'competition') {
 			args.push('-u'+compnumber+'-'+user.name);
-		} else {
+		} 
+		else {
 			args.push('-u'+user.name);
 		}
-		if (game=='competition'){
+		if (game == 'competition') {
 			args.push('-duser='+home+'/user/'+user.name+'/'+compgame);
-		} else if (gameinfo.restrict_paths){
+		} 
+		else if (gameinfo.restrict_paths){
 			args.push('-d'+home+'/user/'+user.name+'/'+game);
-		} else {
+		} 
+		else {
 			args.push('-duser='+home+'/user/'+user.name+'/'+game);
 		}
-		for (var i in gameinfo.args){
+		for (var i in gameinfo.args) {
 			args.push('-'+gameinfo.args[i]);
 		}
 		args.push('-mgcu');
@@ -328,6 +347,8 @@ function newgame(user,msg){
 		scrollBottom: dimensions.rows
 	});*/
 }
+
+
 function closegame(player){
 	if (typeof(matches[player])!='undefined'){
 		//kill the process if it hasn't already
@@ -345,7 +366,7 @@ function closegame(player){
 			}
 			var process = resultList[ 0 ];
 			if( process ){
-				setTimeout(function(){
+				setTimeout(function() {
 					try {
 						ps.kill( gamepid, function( err ) {
 							if (err) 
@@ -373,7 +394,7 @@ function closegame(player){
 			catch (ex) {
 				// The WebSocket is not open, ignore
 			}
-			for (var i in metasockets){
+			for (var i in metasockets) {
 				try {
 					metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
 				} 
@@ -384,10 +405,12 @@ function closegame(player){
 		});
 	}
 }
-function subscribe(user,message){
+
+
+function subscribe(user,message) {
 	var player = message.player;
 	var spectator = user.name;
-	if (typeof(matches[player])!='undefined' && typeof(matches[player].term)!='undefined' && typeof(user.name)!='undefined') {
+	if (typeof(matches[player]) != 'undefined' && typeof(matches[player].term) != 'undefined' && typeof(user.name) != 'undefined') {
 		if(metasockets[player]) {
 			metasockets[player].send(JSON.stringify({eventtype: 'systemannounce', content: spectator + " is now watching"}));
 			matches[player].spectators.push(spectator);
@@ -399,6 +422,12 @@ function subscribe(user,message){
 		} */
 	}
 }
+
+
+
+// ===================================================================
+// EXPORTED FUNCTIONS
+// ===================================================================
 lib.welcome = function(user,ws) {
 	metasockets[user.name] = ws;
 	var player = user.name;
@@ -410,7 +439,8 @@ lib.welcome = function(user,ws) {
 		metasockets[user.name].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
 		metasockets[user.name].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.name)}));
 		metasockets[user.name].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
-	} catch (ex) {
+	} 
+	catch (ex) {
 		// The WebSocket is not open, ignore
 	}
 	
@@ -468,7 +498,9 @@ lib.welcome = function(user,ws) {
 		}
 	});
 }
-lib.keepalive=function(){
+
+
+lib.keepalive = function(){
 	var matchlist=getmatchlist(matches);
 	for (var i in matches) {
 		if (matches[i].idle) {

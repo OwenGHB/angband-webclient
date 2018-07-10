@@ -22,7 +22,7 @@ if(!process.env.SESSION_SECRET) {
 
 
 
-
+console.log(process.env);
 
 // =============================================================================
 //  S E R V E R   C O N F I G U R A T I O N
@@ -80,10 +80,10 @@ app.get('/', function(req, res) {
    var news = localdb.getNews();
    var stats = awc.stats();
 	res.render('jade/frontpage/frontpage.pug', {
-	   user: req.user ? req.user.name : null, 
-	   news: news,
-      games: stats.games,
-      players: stats.players
+      user    : req.user ? req.user.name : null, 
+      news    : news,
+      games   : stats.games,
+      players : stats.players
 	});
 });
 
