@@ -173,9 +173,9 @@ app.use(function(req, res, next) {
 // =============================================================================
 //  S E R V E R   L A U N C H
 // =============================================================================
-var IP   = process.env.C9_IP   || process.env.IP   || "127.0.0.1";
+var IP   = process.env.C9_IP   || process.env.IP   || "localhost";
 var PORT = process.env.C9_PORT || process.env.PORT || 3000;
-var server = app.listen(PORT, IP, function() {
+var server = app.listen(PORT, function() {
   console.log(`angband.live is is up and running at ${IP} port ${PORT}`);
 });
 

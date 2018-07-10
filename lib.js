@@ -15,7 +15,7 @@ var matches     = {};
 var metasockets = {};
 
 
-var home        = process.env.CUSTOM_HOME || '/home/angbandlive';
+var home        = process.env.CUSTOM_HOME || '/home/angband';
 var localdb     = require("./localdb");
 
 
@@ -108,7 +108,7 @@ function isalive(user,game){
 	return alive;
 }
 function getcharinfo(user,game){
-	var dirpath = home+'/public/user/'+user+'/'+game;
+	var dirpath = home+'/user/'+user+'/'+game;
 	fs.ensureDirSync(dirpath);
 	var files=fs.readdirSync(dirpath);
 	var charinfo = {};
@@ -128,9 +128,9 @@ function getcharinfo(user,game){
 }
 function getfilelist(name){
 	var files = {};
-	var users = fs.readdirSync(home+'/public/user/');
+	var users = fs.readdirSync(home+'/user/');
 	if (users.includes(name)){
-		var path = home+'/public/user/'+name+'/';
+		var path = home+'/user/'+name+'/';
 		fs.ensureDirSync(path);
 		var ls = fs.readdirSync(path);
 		for (var i in games){
@@ -185,8 +185,8 @@ function newgame(user,msg){
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.name;
-	var compgame = 'oangband';
-	var compnumber = '215';
+	var compgame = 'silq';
+	var compnumber = '217';
 	var panelargs = ['-b'];
 	if(panels > 1) {
 		if (game == 'poschengband' || game == 'elliposchengband' || game == 'composband') {
@@ -196,11 +196,11 @@ function newgame(user,msg){
 			panelargs = ['-n'+panels];
 		}
 	}
-	var path = home+'/games/'+game;
+	var path = home+'/games/'+game+'/'+game;
 	var args = [];
 	var terminfo='xterm-256color';
 	if (game=='umoria'){
-		args.push(home+'/var/games/'+game+'/'+user.name);
+		args.push(home+'/games/'+game+'/'+user.name);
 	} else {
 		if (game=='competition'){
 			args.push('-u'+compnumber+'-'+user.name);
@@ -208,14 +208,11 @@ function newgame(user,msg){
 			args.push('-u'+user.name);
 		}
 		if (game=='competition'){
-			args.push('-duser='+home+'/public/user/'+user.name+'/'+compgame);
+			args.push('-duser='+home+'/user/'+user.name+'/'+compgame);
 		} else if (gameinfo.restrict_paths){
-			args.push('-d'+home+'/public/user/'+user.name+'/'+game);
+			args.push('-d'+home+'/user/'+user.name+'/'+game);
 		} else {
-			args.push('-duser='+home+'/public/user/'+user.name+'/'+game);
-		}
-		for (var i in gameinfo.data_paths){
-			args.push('-d'+gameinfo.data_paths[i]+'='+home+'/var/games/'+game+'/'+gameinfo.data_paths[i]);
+			args.push('-duser='+home+'/user/'+user.name+'/'+game);
 		}
 		for (var i in gameinfo.args){
 			args.push('-'+gameinfo.args[i]);
@@ -232,11 +229,11 @@ function newgame(user,msg){
 	if (game == 'competition') {
 		var newattempt = true;
 		var newtty = false;
-		var savegames = fs.readdirSync(home+'/etc/'+compgame+'/save');
+		var savegames = fs.readdirSync(home+'/'+compgame+'/lib/save/');
 		if (savegames.includes('1002.'+compnumber+''+user.name)){
 			newattempt = !isalive(user.name,compgame);
 		}
-		fs.ensureDirSync(home+'/public/user/'+user.name);
+		fs.ensureDirSync(home+'/user/'+user.name);
 		var ttydir = fs.readdirSync(home+'/ttyrec');
 		var ttyfile = home+'/ttyrec/'+compnumber+'-'+user.name+'.ttyrec';
 		if (ttydir.includes(ttyfile)){
@@ -254,7 +251,7 @@ function newgame(user,msg){
 				args.unshift('-a');
 		} 
 		else {
-			fs.copySync(home+'/etc/'+compgame+'/save/1002.'+compnumber, home+'/etc/'+compgame+'/save/1002.'+compnumber+''+user.name);
+			fs.copySync(home+'/games/'+compgame+'/lib/save/1002.'+compnumber, home+'/games/'+compgame+'/lib/save/1002.'+compnumber+''+user.name);
 		}
 	}
 	termdesc = {
