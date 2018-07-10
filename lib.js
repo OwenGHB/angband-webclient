@@ -446,7 +446,7 @@ lib.welcome = function(user,ws) {
 	
 
 	// push arrival event to chat database
-	localdb.pushMessage("--system--", `${user.name} has joined the chat`);
+	// localdb.pushMessage("--system--", `${user.name} has joined the chat`);
 
 	//announce their arrival
 	for (var i in metasockets){
@@ -488,7 +488,7 @@ lib.welcome = function(user,ws) {
 		delete metasockets[user.name];
 
 		// push departure event to chat database
-		localdb.pushMessage("--system--", `${user.name} has left the chat`);
+		// localdb.pushMessage("--system--", `${user.name} has left the chat`);
 
 		//announce the departure
 		for (var i in metasockets){
