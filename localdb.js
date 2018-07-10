@@ -19,7 +19,9 @@ var DEFAULT_ROLES = ["basic"];
    users: [{
       name          : string,
       password_hash : string,
-      role          : [string]
+      role          : [string],
+      registered    : datetime,
+      last_visited  : datetime,
    }]
 
    news: [{
@@ -146,6 +148,7 @@ function getNews() {
 module.exports.getNews = getNews;
 
 
+
 // state update
 module.exports.refresh = function() {
    db.games.read();
@@ -154,6 +157,37 @@ module.exports.refresh = function() {
    // db.sessions.read();
 };
 
+
+
+// update last_connected for user
+function updateLastConnected(name) {
+   var now = + new Date();
+   
+   db.users
+      .get("data")
+      .find({name: name})
+      .assign({last_connected: now})
+      .write();
+
+   return now;
+}
+module.exports.updateLastConnected = updateLastConnected;
+
+
+
+// update last_disconnected for user
+function updateLastDisconnected(name) {
+   var now = + new Date();
+   
+   db.users
+      .get("data")
+      .find({name: name})
+      .assign({last_disconnected: now})
+      .write();
+
+   return now;
+}
+module.exports.updateLastDisconnected = updateLastDisconnected;
 
 
 
@@ -178,9 +212,11 @@ function findUserByName(name) {
  *       "new" when username was not found in db and new user was created
  *       "ok" when username and password matched ones in db
  *       "no match" when username/password pair had no match in db or password was incorrect
+ *       "bad username/password" when username/password check failed
  * */
 function authenticate(username, password, callback) {
 
+   console.log("authenticating user", username);
 
    // find user
    var user = db.users.get("data").find({name: username}).value();
@@ -204,9 +240,11 @@ function authenticate(username, password, callback) {
             return callback(error, null);
             
          var new_user = {
-            name          : username,
-            password_hash : hashed_password,
-            roles         : DEFAULT_ROLES
+            name           : username,
+            password_hash  : hashed_password,
+            roles          : DEFAULT_ROLES,
+            registered     : + new Date(),
+            last_connected : + new Date()
          };
          db.users.get("data").push(new_user).write();
          callback(null, new_user, "new");
@@ -218,8 +256,12 @@ function authenticate(username, password, callback) {
       bcrypt.compare(password, user.password_hash, function(error, they_match) {
          if(error)
             return callback(error, null);
-         if(they_match)
+         if(they_match) {
+            // update last_visited in database
+            var now = updateLastConnected(username);
+            user.last_connected = now;
             return callback(null, user, "ok");
+         }
          else
             return callback(null, null, "wrong password");
       });

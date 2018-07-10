@@ -1,5 +1,6 @@
 // var pty         = require('pty.js');
 var pty         = require('node-pty');
+var moment      = require('moment');
 var ps          = require('ps-node');
 var fs          = require('fs-extra');
 var games       = require('./games.js');
@@ -446,7 +447,12 @@ lib.welcome = function(user,ws) {
 	
 
 	// push arrival event to chat database
-	// localdb.pushMessage("--system--", `${user.name} has joined the chat`);
+	var diff = moment().diff(user.last_connected, "seconds");
+	if(!user.last_connected || diff > 30) {
+		localdb.pushMessage("--system--", `${user.name} has joined the chat`);
+		var last_connected = localdb.updateLastConnected(user.name);
+		user.last_connected = last_connected;
+	}
 
 	//announce their arrival
 	for (var i in metasockets){
@@ -488,10 +494,15 @@ lib.welcome = function(user,ws) {
 		delete metasockets[user.name];
 
 		// push departure event to chat database
-		// localdb.pushMessage("--system--", `${user.name} has left the chat`);
+		var diff = moment().diff(user.last_disconnected, "seconds");
+		if(!user.last_disconnected || diff > 30) {
+			localdb.pushMessage("--system--", `${user.name} has left the chat`);
+			var last_disconnected = localdb.updateLastDisconnected(user.name);
+			user.last_disconnected = last_disconnected;
+		}
 
 		//announce the departure
-		for (var i in metasockets){
+		for (var i in metasockets) {
 			try {
 				metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
 				if(i !== user.name) {
