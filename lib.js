@@ -88,6 +88,7 @@ function chat(user, message){
 
 //some get functions
 function getmatchlist(matches) {
+	console.log("getMatchList: matches", matches);
 	var livematches = {};
 	for (var i in matches) {
 		var charinfo = getcharinfo(i, matches[i].game);
@@ -195,7 +196,7 @@ function getgameinfo(game) {
 }
 
 
-function newgame(user,msg) {
+function newgame(user, msg) {
 	var game = msg.game;
 	var gameinfo = getgameinfo(game);
 	var panels = msg.panels;
@@ -205,6 +206,7 @@ function newgame(user,msg) {
 	var compgame = 'silq';
 	var compnumber = '217';
 	var panelargs = ['-b'];
+	console.log(`starting new game: user=${user.name} dimensions=${dimensions.cols}x${dimensions.rows}`);
 	if(panels > 1) {
 		if (game == 'poschengband' || game == 'elliposchengband' || game == 'composband') {
 			panelargs = ['-right','40x*','-bottom','*x8'];
@@ -213,12 +215,13 @@ function newgame(user,msg) {
 			panelargs = ['-n'+panels];
 		}
 	}
-	var path = home+'/games/'+game+'/'+game;
+	var path = home + '/games/' + game + '/' + game;
 	var args = [];
-	var terminfo='xterm-256color';
-	if (game=='umoria'){
-		args.push(home+'/games/'+game+'/'+user.name);
-	} else {
+	var terminfo = 'xterm-256color';
+	if(game == 'umoria') {
+		args.push(home + '/games/' + game + '/' + user.name);
+	} 
+	else {
 		if (game == 'competition') {
 			args.push('-u'+compnumber+'-'+user.name);
 		} 
@@ -279,15 +282,17 @@ function newgame(user,msg) {
 		args     : args,
 		terminfo : terminfo
 	};
-	console.log(args);
+	console.log("current args for the game are:", args);
 	try {
-		var term = pty.fork(termdesc.path,termdesc.args, {
+		var term_opts = {
 			name              : termdesc.terminfo,
 			cols              : parseInt(dimensions.cols),
 			rows              : parseInt(dimensions.rows),
 			cwd               : process.env.HOME,
 			applicationCursor : true
-		});
+		};
+		console.log("forking pty with opts", term_opts);
+		var term = pty.fork(termdesc.path,termdesc.args, term_opts);
 		term.on('data', function(data) {
 			try {
 				metasockets[player].send(JSON.stringify({eventtype: 'owngameoutput', content: data}));

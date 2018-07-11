@@ -194,7 +194,7 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 		spyglass['default'].open($terminal.get(0));
 	}
 	else if(mode === "spectate") {
-		if (typeof(spyglass[qualifier])=='undefined') {
+		if (typeof(spyglass[qualifier]) == 'undefined') {
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + '</a></li>').click(function() {
 					applyTerminal("spectate", qualifier, panels, walls, d);

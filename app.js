@@ -32,7 +32,7 @@ setInterval(function() { awc.keepalive(); }, 10000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -53,7 +53,7 @@ app.use(session({
 ));
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('/home/angbandlive/public/user'));
+app.use(express.static('/home/angband/user'));
 
 // configure passport middleware
 app.use(passport.initialize());
