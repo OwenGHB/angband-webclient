@@ -488,7 +488,7 @@ function adjustFontSizeForSpectation(remote_game_dimensions) {
 
 	// find font size that will fit remote terminal to your game pane
 	var found = false, checked_font_index = 0;
-	$("#tester").css("font-family", desired_font_family);
+	$("#tester").css("font-family", selected_font_family);
 	$("#tester").css("display", "initial");
 	$("#tester").css("visibility", "hidden");
 	for(var i = 0; i < font_sizes.length && !found; i++) {
