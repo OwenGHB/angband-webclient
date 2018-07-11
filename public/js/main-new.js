@@ -99,7 +99,7 @@ function listMatches(matches) {
 			$("#watchmenu ul").append(function(i) {
 				var outputstring = '<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>';
 				if (typeof(matches[players[i]].cLvl)!='undefined'){
-					outputstring+=' as a <span>Level '+matches[players[i]].cLvl+' '+matches[players[i]].race+' '+matches[players[i]].class+'</span>'+idle+'</li>';
+					outputstring += ' as a <span>Level '+matches[players[i]].cLvl+' '+matches[players[i]].race+' '+matches[players[i]].class+'</span>'+idle+'</li>';
 				}
 			    return $(outputstring).click(function() {
 			        applyTerminal("spectate", players[i], 1, "no", matches[players[i]].dimensions);
@@ -201,8 +201,13 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 				});
 			});
 			spyglass[qualifier] = createTerminal(d);
-			socket.send(JSON.stringify({eventtype:'subscribe', content:{player:qualifier}}));
+			socket.send(JSON.stringify({eventtype:'subscribe', content: {player: qualifier}}));
 		}
+
+		// alter font-size to fit player's row/cols to your screen
+		adjustFontSizeForSpectation(d);
+		
+
 		$terminal.html("");
 		spyglass[qualifier].open($terminal.get(0));
 	}
@@ -275,6 +280,7 @@ function closeGame(){
 
 
 function adjustTerminalFontSize() {
+	console.warn("adjustTerminalFontSize is deprecated!");
 	// $("#terminal-container").css("font-size", 6);
 	// var window_height = $(window).innerHeight();
 	// var window_width = $(window).innerWidth();
@@ -470,6 +476,44 @@ function initGameList(games) {
 		var walls = false;
 		applyTerminal("play", gamename, panels, walls, calculateIdealTerminalDimensions());
 	});
+}
+
+
+function adjustFontSizeForSpectation(remote_game_dimensions) {
+	console.log("calculating adjusted font size to fit remote terminal with dimensions", remote_game_dimensions);
+	var selected_font_family = $("#games-font-size").val();
+	
+	var my_pane_height = $(".pane-main").height() - 2 * parseInt(desired_font_size, 10);
+	var my_pane_width  = $(".pane-main").width()  - parseInt(desired_font_size, 10);
+
+	// find font size that will fit remote terminal to your game pane
+	var found = false, checked_font_index = 0;
+	$("#tester").css("font-family", desired_font_family);
+	$("#tester").css("display", "initial");
+	$("#tester").css("visibility", "hidden");
+	for(var i = 0; i < font_sizes.length && !found; i++) {
+		// set new font size to tester
+		$("#tester").css("font-size", font_sizes[i]);
+
+		// get tester new size
+		var tester_width = $("#tester").width();
+		var tester_height = $("#tester").height();
+
+		// calculate my term size using current font size
+		var resulting_rows = tester_height * remote_game_dimensions.rows;
+		var resulting_cols = tester_width  * remote_game_dimensions.cols;
+
+		// check how it fits, exit loop if it is bigger
+		if(resulting_rows > my_pane_height || resulting_cols > my_pane_width)
+			found = true;
+
+		checked_font_index = i;
+	}
+
+	// apply selected font settings to terminal pane
+	$("#terminal-container").css("font-size", font_sizes[checked_font_index - 1]);
+	$("#terminal-container").css("font-family", selected_font_family);
+	$("#terminal-container").css("line-height", "initial");
 }
 
 
