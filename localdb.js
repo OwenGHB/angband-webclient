@@ -229,7 +229,7 @@ function authenticate(username, password, callback) {
          return callback(null, null, "bad username/password");
       
       // username should have only english a-zA-Z0-9 characters
-      if(!new RegExp(/^[a-zA-Z0-9]*$/).test(username))
+      if(!new RegExp(/^[a-zA-Z0-9_]*$/).test(username))
          return callback(null, null, "bad username/password");
 
       // abort if password is too short
