@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"font",
+				"font_sizes"
+			],
+			[
+				"remote",
+				"remote_game_dimensions"
+			],
+			[
+				"extra",
+				"extra-fonts"
+			],
+			[
+				"las",
+				"last_connected"
+			],
+			[
+				"update",
+				"updateLastVisited"
+			],
+			[
+				"last",
+				"last_visited"
+			],
+			[
+				"ali",
+				"align-items"
+			],
+			[
+				"list-sty",
+				"list-style-type\tproperty"
+			],
+			[
 				"ma",
 				"matches"
 			],
@@ -74,10 +106,6 @@
 			[
 				"grid",
 				"grid-area\tproperty"
-			],
-			[
-				"font",
-				"font-weight"
 			],
 			[
 				"fon",
@@ -280,19 +308,27 @@
 	"buffers":
 	[
 		{
-			"file": "app.js",
+			"file": "db/news.json",
 			"settings":
 			{
-				"buffer_size": 5856,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"buffer_size": 1102,
+				"line_ending": "Unix"
 			}
 		},
 		{
 			"file": "lib.js",
 			"settings":
 			{
-				"buffer_size": 13150,
+				"buffer_size": 14253,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app.js",
+			"settings":
+			{
+				"buffer_size": 5835,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -301,70 +337,16 @@
 			"file": "localdb.js",
 			"settings":
 			{
-				"buffer_size": 4969,
+				"buffer_size": 6801,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "config.js",
-			"settings":
-			{
-				"buffer_size": 192,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
 			}
 		},
 		{
 			"file": "db/users.json",
 			"settings":
 			{
-				"buffer_size": 515,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "views/jade/lobby/lobby.pug",
-			"settings":
-			{
-				"buffer_size": 2501,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "views/jade/frontpage/block_donate.pug",
-			"settings":
-			{
-				"buffer_size": 1703,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "views/jade/lobby/game_lobby.pug",
-			"settings":
-			{
-				"buffer_size": 1354,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "public/css/style.css",
-			"settings":
-			{
-				"buffer_size": 9101,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "views/jade/lobby/tab_settings.pug",
-			"settings":
-			{
-				"buffer_size": 818,
-				"encoding": "UTF-8",
+				"buffer_size": 771,
 				"line_ending": "Unix"
 			}
 		},
@@ -372,9 +354,18 @@
 			"file": "public/js/main-new.js",
 			"settings":
 			{
-				"buffer_size": 21745,
+				"buffer_size": 23536,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 731,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -456,20 +447,43 @@
 	"expanded_folders":
 	[
 		"/C/Users/vadimamo/dev/angband.live",
-		"/C/Users/vadimamo/dev/angband.live/db"
+		"/C/Users/vadimamo/dev/angband.live/db",
+		"/C/Users/vadimamo/dev/angband.live/public",
+		"/C/Users/vadimamo/dev/angband.live/public/css",
+		"/C/Users/vadimamo/dev/angband.live/public/js",
+		"/C/Users/vadimamo/dev/angband.live/views",
+		"/C/Users/vadimamo/dev/angband.live/views/jade",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage"
 	],
 	"file_history":
 	[
-		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_games.pug",
+		"/C/Users/vadimamo/dev/angband.live/public/js/___play.js",
 		"/C/Users/vadimamo/dev/angband.live/db/chat.json",
-		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/tab_tabletui.pug",
+		"/C/Users/vadimamo/dev/angband.live/db/users.json",
+		"/C/Users/vadimamo/dev/angband.live/package.json",
+		"/C/Users/vadimamo/dev/angband.live/views/error.pug",
+		"/C/Users/vadimamo/dev/angband.live/public/css/index.css",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_news.pug",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_user_login.pug",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_user_welcome.pug",
+		"/C/Users/vadimamo/Desktop/Sprint review w24.md",
+		"/C/Users/vadimamo/dev/angband.live/app.js",
+		"/C/Users/vadimamo/dev/angband.live/lib.js",
+		"/C/Users/vadimamo/dev/angband.live/localdb.js",
+		"/C/Users/vadimamo/dev/angband.live/config.js",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/lobby.pug",
+		"/C/Users/vadimamo/dev/angband.live/public/css/style.css",
+		"/C/Users/vadimamo/dev/angband.live/public/js/main-new.js",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/tab_settings.pug",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/game_lobby.pug",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_donate.pug",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_games.pug",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/tab_tabletui.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/tab_people.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/tab_navigation.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/tab_files.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/tab_chat.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/frontpage.pug",
-		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/game_lobby.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/game_terminal.pug",
 		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/Logbook/New equipment import/2018-07-02/Import SQL.sql",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage.pug",
@@ -479,27 +493,21 @@
 		"/C/Users/vadimamo/dev/angband.live/views/play/tabs/tab_ppl_online.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/play/block_tabs.pug",
 		"/C/Users/vadimamo/dev/angband.live/public/js/play.js",
-		"/C/Users/vadimamo/dev/angband.live/localdb.js",
 		"/C/Users/vadimamo/dev/angband.live/public/css/play.css",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby.pug",
 		"/C/Users/vadimamo/dev/angband.live/public/style.css",
 		"/C/Users/vadimamo/dev/angband.live/views/play/tabs/tab_chat.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/partials/_lobby.ejs",
 		"/C/Users/vadimamo/dev/angband.live/views/___index.ejs",
-		"/C/Users/vadimamo/dev/angband.live/db/users.json",
-		"/C/Users/vadimamo/dev/angband.live/public/css/index.css",
 		"/C/Users/vadimamo/dev/angband.live/public/main-new.js",
-		"/C/Users/vadimamo/dev/angband.live/app.js",
 		"/C/Users/vadimamo/dev/angband.live/views/blocks/block_user_login.pug",
 		"/C/Users/vadimamo/dev/angband.live/db/news.json",
 		"/C/Users/vadimamo/dev/angband.live/views/blocks/block_user_welcome.pug",
-		"/C/Users/vadimamo/dev/angband.live/lib.js",
 		"/C/Users/vadimamo/dev/angband.live/views/blocks/block_footer.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/blocks/block_donate.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/blocks/block_games.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/blocks/block_news.pug",
 		"/C/Users/vadimamo/dev/angband.live/README.md",
-		"/C/Users/vadimamo/dev/angband.live/package.json",
 		"/C/Users/vadimamo/dev/angband.live/db/sessions.json",
 		"/C/Users/vadimamo/dev/angband-webclient/.gitignore",
 		"/C/Users/vadimamo/dev/instat/src/app/Components/DoubleGraph.js",
@@ -576,18 +584,7 @@
 		"/C/Users/vadimamo/dev/instat/src/app/InsaneLogger.js",
 		"/C/Users/vadimamo/dev/instat/src/app/router_universal.js",
 		"/C/Users/vadimamo/dev/instat/.gitignore",
-		"/C/Users/vadimamo/dev/instat/jsons/wm_configs/instat_converter.js",
-		"/C/Users/vadimamo/dev/instat/src/app/config.js",
-		"/C/Users/vadimamo/dev/instat/src/app/Components/HeaderNext.js",
-		"/C/Users/vadimamo/dev/instat/src/styles/_components/OneSmartGraph.scss",
-		"/C/Users/vadimamo/dev/instat/src/styles/modules/meta-block.scss",
-		"/C/Users/vadimamo/dev/instat/src/app/Components/SearchResults/DeviceList.js",
-		"/C/Users/vadimamo/dev/instat/src/styles/_components/HoverGraph.scss",
-		"/C/Users/vadimamo/dev/instat/src/styles/_components/_old_and_unsorted.scss",
-		"/C/Users/vadimamo/dev/instat-backend-nodejs/docker/Nodejs.dockerfile",
-		"//corp.tele2.com/lvoa/Redirected/vadimamo/Documents/_TELE2 STUFF_/snippets.md",
-		"/C/Users/vadimamo/dev/instat-backend-nodejs/src/app/Components/WeatherMaps/WeatherMap.js",
-		"/C/Users/vadimamo/soft/st3/Data/Packages/ESLint/ESLint.sublime-settings"
+		"/C/Users/vadimamo/dev/instat/jsons/wm_configs/instat_converter.js"
 	],
 	"find":
 	{
@@ -606,6 +603,16 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"rows",
+			"font_sizes",
+			"term",
+			"getmatchlist",
+			"calculateIdealTerminalDimensions",
+			"apply",
+			"extra-f",
+			"extra",
+			"last_visited",
+			"lobby",
 			"limit",
 			"lib.",
 			"chatlog",
@@ -678,24 +685,24 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 5,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "app.js",
+					"file": "db/news.json",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5856,
+						"buffer_size": 1102,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2718,
-								2718
+								1102,
+								1102
 							]
 						],
 						"settings":
@@ -709,26 +716,18 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
 								}
 							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
 							"tab_size": 3,
-							"translate_tabs_to_spaces": true
+							"translate_tabs_to_spaces": true,
+							"word_wrap": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 912.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -737,15 +736,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13150,
+						"buffer_size": 14253,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10390,
-								10390
+								1893,
+								1893
 							]
 						],
 						"settings":
@@ -754,14 +753,6 @@
 							[
 								{
 									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
 									"selector": "text.html"
 								},
 								{
@@ -774,27 +765,69 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7581.0,
+						"translation.y": 1201.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "localdb.js",
+					"file": "app.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4969,
+						"buffer_size": 5835,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								153,
-								118
+								1229,
+								1229
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 798.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "localdb.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6801,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6169,
+								6169
 							]
 						],
 						"settings":
@@ -816,39 +849,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3979.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "config.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 192,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								165,
-								183
-							]
-						],
-						"settings":
-						{
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -857,15 +861,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 515,
+						"buffer_size": 771,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								354,
-								354
+								679,
+								679
 							]
 						],
 						"settings":
@@ -889,228 +893,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "views/jade/lobby/lobby.pug",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2501,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1430,
-								1430
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								}
-							],
-							"syntax": "Packages/Pug/Syntaxes/Pug.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "views/jade/frontpage/block_donate.pug",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1703,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1492,
-								1492
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								}
-							],
-							"syntax": "Packages/Pug/Syntaxes/Pug.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 171.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "views/jade/lobby/game_lobby.pug",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1354,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								678,
-								693
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								}
-							],
-							"syntax": "Packages/Pug/Syntaxes/Pug.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "public/css/style.css",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9101,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6948,
-								6948
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								}
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/CSS/CSS.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 7027.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "views/jade/lobby/tab_settings.pug",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 818,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								51,
-								196
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								}
-							],
-							"syntax": "Packages/Pug/Syntaxes/Pug.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
 					"file": "public/js/main-new.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 21745,
+						"buffer_size": 23536,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2002,
-								2002
+								892,
+								892
 							]
 						],
 						"settings":
@@ -1131,10 +931,49 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 518.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": ".gitignore",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 731,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								702,
+								702
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/zzz A File Icon zzz/aliases/Shell Script (Git).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 228.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -1142,7 +981,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 34.0
+		"height": 30.0
 	},
 	"input":
 	{
@@ -1199,7 +1038,7 @@
 	"project": "Angband.live.sublime-project",
 	"replace":
 	{
-		"height": 94.0
+		"height": 56.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1529,12 +1368,16 @@
 	},
 	"select_project":
 	{
-		"height": 0.0,
+		"height": 500.0,
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"",
+				"C:\\Users\\vadimamo\\dev\\_SUBLIME_PROJECTS_\\Instat-prometheus.sublime-project"
+			]
 		],
-		"width": 0.0
+		"width": 380.0
 	},
 	"select_symbol":
 	{

@@ -88,7 +88,6 @@ function chat(user, message){
 
 //some get functions
 function getmatchlist(matches) {
-	console.log("getMatchList: matches", matches);
 	var livematches = {};
 	for (var i in matches) {
 		var charinfo = getcharinfo(i, matches[i].game);
@@ -282,7 +281,6 @@ function newgame(user, msg) {
 		args     : args,
 		terminfo : terminfo
 	};
-	console.log("current args for the game are:", args);
 	try {
 		var term_opts = {
 			name              : termdesc.terminfo,
@@ -291,7 +289,6 @@ function newgame(user, msg) {
 			cwd               : process.env.HOME,
 			applicationCursor : true
 		};
-		console.log("forking pty with opts", term_opts);
 		var term = pty.fork(termdesc.path,termdesc.args, term_opts);
 		term.on('data', function(data) {
 			try {
