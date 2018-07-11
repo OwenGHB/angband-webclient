@@ -452,7 +452,7 @@ lib.welcome = function(user,ws) {
 	// push arrival event to chat database
 	var diff = moment().diff(user.last_connected, "seconds");
 	if(!user.last_connected || diff > 30) {
-		localdb.pushMessage("--system--", `${user.name} has joined the chat`);
+		// localdb.pushMessage("--system--", `${user.name} has joined the chat`);
 		var last_connected = localdb.updateLastConnected(user.name);
 		user.last_connected = last_connected;
 	}
@@ -463,11 +463,11 @@ lib.welcome = function(user,ws) {
 			metasockets[i].send(JSON.stringify({
 				eventtype: 'usercount', content: Object.keys(metasockets)
 			}));
-			if(i !== user.name) {
-				metasockets[i].send(JSON.stringify({
-					eventtype: 'systemannounce', content: `${user.name} has joined the chat`
-				}));
-			}
+			// if(i !== user.name) {
+			// 	metasockets[i].send(JSON.stringify({
+			// 		eventtype: 'systemannounce', content: `${user.name} has joined the chat`
+			// 	}));
+			// }
 		} 
 		catch (ex) {
 			// The WebSocket is not open, ignore
@@ -499,7 +499,7 @@ lib.welcome = function(user,ws) {
 		// push departure event to chat database
 		var diff = moment().diff(user.last_disconnected, "seconds");
 		if(!user.last_disconnected || diff > 30) {
-			localdb.pushMessage("--system--", `${user.name} has left the chat`);
+			// localdb.pushMessage("--system--", `${user.name} has left the chat`);
 			var last_disconnected = localdb.updateLastDisconnected(user.name);
 			user.last_disconnected = last_disconnected;
 		}
@@ -508,11 +508,11 @@ lib.welcome = function(user,ws) {
 		for (var i in metasockets) {
 			try {
 				metasockets[i].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
-				if(i !== user.name) {
-					metasockets[i].send(JSON.stringify({
-						eventtype: 'systemannounce', content: `${user.name} has left the chat`
-					}));
-				}
+				// if(i !== user.name) {
+				// 	metasockets[i].send(JSON.stringify({
+				// 		eventtype: 'systemannounce', content: `${user.name} has left the chat`
+				// 	}));
+				// }
 			} 
 			catch (ex) {
 				// The WebSocket is not open, ignore
