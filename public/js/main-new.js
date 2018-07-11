@@ -481,7 +481,7 @@ function initGameList(games) {
 
 function adjustFontSizeForSpectation(remote_game_dimensions) {
 	console.log("calculating adjusted font size to fit remote terminal with dimensions", remote_game_dimensions);
-	var selected_font_family = $("#games-font-size").val();
+	var selected_font_family = $("#extra-fonts").val();
 	
 	var my_pane_height = $(".pane-main").height();
 	var my_pane_width  = $(".pane-main").width();
