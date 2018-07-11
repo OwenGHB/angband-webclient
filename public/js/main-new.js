@@ -388,10 +388,12 @@ function initChat() {
 	});
 	socket.addEventListener('close', function () {
 		addMessage("***Disconnected***", "system");
+		$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 		// todo: attempt to reconnect!
 	});
 	socket.addEventListener('open', function () {
 		addMessage("***Connected***", "system");
+		$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 	});
 	
 	$("#new-message-input input").on("keyup", function(e) {
