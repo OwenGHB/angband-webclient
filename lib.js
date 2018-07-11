@@ -99,7 +99,7 @@ function getmatchlist(matches) {
 			race       : charinfo.race,
 			subrace    : charinfo.subrace,
 			class      : charinfo.class,
-			dimensions : {rows: matches[i].term.rows, cols:matches[i].term.cols} 
+			dimensions : {rows: matches[i].dimensions.rows, cols: matches[i].dimensions.cols} 
 		};
 	}
 	return livematches;
@@ -328,7 +328,8 @@ function newgame(user, msg) {
 			game: game,
 			idle: false,
 			idletime: 0,
-			spectators: []
+			spectators: [],
+			dimensions: dimensions
 		};
 		
 		for (var i in metasockets) {
