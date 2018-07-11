@@ -115,7 +115,7 @@ function listMatches(matches) {
 
 function listFiles(files) {
 	var $tab = $("#tab-files .wrapper");
-	var user = files.username;
+	var user = files.user;
 	delete files.username;
 	var games = Object.keys(files);
 	if(games.length === 0)
