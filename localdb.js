@@ -154,6 +154,7 @@ module.exports.refresh = function() {
    db.games.read();
    db.news.read();
    db.users.read();
+   db.chat.read();
    // db.sessions.read();
 };
 
