@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"bac",
+				"background-color\tproperty"
+			],
+			[
 				"font",
 				"font_sizes"
 			],
@@ -292,10 +296,6 @@
 				"select\tTag"
 			],
 			[
-				"bac",
-				"background-color"
-			],
-			[
 				"font-s",
 				"font-size"
 			],
@@ -319,7 +319,7 @@
 			"file": "lib.js",
 			"settings":
 			{
-				"buffer_size": 14253,
+				"buffer_size": 14136,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -337,9 +337,26 @@
 			"file": "localdb.js",
 			"settings":
 			{
-				"buffer_size": 6801,
+				"buffer_size": 6916,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "views/error.pug",
+			"settings":
+			{
+				"buffer_size": 934,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "config.js",
+			"settings":
+			{
+				"buffer_size": 192,
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -354,7 +371,25 @@
 			"file": "public/js/main-new.js",
 			"settings":
 			{
-				"buffer_size": 23536,
+				"buffer_size": 23724,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "public/css/index.css",
+			"settings":
+			{
+				"buffer_size": 2958,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "public/css/style.css",
+			"settings":
+			{
+				"buffer_size": 9101,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -453,10 +488,12 @@
 		"/C/Users/vadimamo/dev/angband.live/public/js",
 		"/C/Users/vadimamo/dev/angband.live/views",
 		"/C/Users/vadimamo/dev/angband.live/views/jade",
-		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage"
+		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage",
+		"/C/Users/vadimamo/dev/angband.live/views/jade/play"
 	],
 	"file_history":
 	[
+		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_user_login.pug",
 		"/C/Users/vadimamo/dev/angband.live/public/js/___play.js",
 		"/C/Users/vadimamo/dev/angband.live/db/chat.json",
 		"/C/Users/vadimamo/dev/angband.live/db/users.json",
@@ -464,7 +501,6 @@
 		"/C/Users/vadimamo/dev/angband.live/views/error.pug",
 		"/C/Users/vadimamo/dev/angband.live/public/css/index.css",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_news.pug",
-		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_user_login.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_user_welcome.pug",
 		"/C/Users/vadimamo/Desktop/Sprint review w24.md",
 		"/C/Users/vadimamo/dev/angband.live/app.js",
@@ -603,6 +639,11 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"fileslog",
+			"filelog",
+			"fileslog",
+			"close",
+			".on",
 			"rows",
 			"font_sizes",
 			"term",
@@ -676,7 +717,7 @@
 			"response.memory.",
 			"   "
 		],
-		"reverse": false,
+		"reverse": true,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
@@ -685,7 +726,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 9,
 			"sheets":
 			[
 				{
@@ -716,10 +757,14 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
 								}
 							],
 							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-							"tab_size": 3,
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true,
 							"word_wrap": true
 						},
@@ -727,7 +772,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -736,15 +781,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14253,
+						"buffer_size": 14136,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1893,
-								1893
+								13017,
+								13017
 							]
 						],
 						"settings":
@@ -758,6 +803,10 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
 								}
 							],
 							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
@@ -765,10 +814,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1201.0,
+						"translation.y": 8835.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -799,6 +848,10 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
 								}
 							],
 							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
@@ -810,7 +863,7 @@
 						"translation.y": 798.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -819,15 +872,102 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6801,
+						"buffer_size": 6916,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6169,
-								6169
+								5217,
+								5217
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3819.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "views/error.pug",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 934,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								821,
+								821
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/Pug/Syntaxes/Pug.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "config.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 192,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								189,
+								189
 							]
 						],
 						"settings":
@@ -844,19 +984,17 @@
 								}
 							],
 							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 3979.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 6,
 					"file": "db/users.json",
 					"semi_transient": false,
 					"settings":
@@ -883,6 +1021,10 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
 								}
 							],
 							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
@@ -893,24 +1035,69 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 7,
 					"file": "public/js/main-new.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 23536,
+						"buffer_size": 23724,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								892,
-								892
+								3640,
+								3640
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1667.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "public/css/index.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2958,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								34,
+								10
 							]
 						],
 						"settings":
@@ -927,18 +1114,59 @@
 								}
 							],
 							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/CSS/CSS.sublime-syntax",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1824.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "public/css/style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9101,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7627,
+								7627
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
+							"syntax": "Packages/CSS/CSS.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 8208.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 10,
 					"file": ".gitignore",
 					"semi_transient": false,
 					"settings":
@@ -965,6 +1193,10 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
 								}
 							],
 							"syntax": "Packages/zzz A File Icon zzz/aliases/Shell Script (Git).sublime-syntax"
@@ -973,7 +1205,7 @@
 						"translation.y": 228.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 10,
 					"type": "text"
 				}
 			]
@@ -981,7 +1213,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 30.0
+		"height": 55.0
 	},
 	"input":
 	{

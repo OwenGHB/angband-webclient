@@ -324,8 +324,9 @@ html, body, #container {
 #gameselect:hover { box-shadow: none; }
 #games-lobby img { margin: 2rem 0; }
 #games-lobby h2 { 
-	color: #627d94; 
-	margin: 1rem 0 0.2rem 0; 
+	color: #b9556b;
+   margin: 1rem 0;
+   text-transform: uppercase;
 }
 #games-lobby .new-game {
 	display: flex;
@@ -360,7 +361,8 @@ html, body, #container {
 }
 #playbutton:hover { background-color: #353535; }
 #watchmenu ul {
-	padding: 0;
+   padding: 0;
+	margin: 0;
 	display: inline-block;
 }
 #watchmenu ul li {
