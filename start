@@ -2,4 +2,4 @@
 
 
 echo ..launching angband.live DEV on port 8080
-PORT=8080 pm2 start --name dev app.js
+PORT=9000 pm2 start --name dev app.js
