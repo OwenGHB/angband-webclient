@@ -24,7 +24,7 @@ var games = [
     data_paths: [],
     args: [] },
   { name: 'frogcomposband',
-    longname: 'FrogComposband 7.0.strawberry',
+    longname: 'FrogComposband 7.0.mango',
     desc: 'Further development of ComPosband, fixes bugs, adds new classes, towns, quests and alters some game mechanics.',
     restrict_paths: false,
     data_paths: [],
