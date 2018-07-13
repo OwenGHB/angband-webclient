@@ -4,6 +4,8 @@ html
       title Angband Live
       link(rel="icon", type="image/png", href="/favicon.png")
       link(href="https://fonts.googleapis.com/css?family=Anonymous+Pro|Cousine|Cutive+Mono|Droid+Sans+Mono|Fira+Mono|Inconsolata|Nova+Mono|Overpass+Mono|Oxygen+Mono|PT+Mono|Roboto+Mono|Share+Tech+Mono|Source+Code+Pro|Space+Mono|Ubuntu+Mono|VT323", rel="stylesheet")
+      link(rel="stylesheet",href="https://use.fontawesome.com/releases/v5.1.0/css/solid.css",integrity="sha384-TbilV5Lbhlwdyc4RuIV/JhD8NR+BfMrvz4BL5QFa2we1hQu6wvREr3v6XSRfCTRp",crossorigin="anonymous")
+      link(rel="stylesheet",href="https://use.fontawesome.com/releases/v5.1.0/css/fontawesome.css",integrity="sha384-ozJwkrqb90Oa3ZNb+yKFW2lToAWYdTiF1vt8JiH5ptTGHTGcN7qdoR1F95e0kYyG",crossorigin="anonymous")
       link(rel="stylesheet", href="/css/style.css")
       link(rel="stylesheet", href="/css/tablet-ui.css")
       script(type="text/javascript", src="/js/jquery-3.2.1.min.js")
@@ -21,13 +23,24 @@ html
                #tester.terminal A
             .pane-side
                .tab-buttons
-                  a(href="#", title="navigation", onclick="showMenu()") home
-                  a.selected(href="#", title="chat", onclick="showTab('tab-chat',this)") chat
-                  a(href="#", title="people", onclick="showTab('tab-people',this)") people
-                  a(href="#", title="files", onclick="showTab('tab-files',this)") files
-                  a#btn-tabletui.hidden(href="#", title="tablet controls", onclick="showTab('tab-tabletui',this)") UI
-                  a(href="#", title="settings", onclick="showTab('tab-settings',this)") opts
-                  a.float-right(href="/logout", title="logout") exit
+                  a(href="#", title="navigation", onclick="showMenu()")
+                     i.fas.fa-home
+                  a#link-chat.selected(href="#", title="chat", onclick="showTab('tab-chat',this)")
+                     i.fas.fa-comments
+                  a(href="#", title="people", onclick="showTab('tab-people',this)")
+                     i.fas.fa-users
+                  a(href="#", title="files", onclick="showTab('tab-files',this)")
+                     i.fas.fa-file-alt
+                  a#btn-tabletui.hidden(href="#", title="tablet controls", onclick="showTab('tab-tabletui',this)")
+                     i.fas.fa-tablet-alt
+                  a(href="#", title="settings", onclick="showTab('tab-settings',this)")
+                     i.fas.fa-cog
+                  
+                  a.float-right(href="/logout", title="logout")
+                     i.fas.fa-sign-out-alt
+                  a.float-right(href="/", target="_blank",title="news")
+                     i.fas.fa-newspaper
+
                .tab-panels
                   #tab-navigation.tab.hidden
                      include tab_navigation.pug
@@ -43,6 +56,6 @@ html
                      include tab_settings.pug
       script.
          var username = "#{user.name}";
-         console.log("username", username);
+         console.log("user name:", username);
       script(type="text/javascript", src="/js/tablet-ui.js")
       script(type="text/javascript", src="/js/main-new.js")

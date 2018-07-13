@@ -308,6 +308,23 @@
 	"buffers":
 	[
 		{
+			"file": "app.js",
+			"settings":
+			{
+				"buffer_size": 5984,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "start",
+			"settings":
+			{
+				"buffer_size": 99,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "db/news.json",
 			"settings":
 			{
@@ -319,51 +336,8 @@
 			"file": "lib.js",
 			"settings":
 			{
-				"buffer_size": 14136,
+				"buffer_size": 14745,
 				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "app.js",
-			"settings":
-			{
-				"buffer_size": 5835,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "localdb.js",
-			"settings":
-			{
-				"buffer_size": 6916,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "views/error.pug",
-			"settings":
-			{
-				"buffer_size": 934,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "config.js",
-			"settings":
-			{
-				"buffer_size": 192,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "db/users.json",
-			"settings":
-			{
-				"buffer_size": 771,
 				"line_ending": "Unix"
 			}
 		},
@@ -371,34 +345,47 @@
 			"file": "public/js/main-new.js",
 			"settings":
 			{
-				"buffer_size": 23724,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "public/css/index.css",
-			"settings":
-			{
-				"buffer_size": 2958,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"buffer_size": 22000,
+				"line_ending": "Unix"
 			}
 		},
 		{
 			"file": "public/css/style.css",
 			"settings":
 			{
-				"buffer_size": 9101,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"buffer_size": 9136,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": ".gitignore",
+			"contents": "\ndiv\n   .text-center\n      img#logo(src=\"/img/logo.png\")\n   h2.text-center start new game\n   .new-game\n      .row\n         .right-flex game:\n         .text-left\n            select#gameselect\n      //- .row\n      //-    .right-flex terminal width (cols):\n      //-    .text-left\n      //-       select#term-cols\n      //- .row\n      //-    .right-flex terminal height (rows):\n      //-    .text-left\n      //-       select#term-rows\n\n      .row\n         .right-flex game font:\n         .text-left\n            select#extra-fonts\n               option(value=\"monospace\") default\n\n      .row\n         .right-flex game font size:\n         .text-left\n            select#games-font-size\n\n      .row\n         .right-flex subwindows:\n         .text-left\n            select#subwindows\n               option(value=\"1\") 1\n               option(value=\"2\") 2\n               option(value=\"3\") 3\n               option(value=\"4\") 4\n               option(value=\"5\") 5\n               option(value=\"6\") 6\n      .hidden.row\n         .right-flex ASCII walls:\n         .text-left\n            select#ascii-walls\n               option(value=\"no\") no\n               option(value=\"yes\") yes\n      .row\n         p#game-description\n      .row\n         a#playbutton(href=\"#\") play\n\n   h2.text-center watch people playing\n   #watchmenu.text-center\n      ul\n",
+			"file": "views/jade/play/game_lobby.pug",
+			"file_size": 1326,
+			"file_write_time": 131758705484124750,
 			"settings":
 			{
-				"buffer_size": 731,
+				"buffer_size": 1326,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#navigation.panel\n   ul\n      //- li\n         //- a#navigation-home(href=\"#\")  - home",
+			"file": "views/jade/play/tab_navigation.pug",
+			"file_size": 85,
+			"file_write_time": 131758699100444900,
+			"settings":
+			{
+				"buffer_size": 85,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "localdb.js",
+			"settings":
+			{
+				"buffer_size": 6916,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -416,16 +403,16 @@
 		"selected_items":
 		[
 			[
+				"color",
+				"UI: Select Color Scheme"
+			],
+			[
 				"bea",
 				"Javascript Beautify"
 			],
 			[
 				"insta",
 				"Package Control: Install Package"
-			],
-			[
-				"color",
-				"UI: Select Color Scheme"
 			],
 			[
 				"re",
@@ -484,32 +471,31 @@
 		"/C/Users/vadimamo/dev/angband.live",
 		"/C/Users/vadimamo/dev/angband.live/db",
 		"/C/Users/vadimamo/dev/angband.live/public",
-		"/C/Users/vadimamo/dev/angband.live/public/css",
-		"/C/Users/vadimamo/dev/angband.live/public/js",
 		"/C/Users/vadimamo/dev/angband.live/views",
-		"/C/Users/vadimamo/dev/angband.live/views/jade",
-		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage",
-		"/C/Users/vadimamo/dev/angband.live/views/jade/play"
+		"/C/Users/vadimamo/dev/angband.live/views/jade"
 	],
 	"file_history":
 	[
+		"/C/Users/vadimamo/dev/angband.live/stop",
+		"/C/Users/vadimamo/dev/angband.live/README.md",
+		"/C/Users/vadimamo/dev/angband.live/public/js/main-new.js",
+		"/C/Users/vadimamo/dev/angband.live/.gitignore",
+		"/C/Users/vadimamo/dev/angband.live/public/css/style.css",
+		"/C/Users/vadimamo/dev/angband.live/public/css/index.css",
+		"/C/Users/vadimamo/dev/angband.live/db/users.json",
+		"/C/Users/vadimamo/dev/angband.live/config.js",
+		"/C/Users/vadimamo/dev/angband.live/views/error.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_user_login.pug",
 		"/C/Users/vadimamo/dev/angband.live/public/js/___play.js",
 		"/C/Users/vadimamo/dev/angband.live/db/chat.json",
-		"/C/Users/vadimamo/dev/angband.live/db/users.json",
 		"/C/Users/vadimamo/dev/angband.live/package.json",
-		"/C/Users/vadimamo/dev/angband.live/views/error.pug",
-		"/C/Users/vadimamo/dev/angband.live/public/css/index.css",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_news.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_user_welcome.pug",
 		"/C/Users/vadimamo/Desktop/Sprint review w24.md",
 		"/C/Users/vadimamo/dev/angband.live/app.js",
 		"/C/Users/vadimamo/dev/angband.live/lib.js",
 		"/C/Users/vadimamo/dev/angband.live/localdb.js",
-		"/C/Users/vadimamo/dev/angband.live/config.js",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/lobby.pug",
-		"/C/Users/vadimamo/dev/angband.live/public/css/style.css",
-		"/C/Users/vadimamo/dev/angband.live/public/js/main-new.js",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/tab_settings.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/lobby/game_lobby.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/jade/frontpage/block_donate.pug",
@@ -543,7 +529,6 @@
 		"/C/Users/vadimamo/dev/angband.live/views/blocks/block_donate.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/blocks/block_games.pug",
 		"/C/Users/vadimamo/dev/angband.live/views/blocks/block_news.pug",
-		"/C/Users/vadimamo/dev/angband.live/README.md",
 		"/C/Users/vadimamo/dev/angband.live/db/sessions.json",
 		"/C/Users/vadimamo/dev/angband-webclient/.gitignore",
 		"/C/Users/vadimamo/dev/instat/src/app/Components/DoubleGraph.js",
@@ -618,9 +603,7 @@
 		"/C/Users/vadimamo/dev/instat/src/app/sagas.js",
 		"/C/Users/vadimamo/dev/instat/src/app/api/api_reports.js",
 		"/C/Users/vadimamo/dev/instat/src/app/InsaneLogger.js",
-		"/C/Users/vadimamo/dev/instat/src/app/router_universal.js",
-		"/C/Users/vadimamo/dev/instat/.gitignore",
-		"/C/Users/vadimamo/dev/instat/jsons/wm_configs/instat_converter.js"
+		"/C/Users/vadimamo/dev/instat/src/app/router_universal.js"
 	],
 	"find":
 	{
@@ -636,9 +619,20 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": true,
+		"case_sensitive": false,
 		"find_history":
 		[
+			"play\"",
+			"play",
+			"listGa",
+			"username",
+			"default",
+			"cleanS",
+			"cleans",
+			"clearSp",
+			"clear",
+			"cleanSpyGlass",
+			"watch",
 			"fileslog",
 			"filelog",
 			"fileslog",
@@ -717,7 +711,7 @@
 			"response.memory.",
 			"   "
 		],
-		"reverse": true,
+		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
@@ -726,11 +720,100 @@
 	"groups":
 	[
 		{
-			"selected": 9,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
+					"file": "app.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5984,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1229,
+								1229
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Waste (rainglow).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1197.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "start",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 99,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								60,
+								60
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/ShellScript/Bash.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
 					"file": "db/news.json",
 					"semi_transient": false,
 					"settings":
@@ -761,6 +844,10 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
 								}
 							],
 							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
@@ -772,24 +859,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
+					"buffer": 3,
 					"file": "lib.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14136,
+						"buffer_size": 14745,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13017,
-								13017
+								10646,
+								10646
 							]
 						],
 						"settings":
@@ -807,34 +894,38 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
 								}
 							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
+							"color_scheme": "Packages/User/Color Highlighter/themes/Waste (rainglow).tmTheme",
 							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8835.0,
+						"translation.y": 7622.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "app.js",
+					"buffer": 4,
+					"file": "public/js/main-new.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5835,
+						"buffer_size": 22000,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1229,
-								1229
+								3356,
+								3356
 							]
 						],
 						"settings":
@@ -848,39 +939,34 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
 								}
 							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
+							"color_scheme": "Packages/User/Color Highlighter/themes/Waste (rainglow).tmTheme",
 							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 798.0,
+						"translation.y": 1526.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "localdb.js",
+					"buffer": 5,
+					"file": "public/css/style.css",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6916,
+						"buffer_size": 9136,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5217,
-								5217
+								5639,
+								5639
 							]
 						],
 						"settings":
@@ -894,39 +980,33 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
 								}
 							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
+							"color_scheme": "Packages/User/Color Highlighter/themes/Waste (rainglow).tmTheme",
+							"syntax": "Packages/CSS/CSS.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 3819.0,
+						"translation.y": 6115.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "views/error.pug",
+					"buffer": 6,
+					"file": "views/jade/play/game_lobby.pug",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 934,
+						"buffer_size": 1326,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								821,
-								821
+								774,
+								774
 							]
 						],
 						"settings":
@@ -950,24 +1030,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "config.js",
+					"buffer": 7,
+					"file": "views/jade/play/tab_navigation.pug",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 192,
+						"buffer_size": 85,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								189,
-								189
+								36,
+								36
 							]
 						],
 						"settings":
@@ -983,8 +1063,7 @@
 									"selector": "text.html"
 								}
 							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
+							"syntax": "Packages/Pug/Syntaxes/Pug.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -994,110 +1073,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "db/users.json",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 771,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								679,
-								679
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								}
-							],
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "public/js/main-new.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 23724,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3640,
-								3640
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								}
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1667.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
 					"buffer": 8,
-					"file": "public/css/index.css",
+					"file": "localdb.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2958,
+						"buffer_size": 6916,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								34,
-								10
+								4582,
+								4582
 							]
 						],
 						"settings":
@@ -1111,101 +1100,26 @@
 								{
 									"characters": ".#",
 									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
 								}
 							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/CSS/CSS.sublime-syntax",
+							"color_scheme": "Packages/User/Color Highlighter/themes/Waste (rainglow).tmTheme",
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
 							"tab_size": 3,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1824.0,
+						"translation.y": 3591.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "public/css/style.css",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9101,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7627,
-								7627
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								}
-							],
-							"color_scheme": "Packages/User/Color Highlighter/themes/Vegetable (rainglow).tmTheme",
-							"syntax": "Packages/CSS/CSS.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 8208.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": ".gitignore",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 731,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								702,
-								702
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": "<",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								},
-								{
-									"characters": ".#",
-									"selector": "text.html"
-								}
-							],
-							"syntax": "Packages/zzz A File Icon zzz/aliases/Shell Script (Git).sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 228.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
@@ -1213,7 +1127,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 55.0
+		"height": 30.0
 	},
 	"input":
 	{
@@ -1279,6 +1193,10 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"main",
+				"public\\js\\main-new.js"
+			],
 			[
 				"loca",
 				"localdb.js"

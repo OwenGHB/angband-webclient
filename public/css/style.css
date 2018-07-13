@@ -23,10 +23,13 @@ html {
    font-size: 14px;
    font-family: 'Ubuntu Mono', monospace;
    line-height: initial;
+   overflow: hidden;
 }
 body {
-   background-color: rgba(17,17,17,0.6)
+   background-color: rgba(17,17,17,0.6);
+   overflow: hidden;
 }
+
 body,input,button,select,option {	
    font-family: monospace;
 	margin: 0;
@@ -189,12 +192,12 @@ html, body, #container {
 	height: 100%;
 }
 .flex .tab-panels .tab .wrapper {
-	/*height: 100%;*/
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-height: 100px;
-    /*height: 100vh;*/
-    -webkit-overflow-scrolling: touch;
+	height: 100%;
+   overflow-y: auto;
+   overflow-x: hidden;
+   min-height: 100px;
+   /*height: 100vh;*/
+   -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 1000px) {
@@ -210,14 +213,19 @@ html, body, #container {
 
 /* TABS */
 .tab-buttons {
-	padding: 10px 0;
+	padding: 5px 0;
+   font-size: 1.2rem;
 }
 .tab-buttons a {
 	color: #778990;
 	text-decoration: none;
 }
 .tab-buttons a {
-   margin-right: 5px;
+   margin-right: 1rem;
+}
+.tab-buttons a.float-right:not(:last-of-type) {
+   margin-right: 0;
+   margin-left: 1rem;
 }
 .tab-buttons a:last-of-type {
    margin-right: 0;  
@@ -345,6 +353,9 @@ html, body, #container {
 #games-lobby .new-game .row input,
 #games-lobby .new-game .row select {
    width: 300px;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   padding: 3px 8px; 
 }
 #game-description {
 	max-width: 400px;
@@ -433,6 +444,13 @@ html, body, #container {
 
 .wrapper::-webkit-scrollbar-thumb {
 	background-color: #6a6a6b;
+}
+
+
+
+/* some UI effects */
+.flashing {
+   color: coral !important;
 }
 
 

@@ -31,7 +31,7 @@ lib.stats = function() {
 
 lib.respond = function(user, msg) {
 	if(msg.eventtype == 'chat') {
-		chat(user,msg.content);
+		chat(user, msg.content);
 	} 
 	else if(msg.eventtype == 'newgame'){
 		if (typeof(matches[user.name]) != 'undefined') {
@@ -60,7 +60,7 @@ lib.respond = function(user, msg) {
 
 
 function chat(user, message){
-	var response = JSON.stringify({ 
+	var response = { 
 		eventtype: "chat",
 		content: { 
 			user: user.name,
@@ -68,23 +68,43 @@ function chat(user, message){
 			extra: user.roles,
 			timestamp: new Date()
 		}
-	});
+	};
 
-	// todo: check against banned users, if user is ok then push message
-	localdb.pushMessage(user, message);
+	// if this is a command message from devs (starts with / followed by command) then do what needs to be done
+	console.log("dev check", message[0], message[0] === "/", user.roles, user.roles.indexOf("dev") !== -1);
+	if(message[0] === "/" && user.roles.indexOf("dev") !== -1) {
+		var command = message.match(/\/\w+/)[0];
+		var msg = message.replace(command + " ", "");
 
-	if (user.name!="Sirfurnace") {
+		console.log(command, msg, command === "/announce");
+		// announce text to all users as system message
+		if(command === "/announce") {
+			msg = "SYSTEM: " + msg;
+			response.eventtype = "systemannounce";
+			response.content = msg;
+			localdb.pushMessage("--system--", msg);
+		}
+		else if(command === "/ban") {
+			// todo: ban user
+		}
+
+	}
+	else {
+		localdb.pushMessage(user, message);
+	}
+
+	if (user.name != "Sirfurnace") {
 		for (var i in metasockets){
 			try {
-				metasockets[i].send(response);
-			} 
+				metasockets[i].send(JSON.stringify(response));
+			}
 			catch (ex) {
 				// The WebSocket is not open, ignore
 			}
 		}
 	} 
 	else {
-		metasockets[user.name].send(response);
+		metasockets[user.name].send(JSON.stringify(response));
 	}
 }
 
@@ -122,10 +142,10 @@ function isalive(user,game){
 function getcharinfo(user, game) {
 	var dirpath = home+'/user/'+user+'/'+game;
 	fs.ensureDirSync(dirpath);
-	var files=fs.readdirSync(dirpath);
+	var files = fs.readdirSync(dirpath);
 	var charinfo = {};
-	if (files.includes('CharOutput.txt')){
-		var json=fs.readFileSync(dirpath+'/CharOutput.txt','utf8');
+	if (files.includes('CharOutput.txt')) {
+		var json=fs.readFileSync(dirpath + '/CharOutput.txt','utf8');
 		json = json.replace(/\n/gm,"\n\"");
 		json = json.replace(/:/gm,'":');
 		json = json.replace(/"{/gm,'{');
@@ -167,7 +187,7 @@ function getfilelist(name) {
 function getgamelist() {
 	var gamelist = [];
 	for (var i in games){
-		gamelist.push({name:games[i].name,longname:games[i].longname,desc:games[i].desc});
+		gamelist.push({name:games[i].name, longname:games[i].longname, desc:games[i].desc});
 	}
 	gamelist.sort(function(a, b) {
 	  var nameA = a.name.toUpperCase(); // ignore upper and lowercase

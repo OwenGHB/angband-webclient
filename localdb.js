@@ -64,15 +64,15 @@ module.exports.verifyWithLocalDb = function(username, password, done) {
 
 
 module.exports.serializeUser = function(user, done) {
-   console.log("serializing", user.name);
+   // console.log("serializing", user.name);
    return done(null, user.name);
 };
 
 
 module.exports.deserializeUser = function(name, done) {
-   console.log("attempting to deserialize user", name);
+   // console.log("attempting to deserialize user", name);
    var user = findUserByName(name);
-   console.log("..deserialized", user ? user.name : "user not found!!!");
+   // console.log("..deserialized", user ? user.name : "user not found!!!");
    if(user)
       return done(null, user);
    else
@@ -224,11 +224,8 @@ function authenticate(username, password, callback) {
    
    // user does not exist, create one
    if(!user) {
-      // abort if username is too short
-      if(username.length < 3)
-         return callback(null, null, "bad username/password");
-
-      if(username.length > 25)
+      // abort if username is too short or too long
+      if(username.length < 3 || username.length > 25)
          return callback(null, null, "bad username/password");
       
       // username should have only english a-zA-Z0-9 characters
@@ -255,8 +252,21 @@ function authenticate(username, password, callback) {
       });
    }
    
-   // user exist, check password hashes
+   // user exist
    else {
+      // check if user is not banned
+      if(user.roles.indexOf("banned") !== -1) {
+         console.warn(`Banned user ${user.name} tried to log in`);
+         return callback(null, null, "banned");
+      }
+
+      // check for special unwanted names
+      if(user.name.toLowerCase() === "anton") {
+         console.warn(`Suspicious user ${user.name} tried to log in`);
+         return callback(null, null, "banned");  
+      }
+
+      // if not compare password hashes
       bcrypt.compare(password, user.password_hash, function(error, they_match) {
          if(error)
             return callback(error, null);

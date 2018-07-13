@@ -91,13 +91,8 @@ app.get("/db/refresh", function(req, res) {
 });
 
 app.post('/enter', passport.authenticate("local", {failureRedirect: '/forbidden'}), function(req, res) {
-   if (["Anton"].includes(req.user)) {
-      console.log("Banned user: ", req.user);
-      return res.redirect("/forbidden");
-   } else {
-      console.log("user authenticated, redirecting to play", req.user);
-      return res.redirect("/play");
-   }
+   console.log("user authenticated, redirecting to play", req.user);
+   return res.redirect("/play");
 });
 
 app.get("/play", localdb.isUserLoggedIn, function(req, res) {

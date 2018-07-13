@@ -1,28 +1,29 @@
-#settings.panel
-   table
-      tbody
-         //- tr
-         //-    td.label game terminal font
-         //-    td.value
-         //-       select#extra-fonts
-         //-          option(value="monospace") default
-         //- tr
-         //-    td.label sidebar on bottom
-         //-    td
-         //-       input#opt-sidebar-bottom(type="checkbox")
-         tr
-            td.label UI font size
-            td.value
-               select#opt-ui-font-size
-         tr.hidden
-            td.label Borders style
-            td
-               select#opt-ui-border-style
-         tr.hidden
-            td.label Page background
-            td
-               input#opt-ui-body-color(type="text")
-         tr.hidden
-            td.label Menu background
-            td
-               input#opt-ui-chat-color(type="text")
+#settings.flex-grow.panel
+   .wrapper
+      table
+         tbody
+            //- tr
+            //-    td.label game terminal font
+            //-    td.value
+            //-       select#extra-fonts
+            //-          option(value="monospace") default
+            //- tr
+            //-    td.label sidebar on bottom
+            //-    td
+            //-       input#opt-sidebar-bottom(type="checkbox")
+            tr
+               td.label UI font size
+               td.value
+                  select#opt-ui-font-size
+            tr.hidden
+               td.label Borders style
+               td
+                  select#opt-ui-border-style
+            tr.hidden
+               td.label Page background
+               td
+                  input#opt-ui-body-color(type="text")
+            tr.hidden
+               td.label Menu background
+               td
+                  input#opt-ui-chat-color(type="text")

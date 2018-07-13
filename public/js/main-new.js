@@ -49,7 +49,7 @@ function populateChat(messages) {
 
 
 function addMessage(msg, extra_class, shouldNotify) {
-	var $msg = $(msg);
+	// var $msg = $(msg);
 	var classes = [];
 	var ts = moment(msg.timestamp).format("HH:mm");
 
@@ -66,6 +66,19 @@ function addMessage(msg, extra_class, shouldNotify) {
 	else {
 		var _m = typeof msg === "object" ? msg.message : msg;
 		$("#chatlog .wrapper").append('<div class="message"><span class="time">['+ts+'] </span><span class="system">' + _m + '</span></div>');
+	}
+
+	// if user is outside chat tab and new msg arrive blink chat icon
+	if(window.localStorage) {
+		if(!$("#link-chat").hasClass("selected")) {
+			var unix_ts = moment(msg.timestamp).unix();
+			var unix_ts_before = window.localStorage.getItem("last_msg");
+
+			if(!unix_ts_before || unix_ts > unix_ts_before)
+				$("#link-chat").addClass("flashing");
+
+			window.localStorage.setItem("last_msg", unix_ts);
+		}
 	}
 }
 
@@ -147,6 +160,9 @@ function showTab(id, el) {
 	$("#" + id).removeClass("hidden");
 	$(".tab-buttons a").removeClass("selected");
 	$(el).addClass("selected");
+
+	if(id === "tab-chat")
+		$("#link-chat").removeClass("flashing");
 }
 
 
