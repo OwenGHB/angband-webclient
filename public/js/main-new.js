@@ -43,13 +43,8 @@ function populateChat(messages) {
 	messages.forEach(function(message) {
 		addMessage(message, false, false);
 	});
-	// var keys = Object.keys(messages);
-	// for(var i=keys.length-1; i>=0; i--) {
-	// 	var m = JSON.parse(messages[keys[i]]);
-	// 	addMessage(m.content, false, false);
-	// }
 	$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
-    initComplete = true;
+   initComplete = true;
 }
 
 
@@ -98,12 +93,15 @@ function listMatches(matches) {
 			var idle = matches[players[i]].idletime > 0 ? ', idle for <span>'+matches[players[i]].idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append(function(i) {
 				var outputstring = '<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>';
-				if (typeof(matches[players[i]].cLvl)!='undefined'){
-					outputstring += ' as a <span>Level '+matches[players[i]].cLvl+' '+matches[players[i]].race+' '+matches[players[i]].class+'</span>'+idle+'</li>';
+				if (typeof(matches[players[i]].cLvl) != 'undefined'){
+					outputstring += ' as a <span>Level ' + matches[players[i]].cLvl + ' ' + matches[players[i]].race + ' ' + matches[players[i]].class + '</span>' + idle + '</li>';
 				}
-			    return $(outputstring).click(function() {
-			        applyTerminal("spectate", players[i], 1, "no", matches[players[i]].dimensions);
-			    });
+			   return $(outputstring).click(function() {
+			   	if(players[i] === username)
+			      	applyTerminal("play", players[i], 1, "no", matches[players[i]].dimensions);
+			   	else
+			      	applyTerminal("spectate", players[i], 1, "no", matches[players[i]].dimensions);
+			   });
 			}(i));			
 		}
 	}
@@ -217,38 +215,43 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 	$("#terminal-pane").removeClass("hidden");
 }
 
+
+// does the same as listGameMatches?? 
 function cleanSpyGlass(matches){
-	$("#navigation ul").html("");
-	$("#navigation ul").append(function() {
-		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
-			$("#terminal-pane").addClass("hidden");
-			$("#games-lobby").removeClass("hidden");
-		});
-	});
-	var players = Object.keys(matches);
-	if(Object.keys(spyglass).length > 0) {
-		for(var i in spyglass) {
-			if (i=='default'){
-				$("#navigation ul").append(function(i) {
-					return $('<li><a href="#"> - your game</a></li>').click(function() {
-						var panels = $("#subwindows").val();
-						var walls = false;
-						var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
-						var gamename = $("#gameselect").val();
-						applyTerminal("play", gamename, panels, walls, d);
-					});
-				}(i));
-			} else if (players.includes(i)) {
-				$("#navigation ul").append(function(i) {
-					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
-						applyTerminal("spectate", i, 1, false, matches[i].dimensions);
-					});
-				}(i));	
-			} else {
-				delete spyglass[i];
-			}
-		}
-	}
+	console.warn("cleanSpyGlass deprecated");
+	// $("#navigation ul").html("");
+	// // $("#navigation ul").append(function() {
+	// // 	return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
+	// // 		$("#terminal-pane").addClass("hidden");
+	// // 		$("#games-lobby").removeClass("hidden");
+	// // 	});
+	// // });
+	// var players = Object.keys(matches);
+	// if(Object.keys(spyglass).length > 0) {
+	// 	for(var i in spyglass) {
+	// 		if (i == username) {
+	// 			$("#navigation ul").append(function(i) {
+	// 				return $('<li><a href="#"> - your game</a></li>').click(function() {
+	// 					var panels = $("#subwindows").val();
+	// 					var walls = false;
+	// 					var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
+	// 					var gamename = $("#gameselect").val();
+	// 					applyTerminal("play", gamename, panels, walls, );
+	// 				});
+	// 			}(i));
+	// 		} 
+	// 		else if (players.includes(i)) {
+	// 			$("#navigation ul").append(function(i) {
+	// 				return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
+	// 					applyTerminal("spectate", i, 1, false, matches[i].dimensions);
+	// 				});
+	// 			}(i));	
+	// 		} 
+	// 		else {
+	// 			delete spyglass[i];
+	// 		}
+	// 	}
+	// }
 }
 
 
@@ -281,53 +284,6 @@ function closeGame(){
 
 function adjustTerminalFontSize() {
 	console.warn("adjustTerminalFontSize is deprecated!");
-	// $("#terminal-container").css("font-size", 6);
-	// var window_height = $(window).innerHeight();
-	// var window_width = $(window).innerWidth();
-	// var desired_font_size = $("#games-font-size").val();
-	// var pane_height = $(".pane-main").height();
-	// var pane_width = $(".pane-main").width();
-
-	// // apply desired font size to tester and get its new dimensions
-	// $("#tester").css("display", "initial");
-	// $("#tester").css("visibility", "hidden");
-	// $("#tester").css("font-size", desired_font_size);
-	// var tester_width = $("#tester").width();
-	// var tester_height = $("#tester").height();
-
-	// // calculate how many testers can we fit into pane-main
-	// var _width = (pane_width / tester_width).toFixed(0);
-	// var _height = (pane_height / tester_height).toFixed(0);
-
-	// console.log(`${pane_width}x${pane_height} fit ${_width}x${_height} terminal (font size: ${desired_font_size}, tester: ${tester_width}x${tester_height})`);
-
-	// $("#tester").css("display", "none");
-
-	// var sizes = font_sizes;
-	// var $mainpane = $(".pane-main");
-	// var mph = $mainpane.innerHeight();
-	// var mpw = $mainpane.innerWidth();
-	// var selected_size = sizes[0];
-	// var i = 6, found = false;
-	// while(i<100 && !found) {
-	// 	$("#tester").css('font-size', i + "px");
-	// 	var tw = $("#tester").innerWidth();
-	// 	var th = $("#tester").innerHeight();
-	// 	var cfs = $("#tester").css('font-size');
-	// 	var sidebar_pos = $("#opt-sidebar-bottom").prop("checked");
-	// 	var check_width = dimensions.cols * tw > mpw-safety;
-	// 	var check_height = dimensions.rows * th > mph-safety;
-	// 	if(sidebar_pos || window_width < 1000)
-	// 		check_height = dimensions.rows * th > window_height - 200;
-	// 	if(check_height || check_width)
-	// 		found = true;
-	// 	else 
-	// 		selected_size = i;
-	// 	i = i + 0.5;
-	// }
-	// $("#tester").css("display", "none");
-	// $("#terminal-container").css("font-size", selected_size + "px");
-
 }
 
 
@@ -352,7 +308,7 @@ function initChat() {
 			case "usercount":
 				updateUserCount(data.content); break;
 			case "matchupdate":
-				listMatches(data.content); cleanSpyGlass(data.content); break;
+				listMatches(data.content); /*cleanSpyGlass(data.content);*/ break;
 			case "fileupdate":
 				listFiles(data.content); break;
 			case "systemannounce":

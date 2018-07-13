@@ -45,12 +45,15 @@ lib.respond = function(user, msg) {
 		connectplayer(user.name);
 	} 
 	else if(msg.eventtype == 'subscribe') {
-		subscribe(user,msg.content);
-	} 
+		subscribe(user, msg.content);
+	}
+	else if(msg.eventtype == 'unsubscribe') {
+		unsubscribe(user, msg.content);
+	}
 	else if(msg.eventtype == 'gameinput') {
-		if(typeof(matches[user.name])!='undefined'){
+		if(typeof(matches[user.name]) != 'undefined'){
 			matches[user.name].term.write(msg.content);
-			matches[user.name].idle=false;
+			matches[user.name].idle = false;
 		}
 	}
 }
@@ -411,7 +414,7 @@ function closegame(player){
 }
 
 
-function subscribe(user,message) {
+function subscribe(user, message) {
 	var player = message.player;
 	var spectator = user.name;
 	if (typeof(matches[player]) != 'undefined' && typeof(matches[player].term) != 'undefined' && typeof(user.name) != 'undefined') {
@@ -424,6 +427,20 @@ function subscribe(user,message) {
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		} */
+	}
+}
+
+
+function unsubscribe(user, message) {
+	var player = message.player;
+	var spectator = user.name;
+	if (typeof(matches[player]) != 'undefined' && typeof(matches[player].term) != 'undefined' && typeof(user.name) != 'undefined') {
+		if(metasockets[player]) {
+			metasockets[player].send(JSON.stringify({eventtype: 'systemannounce', content: spectator + " stopped watching your game"}));
+			var index = matches[player].spectators.indexOf(spectator);
+			if(index !== -1)
+				matches[player].spectators.splice(index, 1);
+		}
 	}
 }
 
