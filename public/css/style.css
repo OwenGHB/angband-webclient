@@ -324,7 +324,7 @@ html, body, #container {
 #gameselect:hover { box-shadow: none; }
 #games-lobby img { margin: 2rem 0; }
 #games-lobby h2 { 
-	color: #b9556b;
+	color: #b95555;
    margin: 1rem 0;
    text-transform: uppercase;
 }
