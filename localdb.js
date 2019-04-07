@@ -5,11 +5,10 @@ var config   = require("./config");
 
 
 var db       = {
-   games      : lowdb(new FileSync("./db/games.json")),
-   news       : lowdb(new FileSync("./db/news.json")),
-   chat       : lowdb(new FileSync("./db/chat.json")),
-   users      : lowdb(new FileSync("./db/users.json")),
-   livematches: lowdb(new FileSync("./db/livematches.json"))
+   games    : lowdb(new FileSync("./db/games.json")),
+   news     : lowdb(new FileSync("./db/news.json")),
+   chat     : lowdb(new FileSync("./db/chat.json")),
+   users    : lowdb(new FileSync("./db/users.json"))
 };
 var SALT_ROUNDS   = 5;
 var DEFAULT_ROLES = ["basic"];
@@ -43,11 +42,10 @@ var DEFAULT_ROLES = ["basic"];
 
 */
 // set default data if db files are empty
-db.games      .defaults({data:[]}).write();
-db.news       .defaults({data:[]}).write();
-db.users      .defaults({data:[]}).write();
-db.chat       .defaults({data:[]}).write();
-db.livematches.defaults({data:[]}).write();
+db.games .defaults({data:[]}).write();
+db.news  .defaults({data:[]}).write();
+db.users .defaults({data:[]}).write();
+db.chat  .defaults({data:[]}).write();
 
 
 // export db object
@@ -133,18 +131,11 @@ module.exports.readMessages = function(limit) {
       .value();
 }
 
-// write games info to db for crash recovery
-module.exports.registerGame = function(gamepid) {
-	 return db.livematches.get("data").push({gamepid:gamepid}).write();
-}
 
-module.exports.deregisterGame = function(gamepid) {
-	 return db.livematches.get("data").remove({gamepid:gamepid}).write();
-}
 
-module.exports.processCheck = function(gamepid) {
-	 return db.livematches.get("data").value();
-}
+
+
+
 
 // get last 10 news
 function getNews() {
