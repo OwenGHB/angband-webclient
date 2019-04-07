@@ -230,10 +230,7 @@ function newgame(user, msg) {
 	var gameinfo = getgameinfo(game);
 	var panels = msg.panels;
 	var dimensions = msg.dimensions;
-<<<<<<< HEAD
 	var asciiwalls = msg.walls;
-=======
->>>>>>> c5182a25e3e1d44615755d4a1cfe3743fe9bd67e
 	var player = user.name;
 	var compgame = 'silq';
 	var compnumber = '217';
@@ -385,7 +382,6 @@ function newgame(user, msg) {
 	});*/
 }
 
-<<<<<<< HEAD
 function updategame(user, game) {
 	if(user.maintains.indexOf(game) !== -1){
 		console.log(`update by user ${user.name} of ${game}`);
@@ -413,85 +409,6 @@ function updategame(user, game) {
 					// The WebSocket is not open, ignore
 				}
 			});
-=======
-function gettermdesc(game, player, panels){
-	var termdesc = {};
-	var compgame = 'silq';
-	var compnumber = '217';
-	var panelargs = ['-b'];
-	var terminfo = 'xterm-256color';
-	var gameinfo = getgameinfo(game);
-	if (panels > 1) {
-		if (['poschengband','elliposchengband','composband','frogcomposband'].includes(game)) {
-=======
-	var asciiwalls = msg.walls;
-	var player = user.username;
-	var compgame = 'frogcomposband';
-	var compnumber = '217';
-	var panelargs = ['-b'];
-	if (panels>1) {
-		if (["poschengband","elliposchengband","composband","composband-alpha","frogcomposband"].includes(game)){
-			panelargs = ['-right','40x*','-bottom','*x8'];
-		} 
-		else {
-			panelargs = ['-n'+panels];
-		}
-	}
-	var path = home + '/games/' + game + '/' + game;
-	var args = [];
-	if(game == 'umoria') {
-		args.push(home + '/games/' + game + '/' + player);
-	} 
-	else {
-		if (game == 'competition') {
-			args.push('-u'+compnumber+'-'+player);
-		} 
-		else {
-			args.push('-u'+player);
-		}
-		if (game == 'competition') {
-			args.push('-duser='+home+'/user/'+player+'/'+compgame);
-		} 
-		else if (gameinfo.restrict_paths){
-			args.push('-d'+home+'/user/'+player+'/'+game);
-		} 
-		else {
-			args.push('-duser='+home+'/user/'+player+'/'+game);
-		}
-		for (var i in gameinfo.args) {
-			args.push('-'+gameinfo.args[i]);
-		}
-		args.push('-mgcu');
-		args.push('--');
-		for (var i in panelargs){
-			args.push(panelargs[i]);
-		}
-	}
-	
-	if (game == 'competition') {
-		var newattempt = true;
-		var newtty = false;
-		var savegames = fs.readdirSync(home+'/'+compgame+'/lib/save/');
-		if (savegames.includes('1000.'+compnumber+''+player)){
-			newattempt = !isalive(player,compgame);
-		}
-		fs.ensureDirSync(home+'/user/'+player);
-		var ttydir = fs.readdirSync(home+'/ttyrec');
-		var ttyfile = home+'/ttyrec/'+compnumber+'-'+player+'.ttyrec';
-		if (ttydir.includes(ttyfile)){
-			newtty=true;
-		}
-		var command = home+'/games/'+compgame+' '+args.join(' ');
-		path = 'ttyrec';
-		args = [
-			'-e',
-			command,
-			ttyfile
-		];
-		if (!newattempt) {
-			if (!newtty) 
-				args.unshift('-a');
->>>>>>> c5182a25e3e1d44615755d4a1cfe3743fe9bd67e
 		} 
 		catch(ex) {
 			console.log('update failure.');
