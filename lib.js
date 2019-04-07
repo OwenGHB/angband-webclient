@@ -222,7 +222,6 @@ function newgame(user, msg) {
 	var game = msg.game;
 	var panels = msg.panels;
 	var dimensions = msg.dimensions;
-<<<<<<< HEAD
 	var player = user.name;
 	var termdesc = gettermdesc(game, player, panels);
 	console.log(`starting new game: user=${user.name} dimensions=${dimensions.cols}x${dimensions.rows}`);
@@ -325,7 +324,6 @@ function gettermdesc(game, player, panels){
 	var panelargs = ['-b'];
 	if (panels>1) {
 		if (["poschengband","elliposchengband","composband","composband-alpha","frogcomposband"].includes(game)){
->>>>>>> e8c83899ba01d3cc64823c327654ad594a4448dd
 			panelargs = ['-right','40x*','-bottom','*x8'];
 		} 
 		else {
