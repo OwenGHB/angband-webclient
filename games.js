@@ -11,6 +11,15 @@ var games = [
     restrict_paths: false,
     data_paths: [],
     args: [] },
+<<<<<<< HEAD
+=======
+  // { name: 'competition',
+    // longname: 'Competition 215',
+    // desc: 'Gorn is looking to make a home for the winter. Angband looks nice but first he has to clear out the existing residents.',
+    // restrict_paths: false,
+    // data_paths: [],
+    // args: [] },
+>>>>>>> e8c83899ba01d3cc64823c327654ad594a4448dd
   { name: 'composband',
     longname: 'Composband 7.1.0',
     desc: 'Composite *bands. Site authors attempts to reintroduce lost content into PosChengband from previous versions and variants.',
@@ -24,7 +33,11 @@ var games = [
     data_paths: [],
     args: [] },
   { name: 'frogcomposband',
+<<<<<<< HEAD
     longname: 'FrogComposband 7.0.mango',
+=======
+    longname: 'FrogComposband peppermint',
+>>>>>>> e8c83899ba01d3cc64823c327654ad594a4448dd
     desc: 'Further development of ComPosband, fixes bugs, adds new classes, towns, quests and alters some game mechanics.',
     restrict_paths: false,
     data_paths: [],

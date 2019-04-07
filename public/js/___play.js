@@ -287,10 +287,10 @@ function adjustTerminalFontSize() {
 		var th = $("#tester").innerHeight();
 		var cfs = $("#tester").css('font-size');
 		var sidebar_pos = $("#opt-sidebar-bottom").prop("checked");
-		var check_width = dimensions.cols * tw > mpw-safety;
-		var check_height = dimensions.rows * th > mph-safety;
+		var check_width = (dimensions.cols+1) * tw > mpw-safety;
+		var check_height = (dimensions.rows+1) * th > mph-safety;
 		if(sidebar_pos || window_width < 1000)
-			check_height = dimensions.rows * th > window_height - 200;
+			check_height = (dimensions.rows+1) * th > window_height - 200;
 		if(check_height || check_width)
 			found = true;
 		else 
