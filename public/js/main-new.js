@@ -13,6 +13,8 @@ var spyglass = {};
 var playing = false;
 var dimensions= {};
 
+//var username also available
+
 var fonts = [
 	"Share Tech Mono",
 	"Fira Mono",
@@ -61,7 +63,7 @@ function addMessage(msg, extra_class, shouldNotify) {
 		$m.find("span.msg").text(msg.message);
 		$("#chatlog .wrapper").append($m);
 		if(shouldNotify) 
-			notifyIfNeeded(msg.user, msg.message);
+			notifyIfNeeded(username, msg.message);
 	}
 	else {
 		var _m = typeof msg === "object" ? msg.message : msg;
