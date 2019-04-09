@@ -472,10 +472,10 @@ html, body, #container {
 }
 #chatlog .dev {
   background: red; /* For browsers that do not support gradients */
-  background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(192,0,0,0.2), rgba(192,32,0,0.5),rgba(0,0,0,0)); /*Safari 5.1-6*/
-  background: -o-radial-gradient(rgba(0,0,0,1),rgba(192,0,0,0.2), rgba(192,32,0,0.5),rgba(0,0,0,0)); /*Opera 11.1-12*/
-  background: -moz-radial-gradient(rgba(0,0,0,1),rgba(192,0,0,0.2), rgba(192,32,0,0.5),rgba(0,0,0,0)); /*Fx 3.6-15*/
-  background: radial-gradient(rgba(0,0,0,1),rgba(192,0,0,0.2), rgba(192,32,0,0.5),rgba(0,0,0,0)); /*Standard*/
+  background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,32,0,0.5),rgba(0,0,0,0)); /*Safari 5.1-6*/
+  background: -o-radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,32,0,0.5),rgba(0,0,0,0)); /*Opera 11.1-12*/
+  background: -moz-radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,32,0,0.5),rgba(0,0,0,0)); /*Fx 3.6-15*/
+  background: radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,32,0,0.5),rgba(0,0,0,0)); /*Standard*/
 }
 #chatlog .deputy {
   background: red; /* For browsers that do not support gradients */
