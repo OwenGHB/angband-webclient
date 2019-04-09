@@ -82,7 +82,6 @@ function chat(user, message){
 		console.log(command, msg, command === "/announce");
 		// announce text to all users as system message
 		if(command === "/announce") {
-			msg = "SYSTEM: " + msg;
 			response.eventtype = "systemannounce";
 			response.content = msg;
 			localdb.pushMessage("--system--", msg);
@@ -117,6 +116,7 @@ function getmatchlist(matches) {
 	var livematches = {};
 	for (var i in matches) {
 		var charinfo = getcharinfo(i, matches[i].game);
+		var alive=isalive(i, matches[i].game);
 		livematches[i] = {
 			game       : matches[i].game,
 			idletime   : matches[i].idletime,
@@ -124,6 +124,7 @@ function getmatchlist(matches) {
 			race       : charinfo.race,
 			subrace    : charinfo.subrace,
 			class      : charinfo.class,
+			alive      : alive,
 			dimensions : {rows: matches[i].dimensions.rows, cols: matches[i].dimensions.cols} 
 		};
 	}
@@ -316,7 +317,7 @@ function newgame(user, msg) {
 			name              : termdesc.terminfo,
 			cols              : parseInt(dimensions.cols),
 			rows              : parseInt(dimensions.rows),
-			cwd               : process.env.HOME,
+			cwd               : home + '/games/' + game,
 			applicationCursor : true
 		};
 		var term = pty.fork(termdesc.path,termdesc.args, term_opts);
@@ -382,8 +383,9 @@ function newgame(user, msg) {
 	});*/
 }
 
-function updategame(user, game) {
-	if(user.maintains.indexOf(game) !== -1){
+function updategame(user, game, dimensions) {
+	var gameinfo = getgameinfo(game);
+	if(gameinfo.owner == user.name){
 		console.log(`update by user ${user.name} of ${game}`);
 		var path = home + '/updategame.sh';
 		var args = [game];

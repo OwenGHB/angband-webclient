@@ -4,8 +4,13 @@ git pull
 git reset --hard origin/master
 if test $1 = 'angband-master' || test $1 = 'composband' || test $1 = 'frogcomposband' || test $1 = 'angband'
 then
+printf "Rebuild makefiles? (use for version changes or build configuration changes) [y/n]"
+read -n 1 ans
+if test $ans = 'y'
+then
 ./autogen.sh
 ./configure --with-no-install --disable-x11
+fi
 make
 elif test $1 = 'silq-dev' || test $1 = 'silq'
 then
