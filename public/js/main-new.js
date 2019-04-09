@@ -227,6 +227,20 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 		$terminal.html("");
 		spyglass[qualifier].open($terminal.get(0));
 	}
+	else if(mode === "update") {
+		if (typeof(spyglass[qualifier]) == 'undefined') {
+			$("#navigation ul").append(function() {
+				return $('<li><a href="#"> - ' + qualifier + '</a></li>').click(function() {
+					applyTerminal("update", qualifier, panels, walls, d);
+				});
+			});
+			spyglass[qualifier] = createTerminal(d);
+			socket.send(JSON.stringify({eventtype:'update', content: {game: qualifier}}));
+		}
+
+		$terminal.html("");
+		spyglass[qualifier].open($terminal.get(0));
+	}
 	
 	// hide lobby and unhide terminal
 	$("#games-lobby").addClass("hidden");
@@ -335,8 +349,10 @@ function initChat() {
 				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 				break;
 			case "owngameoutput":
+			case "updateoutput":
 				spyglass['default'].write(data.content); break;
 			case "gameover":
+			case "updateover":
 				closeGame(); break;
 			case "gameoutput":
 				if (typeof(spyglass[data.content.player])!='undefined') {
@@ -439,6 +455,11 @@ function initGameList(games) {
 		for(var i=0; i<games.length; i++) {
 			if(e.target.value === games[i].name) {
 				$("#game-description").html(games[i].desc);
+				if (typeof(games[i].owner) != undefined && username == games[i].owner) {
+					$("#updatebutton").removeClass('hidden');
+				} else {
+					$("#updatebutton").addClass('hidden');
+				}
 				saveSelectedGameName(e.target.value);
 				loadDefaultGameOptions(e.target.value);
 				loadGameOptions(e.target.value);
@@ -451,6 +472,10 @@ function initGameList(games) {
 		var panels = $("#subwindows").val();
 		var walls = false;
 		applyTerminal("play", gamename, panels, walls, calculateIdealTerminalDimensions());
+	});
+	$("#updatebutton").click(function() {
+		var gamename = $("#gameselect").val();
+		applyTerminal("update", gamename, 1, "no", calculateIdealTerminalDimensions());
 	});
 }
 
