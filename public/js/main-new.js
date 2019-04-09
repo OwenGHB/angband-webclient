@@ -228,18 +228,25 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 		spyglass[qualifier].open($terminal.get(0));
 	}
 	else if(mode === "update") {
-		if (typeof(spyglass[qualifier]) == 'undefined') {
-			$("#navigation ul").append(function() {
-				return $('<li><a href="#"> - ' + qualifier + '</a></li>').click(function() {
-					applyTerminal("update", qualifier, panels, walls, d);
-				});
+		spyglass['default'] = createTerminal(d);
+		$("#navigation ul").append(function() {
+			return $('<li><a href="#"> - ' + qualifier + ' (your game)</a></li>').click(function() {
+				applyTerminal("play", qualifier, panels, walls, d);
 			});
-			spyglass[qualifier] = createTerminal(d);
-			socket.send(JSON.stringify({eventtype:'update', content: {game: qualifier}}));
-		}
+		});
+		socket.send(JSON.stringify({
+			eventtype:'update',
+			content: {
+				game: qualifier,
+				dimensions: d,
+			}
+		}));
+		spyglass['default'].on('data', function(data) {
+			socket.send(JSON.stringify({eventtype: 'updateinput', content: data}));
+		});
 
 		$terminal.html("");
-		spyglass[qualifier].open($terminal.get(0));
+		spyglass['default'].open($terminal.get(0));
 	}
 	
 	// hide lobby and unhide terminal
@@ -454,7 +461,7 @@ function initGameList(games) {
 	$("#gameselect").change(function(e) {
 		for(var i=0; i<games.length; i++) {
 			if(e.target.value === games[i].name) {
-				$("#game-description").html(games[i].desc);
+				$("#game-description").html(games[i].desc + " Maintained by "+games[i].owner);
 				if (typeof(games[i].owner) != undefined && username == games[i].owner) {
 					$("#updatebutton").removeClass('hidden');
 				} else {

@@ -363,7 +363,7 @@ html, body, #container {
     text-align: center;
     color: gray;
 }
-#playbutton {
+#playbutton, #updatebutton {
 	padding: 0.4rem 2rem;
     background-color: #171719;
     border: 2px solid #353535;
@@ -371,7 +371,9 @@ html, body, #container {
     text-decoration: none;
     margin-bottom: 2rem;
 }
-#playbutton:hover { background-color: #353535; }
+#playbutton:hover, , #updatebutton:hover { 
+	background-color: #353535; 
+}
 #watchmenu ul {
    padding: 0;
 	margin: 0;
@@ -458,7 +460,8 @@ html, body, #container {
 
 /* ROLES AND STATUS */
 #chatlog .winner{
-	color: #AF11AF;
+	/*color: #AF11AF;*/
+	color: #b220b2;
 }
 #chatlog .silwinner{
 	color: #e2e265;
@@ -469,44 +472,18 @@ html, body, #container {
 }
 #chatlog .dev {
   background: red; /* For browsers that do not support gradients */
-  background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(0,0,0,0.5), rgba(192,32,0,0.2),rgba(192,0,0,0.5)); /*Safari 5.1-6*/
-  background: -o-radial-gradient(rgba(0,0,0,1),rgba(0,0,0,0.5), rgba(192,32,0,0.2),rgba(192,0,0,0.5)); /*Opera 11.1-12*/
-  background: -moz-radial-gradient(rgba(0,0,0,1),rgba(0,0,0,0.5), rgba(192,32,0,0.2),rgba(192,0,0,0.5)); /*Fx 3.6-15*/
-  background: radial-gradient(rgba(0,0,0,1),rgba(0,0,0,0.5), rgba(192,32,0,0.2),rgba(192,0,0,0.5)); /*Standard*/
+  background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(192,0,0,0.5), rgba(192,32,0,0.2),rgba(0,0,0,0)); /*Safari 5.1-6*/
+  background: -o-radial-gradient(rgba(0,0,0,1),rgba(192,0,0,0.5), rgba(192,32,0,0.2),rgba(0,0,0,0)); /*Opera 11.1-12*/
+  background: -moz-radial-gradient(rgba(0,0,0,1),rgba(192,0,0,0.5), rgba(192,32,0,0.2),rgba(0,0,0,0)); /*Fx 3.6-15*/
+  background: radial-gradient(rgba(0,0,0,1),rgba(192,0,0,0.5), rgba(192,32,0,0.2),rgba(0,0,0,0)); /*Standard*/
 }
 #chatlog .deputy {
-  background: blue; /* For browsers that do not support gradients */
+  background: red; /* For browsers that do not support gradients */
   background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(0,0,128,0.5), rgba(0,32,128,0.2),rgba(0,0,0,0)); /*Safari 5.1-6*/
   background: -o-radial-gradient(rgba(0,0,0,1),rgba(0,0,128,0.5), rgba(0,32,128,0.2),rgba(0,0,0,0)); /*Opera 11.1-12*/
   background: -moz-radial-gradient(rgba(0,0,0,1),rgba(0,0,128,0.5), rgba(0,32,128,0.2),rgba(0,0,0,0)); /*Fx 3.6-15*/
   background: radial-gradient(rgba(0,0,0,1),rgba(0,0,128,0.5), rgba(0,32,128,0.2),rgba(0,0,0,0)); /*Standard*/
 }
-#chatlog .variant {
-<<<<<<< HEAD:public/css/style.css
-  background: green; /* For browsers that do not support gradients */
-=======
-  background: red; /* For browsers that do not support gradients */
->>>>>>> e8c83899ba01d3cc64823c327654ad594a4448dd:public/style.css
-  background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(0,192,0,0.5), rgba(0,128,0,0.2),rgba(0,0,0,0)); /*Safari 5.1-6*/
-  background: -o-radial-gradient(rgba(0,0,0,1),rgba(0,192,0,0.5), rgba(0,128,0,0.2),rgba(0,0,0,0)); /*Opera 11.1-12*/
-  background: -moz-radial-gradient(rgba(0,0,0,1),rgba(0,192,0,0.5), rgba(0,128,0,0.2),rgba(0,0,0,0)); /*Fx 3.6-15*/
-  background: radial-gradient(rgba(0,0,0,1),rgba(0,192,0,0.5), rgba(0,128,0,0.2),rgba(0,0,0,0)); /*Standard*/
-}
-#chatlog .donor {
-<<<<<<< HEAD:public/css/style.css
-  background: yellow; /* For browsers that do not support gradients */
-=======
-  background: red; /* For browsers that do not support gradients */
->>>>>>> e8c83899ba01d3cc64823c327654ad594a4448dd:public/style.css
-  background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(0,0,0,0.5), rgba(192,192,0,0.1),rgba(192,192,0,0.5)); /*Safari 5.1-6*/
-  background: -o-radial-gradient(rgba(0,0,0,1),rgba(0,0,0,0.5), rgba(192,192,0,0.1),rgba(192,192,0,0.5)); /*Opera 11.1-12*/
-  background: -moz-radial-gradient(rgba(0,0,0,1),rgba(0,0,0,0.5), rgba(192,192,0,0.1),rgba(192,192,0,0.5)); /*Fx 3.6-15*/
-  background: radial-gradient(rgba(0,0,0,1),rgba(0,0,0,0.5), rgba(192,192,0,0.1),rgba(192,192,0,0.5)); /*Standard*/
-}
-<<<<<<< HEAD:public/css/style.css
-
-=======
->>>>>>> e8c83899ba01d3cc64823c327654ad594a4448dd:public/style.css
 #chatlog .kt {
 	color: #EA5656;
 }

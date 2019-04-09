@@ -12,6 +12,10 @@ var lib         = {};
 // holds current games played. User.name is the key
 var matches     = {};
 
+//miscellaneous terminals, currently used for game updates
+// user.name is key 
+var misc		= {};
+
 // holds current socket connections
 var metasockets = {};
 
@@ -56,7 +60,12 @@ lib.respond = function(user, msg) {
 			matches[user.name].idle = false;
 		}
 	}
-	else if(msg.eventtype == 'gameupdate') {
+	else if(msg.eventtype == 'updateinput') {
+		if(typeof(misc[user.name]) != 'undefined'){
+			misc[user.name].write(msg.content);
+		}
+	}
+	else if(msg.eventtype == 'update') {
 		updategame(user, msg.content);
 	}
 }
@@ -195,7 +204,12 @@ function deletefile(username,filename) {
 function getgamelist() {
 	var gamelist = [];
 	for (var i in games){
-		gamelist.push({name:games[i].name, longname:games[i].longname, desc:games[i].desc});
+		gamelist.push({
+			name:games[i].name, 
+			longname:games[i].longname, 
+			desc:games[i].desc,
+			owner:games[i].owner
+		});
 	}
 	gamelist.sort(function(a, b) {
 	  var nameA = a.name.toUpperCase(); // ignore upper and lowercase
@@ -220,6 +234,7 @@ function getgameinfo(game) {
 			info.restrict_paths=games[i].restrict_paths;
 			info.data_paths=games[i].data_paths;
 			info.args=games[i].args;
+			info.owner=games[i].owner;
 		}
 	}
 	return info;
@@ -383,22 +398,22 @@ function newgame(user, msg) {
 	});*/
 }
 
-function updategame(user, game, dimensions) {
-	var gameinfo = getgameinfo(game);
-	if(gameinfo.owner == user.name){
-		console.log(`update by user ${user.name} of ${game}`);
-		var path = home + '/updategame.sh';
-		var args = [game];
+function updategame(user, msg) {
+	var gameinfo = getgameinfo(msg.game);
+	console.log(`update attempt by user ${user.name} of ${msg.game}`);
+	if(typeof(gameinfo.owner)!= undefined && gameinfo.owner == user.name){
+	console.log(`proceeding with update`);
+		var path = process.cwd() + '/updategame.sh';
 		termdesc = {
 			path     : path,
-			args     : args,
+			args     : [msg.game],
 			terminfo : 'xterm-256color'
 		};
 		try {
 			var term_opts = {
 				name              : termdesc.terminfo,
-				cols              : parseInt(dimensions.cols),
-				rows              : parseInt(dimensions.rows),
+				cols              : parseInt(msg.dimensions.cols),
+				rows              : parseInt(msg.dimensions.rows),
 				cwd               : process.env.HOME,
 				applicationCursor : true
 			};
@@ -411,19 +426,21 @@ function updategame(user, game, dimensions) {
 					// The WebSocket is not open, ignore
 				}
 			});
+			term.on('close', function(data) {
+				try {
+					metasockets[user.name].send(JSON.stringify({eventtype: 'updateover', content: []}));
+				} 
+				catch (ex) {
+					// The WebSocket is not open, ignore
+				}
+			});
+			misc[user.name]=term;
 		} 
 		catch(ex) {
 			console.log('update failure.');
 			console.error(ex);
 		}
-		term.on('close', function(data) {
-			try {
-				metasockets[player].send(JSON.stringify({eventtype: 'updateover', content: []}));
-			} 
-			catch (ex) {
-				// The WebSocket is not open, ignore
-			}
-		});
+		
 	}
 }
 
