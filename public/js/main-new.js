@@ -359,7 +359,6 @@ function initChat() {
 			case "updateoutput":
 				spyglass['default'].write(data.content); break;
 			case "gameover":
-			case "updateover":
 				closeGame(); break;
 			case "gameoutput":
 				if (typeof(spyglass[data.content.player])!='undefined') {
@@ -461,7 +460,9 @@ function initGameList(games) {
 	$("#gameselect").change(function(e) {
 		for(var i=0; i<games.length; i++) {
 			if(e.target.value === games[i].name) {
-				$("#game-description").html(games[i].desc + " Maintained by "+games[i].owner);
+				var desc = games[i].desc;
+				if (typeof(games[i].owner) != undefined) desc +=' Maintained by '+games[i].owner;
+				$("#game-description").html(games[i].desc);
 				if (typeof(games[i].owner) != undefined && username == games[i].owner) {
 					$("#updatebutton").removeClass('hidden');
 				} else {
