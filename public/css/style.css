@@ -26,7 +26,11 @@ html {
    overflow: hidden;
 }
 body {
-   background-color: rgba(0,0,0,0.6);
+   background: rgba(0,0,0,0.6);
+   background: -webkit-radial-gradient(rgba(0,0,0,0.44),rgba(0,0,0,0.88)); /*Safari 5.1-6*/
+   background: -o-radial-gradient(rgba(0,0,0,0.44),rgba(0,0,0,0.88)); /*Opera 11.1-12*/
+   background: -moz-radial-gradient(rgba(0,0,0,0.44),rgba(0,0,0,0.88)); /*Fx 3.6-15*/
+   background: radial-gradient(rgba(0,0,0,0.44),rgba(0,0,0,0.88)); /*Standard*/
    overflow: hidden;
 }
 
