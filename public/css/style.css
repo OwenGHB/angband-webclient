@@ -85,6 +85,9 @@ input[type="checkbox"] { width: initial; }
 	background-color: black;
 	/*float: left;*/
 }
+#terminal-pane {
+	background-color: black;
+}
 /*#mainmenu {
 	float: left;
 }
