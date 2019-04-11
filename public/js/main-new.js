@@ -153,7 +153,6 @@ function listFiles(files) {
 function showMenu(){
 	$("#terminal-pane").addClass("hidden");
 	$("#games-lobby").removeClass("hidden");
-	$("body").css({backgroundColor:'rgba(0,0,0,0.3)'});
 }
 
 
@@ -259,7 +258,6 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 	// hide lobby and unhide terminal with fade
 	$("#games-lobby").addClass("hidden");
 	$("#terminal-pane").removeClass("hidden");
-	$("body").css({backgroundColor:'rgba(0,0,0,0.88)'});
 }
 
 
@@ -270,7 +268,6 @@ function cleanSpyGlass(matches){
 		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
 			$("#terminal-pane").addClass("hidden");
 			$("#games-lobby").removeClass("hidden");
-			$("body").css({backgroundColor:'rgba(0,0,0,0.3)'});
 		});
 	});
 	var players = Object.keys(matches);
@@ -308,7 +305,6 @@ function closeGame(){
 		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
 			$("#terminal-pane").addClass("hidden");
 			$("#games-lobby").removeClass("hidden");
-			$("body").css({backgroundColor:'rgba(0,0,0,0.3)'});
 		});
 	});
 	if(Object.keys(spyglass).length > 0) {
@@ -326,7 +322,6 @@ function closeGame(){
 	}
 	$("#terminal-pane").addClass("hidden");
 	$("#games-lobby").removeClass("hidden");
-	$("body").css({backgroundColor:'rgba(0,0,0,0.3)'});
 	playing=false;
 }
 

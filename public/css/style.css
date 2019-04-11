@@ -26,7 +26,7 @@ html {
    overflow: hidden;
 }
 body {
-   background-color: rgba(0,0,0,0.3);
+   background-color: rgba(0,0,0,0.7);
    overflow: hidden;
 }
 
@@ -182,7 +182,7 @@ html, body, #container {
 .tab-panels .hidden { display: none !important; }
 .tab-panels .panel,
 #new-message-input {
-	background-color: rgba(17,17,17,0.5);
+	background-color: rgba(17,17,17,0.8);
 	border: 2px solid #353535;
 	margin-bottom: 0.25rem;
 	padding: 0.4rem;
