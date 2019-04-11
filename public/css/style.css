@@ -16,7 +16,7 @@ a {
 
 
 html {
-   background-image: url("/img/bgr.png");
+   background-image: url("/img/bgr.jpg");
    background-repeat: no-repeat;
    background-size: cover;
    background-position: center center;
@@ -162,7 +162,14 @@ html, body, #container {
     overflow: hidden;
     min-height: 200px;
 }
-.flex .tab-panels {
+.flex .tab-panels.uchel {
+	flex-grow: 0.2;
+	display: flex;
+    flex-direction: column;
+    height: 100%;
+    height: 100px;
+}
+.flex .tab-panels.isaf {
 	flex-grow: 1;
 	display: flex;
     flex-direction: column;
