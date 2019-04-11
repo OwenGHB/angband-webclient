@@ -16,17 +16,17 @@ a {
 
 
 html {
-   background-image: url("/img/bgr1.jpg");
+   background-image: url("/img/bgr.png");
    background-repeat: no-repeat;
    background-size: cover;
-   background-position: top center;
+   background-position: center center;
    font-size: 14px;
    font-family: 'Ubuntu Mono', monospace;
    line-height: initial;
    overflow: hidden;
 }
 body {
-   background-color: rgba(17,17,17,0.6);
+   background-color: rgba(0,0,0,0.3);
    overflow: hidden;
 }
 
@@ -182,7 +182,7 @@ html, body, #container {
 .tab-panels .hidden { display: none !important; }
 .tab-panels .panel,
 #new-message-input {
-	background-color: #0f0f0f;
+	background-color: rgba(17,17,17,0.5);
 	border: 2px solid #353535;
 	margin-bottom: 0.25rem;
 	padding: 0.4rem;
@@ -243,10 +243,10 @@ html, body, #container {
 .tab-panels .tab a {
 	display: block;
 	text-decoration: none;
-	color: #dc5d62;
+	color: #778990;
 }
 .tab-panels .tab a:hover {
-	color: #e29497;
+	color: #00B7FF;
 }
 .tab-panels label {
 }
@@ -361,7 +361,6 @@ html, body, #container {
 #game-description {
 	max-width: 400px;
     text-align: center;
-    color: gray;
 }
 #playbutton, #updatebutton {
 	padding: 0.4rem 2rem;
@@ -381,7 +380,6 @@ html, body, #container {
 }
 #watchmenu ul li {
 	list-style-type: none;
-	color: gray;
 	cursor: pointer;
 	padding: 1px 4px;
 }
@@ -405,9 +403,7 @@ html, body, #container {
     align-items: center;
 }
 #terminal-container {
-	border: 2px solid #353535;
 	display: block;
-	padding: 1px 2px;
 }
 #terminal-container,
 #tester {
@@ -472,10 +468,10 @@ html, body, #container {
 }
 #chatlog .dev {
   background: red; /* For browsers that do not support gradients */
-  background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,32,0,0.5),rgba(0,0,0,0)); /*Safari 5.1-6*/
-  background: -o-radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,32,0,0.5),rgba(0,0,0,0)); /*Opera 11.1-12*/
-  background: -moz-radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,32,0,0.5),rgba(0,0,0,0)); /*Fx 3.6-15*/
-  background: radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,32,0,0.5),rgba(0,0,0,0)); /*Standard*/
+  background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,0,0,0.5),rgba(192,0,0,0.1)); /*Safari 5.1-6*/
+  background: -o-radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,0,0,0.5),rgba(192,0,0,0.1)); /*Opera 11.1-12*/
+  background: -moz-radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,0,0,0.5),rgba(192,0,0,0.1)); /*Fx 3.6-15*/
+  background: radial-gradient(rgba(0,0,0,1),rgba(64,0,0,0.2), rgba(128,0,0,0.5),rgba(192,0,0,0.1)); /*Standard*/
 }
 #chatlog .deputy {
   background: red; /* For browsers that do not support gradients */

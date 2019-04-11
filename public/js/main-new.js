@@ -1,4 +1,4 @@
-var safety = 10;            // for font size calculation
+var safety = 2;            // for font size calculation
 var initComplete = false    // used to do some stuff only after this will be true
 
 var protocol = window.location.protocol === "https:" ? "wss" : "ws";
@@ -153,14 +153,21 @@ function listFiles(files) {
 function showMenu(){
 	$("#terminal-pane").addClass("hidden");
 	$("#games-lobby").removeClass("hidden");
+	$("body").css({backgroundColor:'rgba(0,0,0,0.3)'});
 }
 
 
 function showTab(id, el) {
-	const tabs = $(".tab-panels").children().map(function(i,e){return e.id;});
-	$(".tab-panels div.tab").addClass("hidden");
-	$("#" + id).removeClass("hidden");
-	$(".tab-buttons a").removeClass("selected");
+	//ugly hack but a lot of things are ugly right now
+	if (['tab-chat','tab-people'].includes(id)){
+		$(".isaf div.tab").addClass("hidden");
+		$("#" + id).removeClass("hidden");
+		$(".isaf a").removeClass("selected");
+	} else {
+		$(".uchel div.tab").addClass("hidden");
+		$("#" + id).removeClass("hidden");
+		$(".uchel a").removeClass("selected");
+	}
 	$(el).addClass("selected");
 
 	if(id === "tab-chat")
@@ -249,48 +256,49 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 		spyglass['default'].open($terminal.get(0));
 	}
 	
-	// hide lobby and unhide terminal
+	// hide lobby and unhide terminal with fade
 	$("#games-lobby").addClass("hidden");
 	$("#terminal-pane").removeClass("hidden");
+	$("body").css({backgroundColor:'rgba(0,0,0,0.88)'});
 }
 
 
 // does the same as listGameMatches?? 
 function cleanSpyGlass(matches){
-	console.warn("cleanSpyGlass deprecated");
-	// $("#navigation ul").html("");
-	// // $("#navigation ul").append(function() {
-	// // 	return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
-	// // 		$("#terminal-pane").addClass("hidden");
-	// // 		$("#games-lobby").removeClass("hidden");
-	// // 	});
-	// // });
-	// var players = Object.keys(matches);
-	// if(Object.keys(spyglass).length > 0) {
-	// 	for(var i in spyglass) {
-	// 		if (i == username) {
-	// 			$("#navigation ul").append(function(i) {
-	// 				return $('<li><a href="#"> - your game</a></li>').click(function() {
-	// 					var panels = $("#subwindows").val();
-	// 					var walls = false;
-	// 					var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
-	// 					var gamename = $("#gameselect").val();
-	// 					applyTerminal("play", gamename, panels, walls, );
-	// 				});
-	// 			}(i));
-	// 		} 
-	// 		else if (players.includes(i)) {
-	// 			$("#navigation ul").append(function(i) {
-	// 				return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
-	// 					applyTerminal("spectate", i, 1, false, matches[i].dimensions);
-	// 				});
-	// 			}(i));	
-	// 		} 
-	// 		else {
-	// 			delete spyglass[i];
-	// 		}
-	// 	}
-	// }
+	$("#navigation ul").html("");
+	$("#navigation ul").append(function() {
+		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
+			$("#terminal-pane").addClass("hidden");
+			$("#games-lobby").removeClass("hidden");
+			$("body").css({backgroundColor:'rgba(0,0,0,0.3)'});
+		});
+	});
+	var players = Object.keys(matches);
+	if(Object.keys(spyglass).length > 0) {
+		for(var i in spyglass) {
+			if (i == username) {
+				$("#navigation ul").append(function(i) {
+					return $('<li><a href="#">' + i + '</a></li>').click(function() {
+						var panels = $("#subwindows").val();
+						var walls = false;
+						var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
+						var gamename = $("#gameselect").val();
+						applyTerminal("play", gamename, panels, walls, );
+					});
+				}(i));
+			} 
+			else if (players.includes(i)) {
+				$("#navigation ul").append(function(i) {
+					return $('<li><a href="#">' + i + '</a></li>').click(function() {
+						applyTerminal("spectate", i, 1, false, matches[i].dimensions);
+					});
+				}(i));	
+			} 
+			else {
+				delete spyglass[i];
+			}
+		}
+	}
 }
 
 
@@ -300,6 +308,7 @@ function closeGame(){
 		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
 			$("#terminal-pane").addClass("hidden");
 			$("#games-lobby").removeClass("hidden");
+			$("body").css({backgroundColor:'rgba(0,0,0,0.3)'});
 		});
 	});
 	if(Object.keys(spyglass).length > 0) {
@@ -317,6 +326,7 @@ function closeGame(){
 	}
 	$("#terminal-pane").addClass("hidden");
 	$("#games-lobby").removeClass("hidden");
+	$("body").css({backgroundColor:'rgba(0,0,0,0.3)'});
 	playing=false;
 }
 
