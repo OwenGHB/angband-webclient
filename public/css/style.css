@@ -16,14 +16,35 @@ a {
 
 
 html {
-   background-image: url("/img/bgr.jpg");
-   background-repeat: no-repeat;
-   background-size: cover;
-   background-position: center center;
-   font-size: 14px;
-   font-family: 'Ubuntu Mono', monospace;
-   line-height: initial;
-   overflow: hidden;
+    background-image: url("/img/bgr_1920.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    font-size: 14px;
+    font-family: 'Ubuntu Mono', monospace;
+    line-height: initial;
+    overflow: hidden;
+}
+
+@media only screen and (min-width : 1921px) {
+    html {
+        background-image: url('/img/bgr_2560.jpg');
+    }
+}
+@media only screen and (max-width : 1280px) {
+    html {
+        background-image: url('/img/bgr_1280.jpg');
+    }
+}
+@media only screen and (max-width : 1000px) {
+    html {
+        background-image: url('/img/bgr_1000.jpg');
+    }
+}
+@media only screen and (max-width : 768px) {
+    html {
+        background-image: url('/img/bgr_768.jpg');
+    }
 }
 body {
    background: rgba(0,0,0,0.6);
