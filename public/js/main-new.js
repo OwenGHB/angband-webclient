@@ -352,7 +352,7 @@ function initChat() {
 				break;
 			case "chat":
 				addMessage(data.content, false, initComplete); 
-				// if(initComplete)
+				if(initComplete)
 				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 				break;
 			case "usercount":
@@ -370,6 +370,8 @@ function initChat() {
 				break;
 			case "deathannounce":
 				addMessage(data.content, "deathangel", initComplete);
+				if(initComplete)
+				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 				break;
 			case "owngameoutput":
 			case "updateoutput":
