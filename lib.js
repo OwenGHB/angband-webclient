@@ -41,7 +41,7 @@ lib.respond = function(user, msg) {
 		if (typeof(matches[user.name]) != 'undefined') {
 			closegame(user.name);
 		} 
-		else if(user.roles.indexOf("banned") !== -1) {
+		else if(!(user.roles.indexOf("banned") !== -1)) {
 			newgame(user,msg.content);
 		}
 	} 
@@ -122,8 +122,8 @@ function chat(user, message){
 
 	}
 	else {
-		localdb.pushMessage(user, message);
-		if (user.roles.indexOf("mute") !== -1) {
+		if (!(user.roles.indexOf("mute") == -1)) {
+			localdb.pushMessage(user, message);
 			for (var i in metasockets){
 				try {
 					metasockets[i].send(JSON.stringify(response));
