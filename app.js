@@ -85,11 +85,6 @@ app.get('/', function(req, res) {
 	});
 });
 
-app.get("/db/refresh", function(req, res) {
-   localdb.refresh();
-   res.send("database refreshed");
-});
-
 app.post('/enter', passport.authenticate("local", {failureRedirect: '/forbidden'}), function(req, res) {
    console.log("user authenticated, redirecting to play", req.user);
    return res.redirect("/play");

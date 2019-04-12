@@ -133,7 +133,13 @@ module.exports.readMessages = function(limit) {
 
 
 
-
+//user roles
+module.exports.addRole = function(role,user) {
+   var roles = db.users.get("data").find({name: user}).value().roles;
+   roles.push(role);
+   db.users.get("data").find({name: user}).assign({roles: roles}).write();
+   return roles;
+}
 
 
 

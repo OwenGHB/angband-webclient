@@ -41,7 +41,7 @@ lib.respond = function(user, msg) {
 		if (typeof(matches[user.name]) != 'undefined') {
 			closegame(user.name);
 		} 
-		else if(user.name != 'anthon') {
+		else if(user.roles.indexOf("banned") !== -1) {
 			newgame(user,msg.content);
 		}
 	} 
@@ -83,40 +83,62 @@ function chat(user, message){
 	};
 
 	// if this is a command message from devs (starts with / followed by command) then do what needs to be done
-	console.log("dev check", message[0], message[0] === "/", user.roles, user.roles.indexOf("dev") !== -1);
 	if(message[0] === "/" && user.roles.indexOf("dev") !== -1) {
 		var command = message.match(/\/\w+/)[0];
 		var msg = message.replace(command + " ", "");
-
-		console.log(command, msg, command === "/announce");
+		
+		response.eventtype = "systemannounce";
+		
 		// announce text to all users as system message
-		if(command === "/announce") {
-			response.eventtype = "systemannounce";
+		if(command === "/announce" && command != msg) {
 			response.content = msg;
 			localdb.pushMessage("--system--", msg);
+			for (var i in metasockets){
+				try {
+					metasockets[i].send(JSON.stringify(response));
+				}
+				catch (ex) {
+					// The WebSocket is not open, ignore
+				}
+			}
 		}
-		else if(command === "/ban") {
-			// todo: ban user
+		else if(command === "/addrole" && command != msg) {
+			var role = msg.match(/\w+/)[0];
+			var recipient = msg.replace(role + " ", "");
+			var roles = localdb.addRole(role,recipient);
+			response.content = "user "+recipient+" has roles "+JSON.stringify(roles);
+			metasockets[user.name].send(JSON.stringify(response));
+			
+		}
+		else if(command === "/refresh"){
+			localdb.refresh();
+			response.content = "db refreshed";
+			metasockets[user.name].send(JSON.stringify(response));
+		}
+		else {
+			response.content = "unknown command or incorrect syntax";
+			metasockets[user.name].send(JSON.stringify(response));
 		}
 
 	}
 	else {
 		localdb.pushMessage(user, message);
+		if (user.roles.indexOf("mute") !== -1) {
+			for (var i in metasockets){
+				try {
+					metasockets[i].send(JSON.stringify(response));
+				}
+				catch (ex) {
+					// The WebSocket is not open, ignore
+				}
+			}
+		} 
+		else {
+			metasockets[user.name].send(JSON.stringify(response));
+		}
 	}
 
-	if (user.name != "Sirfurnace") {
-		for (var i in metasockets){
-			try {
-				metasockets[i].send(JSON.stringify(response));
-			}
-			catch (ex) {
-				// The WebSocket is not open, ignore
-			}
-		}
-	} 
-	else {
-		metasockets[user.name].send(JSON.stringify(response));
-	}
+	
 }
 
 
