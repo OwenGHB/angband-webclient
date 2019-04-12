@@ -27,10 +27,10 @@ html {
 }
 body {
    background: rgba(0,0,0,0.6);
-   background: -webkit-radial-gradient(rgba(0,0,0,0.44),rgba(0,0,0,0.88)); /*Safari 5.1-6*/
-   background: -o-radial-gradient(rgba(0,0,0,0.44),rgba(0,0,0,0.88)); /*Opera 11.1-12*/
-   background: -moz-radial-gradient(rgba(0,0,0,0.44),rgba(0,0,0,0.88)); /*Fx 3.6-15*/
-   background: radial-gradient(rgba(0,0,0,0.44),rgba(0,0,0,0.88)); /*Standard*/
+   background: -webkit-radial-gradient(rgba(0,0,0,0.33),rgba(0,0,0,0.99)); /*Safari 5.1-6*/
+   background: -o-radial-gradient(rgba(0,0,0,0.33),rgba(0,0,0,0.99)); /*Opera 11.1-12*/
+   background: -moz-radial-gradient(rgba(0,0,0,0.33),rgba(0,0,0,0.99)); /*Fx 3.6-15*/
+   background: radial-gradient(rgba(0,0,0,0.33),rgba(0,0,0,0.99)); /*Standard*/
    overflow: hidden;
 }
 
@@ -90,7 +90,7 @@ input[type="checkbox"] { width: initial; }
 	/*float: left;*/
 }
 #terminal-pane {
-	background-color: black;
+	background-color: rgba(0,0,0,0);
 }
 /*#mainmenu {
 	float: left;
@@ -196,10 +196,10 @@ html, body, #container {
 .tab-panels .hidden { display: none !important; }
 .tab-panels .panel,
 #new-message-input {
-	background-color: rgba(17,17,17,0.8);
-	border: 2px solid #353535;
-	margin-bottom: 0.25rem;
-	padding: 0.4rem;
+	background-color: rgba(0,0,0,0.6);
+	border: 2px outset #252515;
+	margin-bottom: 0.15rem;
+	padding: 0.2rem;
 	position: relative;
 }
 .tab-panels .panel {
@@ -371,6 +371,7 @@ html, body, #container {
    -webkit-appearance: none;
    -moz-appearance: none;
    padding: 3px 8px; 
+   background-color: rgba(0,0,0,0.75);
 }
 #game-description {
 	max-width: 400px;
@@ -378,8 +379,8 @@ html, body, #container {
 }
 #playbutton, #updatebutton {
 	padding: 0.4rem 2rem;
-    background-color: #171719;
-    border: 2px solid #353535;
+    background-color: #212119;
+    border: 2px outset #353515;
     color: #c7c6c6;
     text-decoration: none;
     margin-bottom: 2rem;
