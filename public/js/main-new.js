@@ -43,7 +43,13 @@ var notify_sound = $("#notification").get(0);
 
 function populateChat(messages) {
 	messages.forEach(function(message) {
-		addMessage(message, false, false);
+		if (message.user=='--system--') {
+			addMessage(message, "system", false);
+		} else if (message.user=='--deathangel--') {
+			addMessage(message, "deathangel", false);
+		} else {
+			addMessage(message, false, false);
+		}
 	});
 	$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
    initComplete = true;
@@ -67,7 +73,7 @@ function addMessage(msg, extra_class, shouldNotify) {
 	}
 	else {
 		var _m = typeof msg === "object" ? msg.message : msg;
-		$("#chatlog .wrapper").append('<div class="message"><span class="time">['+ts+'] </span><span class="system">' + _m + '</span></div>');
+		$("#chatlog .wrapper").append('<div class="message"><span class="time">['+ts+'] </span><span class="'+extra_class+'">' + _m + '</span></div>');
 	}
 
 	// if user is outside chat tab and new msg arrive blink chat icon
@@ -352,13 +358,18 @@ function initChat() {
 			case "usercount":
 				updateUserCount(data.content); break;
 			case "matchupdate":
-				listMatches(data.content); /*cleanSpyGlass(data.content);*/ break;
+				listMatches(data.content); 
+				//cleanSpyGlass(data.content); 
+				break;
 			case "fileupdate":
 				listFiles(data.content); break;
 			case "systemannounce":
 				addMessage(data.content, "system", initComplete);
 				if(initComplete)
 				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+				break;
+			case "deathannounce":
+				addMessage(data.content, "deathangel", initComplete);
 				break;
 			case "owngameoutput":
 			case "updateoutput":

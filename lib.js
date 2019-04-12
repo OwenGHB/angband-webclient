@@ -70,7 +70,6 @@ lib.respond = function(user, msg) {
 	}
 }
 
-
 function chat(user, message){
 	var response = { 
 		eventtype: "chat",
@@ -93,14 +92,7 @@ function chat(user, message){
 		if(command === "/announce" && command != msg) {
 			response.content = msg;
 			localdb.pushMessage("--system--", msg);
-			for (var i in metasockets){
-				try {
-					metasockets[i].send(JSON.stringify(response));
-				}
-				catch (ex) {
-					// The WebSocket is not open, ignore
-				}
-			}
+			announce(response);
 		}
 		else if(command === "/addrole" && command != msg) {
 			var role = msg.match(/\w+/)[0];
@@ -124,30 +116,30 @@ function chat(user, message){
 	else {
 		if (!(user.roles.indexOf("mute") !== -1)) {
 			localdb.pushMessage(user, message);
-			for (var i in metasockets){
-				try {
-					metasockets[i].send(JSON.stringify(response));
-				}
-				catch (ex) {
-					// The WebSocket is not open, ignore
-				}
-			}
+			announce(response);
 		} 
 		else {
 			metasockets[user.name].send(JSON.stringify(response));
 		}
-	}
-
-	
+	}	
 }
 
+function announce(message){
+	for (var i in metasockets){
+		try {
+			metasockets[i].send(JSON.stringify(message));
+		}
+		catch (ex) {
+			// The WebSocket is not open, ignore
+		}
+	}
+}
 
 //some get functions
 function getmatchlist(matches) {
 	var livematches = {};
 	for (var i in matches) {
 		var charinfo = getcharinfo(i, matches[i].game);
-		var alive=isalive(i, matches[i].game);
 		livematches[i] = {
 			game       : matches[i].game,
 			idletime   : matches[i].idletime,
@@ -155,7 +147,6 @@ function getmatchlist(matches) {
 			race       : charinfo.race,
 			subrace    : charinfo.subrace,
 			class      : charinfo.class,
-			alive      : alive,
 			dimensions : {rows: matches[i].dimensions.rows, cols: matches[i].dimensions.cols} 
 		};
 	}
@@ -219,7 +210,8 @@ function getfilelist(name) {
 }
 
 function deletefile(username,filename) {
-	
+	var path = home+'/user/'+username+'/';
+	fs.ensureDirSync(path);
 }
 
 
@@ -270,6 +262,7 @@ function newgame(user, msg) {
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.name;
+	var alive = isalive(player,game);
 	var compgame = 'silq';
 	var compnumber = '217';
 	var panelargs = ['-b'];
@@ -387,24 +380,18 @@ function newgame(user, msg) {
 		term.on('close', function(data) {
 			closegame(user.name);
 		});
-
+		
 		matches[user.name] = {
 			term: term,
 			game: game,
 			idle: false,
 			idletime: 0,
+			alive: alive,
 			spectators: [],
 			dimensions: dimensions
 		};
 		
-		for (var i in metasockets) {
-			try {
-				metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
-			} 
-			catch (ex) {
-				// The WebSocket is not open, ignore
-			}
-		}
+		announce({eventtype: 'matchupdate', content: getmatchlist(matches)});
 	} 
 	catch(ex) {
 		console.log('we usually crash here, now we should not any more.');
@@ -423,7 +410,7 @@ function newgame(user, msg) {
 function updategame(user, msg) {
 	var gameinfo = getgameinfo(msg.game);
 	console.log(`update attempt by user ${user.name} of ${msg.game}`);
-	if(typeof(gameinfo.owner)!= undefined && gameinfo.owner == user.name){
+	if(typeof(gameinfo.owner)!= 'undefined' && gameinfo.owner == user.name){
 	console.log(`proceeding with update`);
 		var path = process.cwd() + '/updategame.sh';
 		termdesc = {
@@ -461,8 +448,7 @@ function updategame(user, msg) {
 		catch(ex) {
 			console.log('update failure.');
 			console.error(ex);
-		}
-		
+		}	
 	}
 }
 
@@ -503,22 +489,27 @@ function closegame(player){
 			else {
 				console.log( 'Process %s was not found, expect user exited cleanly.',player );
 			}
-			// Clean things up
-			delete matches[player]; 
 			try {
 				metasockets[player].send(JSON.stringify({eventtype: 'gameover', content: []}));
 			} 
 			catch (ex) {
 				// The WebSocket is not open, ignore
 			}
-			for (var i in metasockets) {
-				try {
-					metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
-				} 
-				catch (ex) {
-					// The WebSocket is not open, ignore
+			if (!isalive(player,matches[player].game)) {
+				if (matches[player].alive) {
+					var killedBy = getcharinfo(player,matches[player].game).killedBy
+					var msg = player+" was killed by "+killedBy;
+					if (killedBy == "(winner)") {
+						msg = player+" won the game!";
+					}
+					localdb.pushMessage("--deathangel--", msg);
+					announce({eventtype:"deathannounce",content:msg});
 				}
 			}
+			matches[player].alive=isalive(player,matches[player].game);
+			// Clean things up
+			delete matches[player]; 
+			announce({eventtype: 'matchupdate', content: getmatchlist(matches)});
 		});
 	}
 }
@@ -661,6 +652,19 @@ lib.keepalive = function(){
 		if (matches[i].idletime>60) {
 			closegame(i);
 		} 
+		
+		if (!isalive(i,matches[i].game)) {
+			if (matches[i].alive) {
+				var killedBy = getcharinfo(i,matches[i].game).killedBy
+				var msg = i+" was killed by "+killedBy;
+				if (killedBy == "(winner)") {
+					msg = i+" won the game!";
+				}
+				localdb.pushMessage("--deathangel--", msg);
+				announce({eventtype:"deathannounce",content:msg});
+			}
+		}
+		matches[i].alive=isalive(i,matches[i].game);
 	}
 	for (var i in metasockets) {
 		try {

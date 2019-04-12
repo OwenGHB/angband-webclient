@@ -196,7 +196,7 @@ html, body, #container {
 .tab-panels .hidden { display: none !important; }
 .tab-panels .panel,
 #new-message-input {
-	background-color: rgba(0,0,0,0.6);
+	background-color: rgba(0,0,0,0.5);
 	border: 2px outset #252515;
 	margin-bottom: 0.15rem;
 	padding: 0.2rem;
@@ -204,6 +204,7 @@ html, body, #container {
 }
 .tab-panels .panel {
 	height: 100%;
+	overflow: auto;
 }
 .flex .tab-panels .tab .wrapper {
 	/*height: 100%;*/
@@ -282,6 +283,7 @@ html, body, #container {
 	font-weight: 600;
 }
 #chatlog .system { color: burlywood; }
+#chatlog .deathangel { color: #800000;}
 #chatlog .message { word-wrap: break-word; }
 #chatlog .message .time { color: #555; }
 #new-message-input input { width: 100%; font-size: inherit; outline: none;}
