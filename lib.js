@@ -122,7 +122,7 @@ function chat(user, message){
 
 	}
 	else {
-		if (!(user.roles.indexOf("mute") == -1)) {
+		if (!(user.roles.indexOf("mute") !== -1)) {
 			localdb.pushMessage(user, message);
 			for (var i in metasockets){
 				try {
