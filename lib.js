@@ -115,6 +115,7 @@ function chat(user, message){
 				localdb.setVersionString(game,longname);
 				response.content = game+" renamed to "+longname;
 				localdb.refresh();
+				games = localdb.fetchGames();
 			} else {
 				response.content = "You do not have the authority to rename "+game;
 			}
