@@ -127,7 +127,8 @@ function chat(user, message){
 function checkForDeath(player){
 	if (!isalive(player,matches[player].game)) {
 		if (matches[player].alive) {
-			var msg = player+" was killed by "+getcharinfo(player,matches[player].game).killedBy;
+			var killedBy = getcharinfo(player,matches[player].game).killedBy
+			var msg = player+" was killed by "+killedBy;
 			if (killedBy == "Ripe Old Age") {
 				msg+=". Long live "+player+"!";
 				localdb.addRole("winner",player);
