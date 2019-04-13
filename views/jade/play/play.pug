@@ -29,6 +29,8 @@ html
                      i.fas.fa-file-alt
                   a#btn-tabletui.hidden(href="#", title="tablet controls", onclick="showTab('tab-tabletui',this)")
                      i.fas.fa-tablet-alt
+                  a.hidden(href="#", title="tools", onclick="showTab('tab-tools',this)")
+                     i.fas.fa-wrench
                   a(href="#", title="settings", onclick="showTab('tab-settings',this)")
                      i.fas.fa-cog
                   
@@ -44,6 +46,10 @@ html
                      include tab_files.pug
                   #tab-tabletui.tab.hidden
                      include tab_tabletui.pug
+                  #tab-tools.tab.hidden
+                     #tools.flex-grow.panel
+                        .wrapper
+                           p#keystrokeinput
                   #tab-settings.tab.hidden
                      include tab_settings.pug
 					 

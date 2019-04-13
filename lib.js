@@ -55,7 +55,8 @@ lib.respond = function(user, msg) {
 		unsubscribe(user, msg.content);
 	}
 	else if(msg.eventtype == 'gameinput') {
-		if(typeof(matches[user.name]) != 'undefined'){
+		var inputAsString = JSON.stringify(msg.content);
+		if(typeof(matches[user.name]) != 'undefined' && inputAsString != '"\\u001a"'){
 			matches[user.name].term.write(msg.content);
 			matches[user.name].idle = false;
 		}

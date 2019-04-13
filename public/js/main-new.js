@@ -215,6 +215,7 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 				}
 			}));
 			spyglass['default'].on('data', function(data) {
+				$("#keystrokeinput").html(JSON.stringify(data));
 				socket.send(JSON.stringify({eventtype: 'gameinput', content: data}));
 			});
 		}
@@ -254,6 +255,7 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 			}
 		}));
 		spyglass['default'].on('data', function(data) {
+			$("#keystrokeinput").html(JSON.stringify(data));
 			socket.send(JSON.stringify({eventtype: 'updateinput', content: data}));
 		});
 
@@ -479,9 +481,9 @@ function initGameList(games) {
 		for(var i=0; i<games.length; i++) {
 			if(e.target.value === games[i].name) {
 				var desc = games[i].desc;
-				if (typeof(games[i].owner) != undefined) desc +=' Maintained by '+games[i].owner;
+				if (typeof(games[i].owner) != 'undefined') desc +=' Maintained by '+games[i].owner;
 				$("#game-description").html(games[i].desc);
-				if (typeof(games[i].owner) != undefined && username == games[i].owner) {
+				if (typeof(games[i].owner) != 'undefined' && username == games[i].owner) {
 					$("#updatebutton").removeClass('hidden');
 				} else {
 					$("#updatebutton").addClass('hidden');
