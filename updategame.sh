@@ -20,6 +20,12 @@ make
 elif test $1 = 'silq-dev' || test $1 = 'silq'
 then
 cd src
+printf "clean object files?"
+read -n 1 ans
+if test $ans = 'y'
+then
+rm *.o
+fi
 make -f Makefile.nfe
 cd ../
 else

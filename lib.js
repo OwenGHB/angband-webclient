@@ -3,7 +3,6 @@ var pty         = require('node-pty');
 var moment      = require('moment');
 var ps          = require('ps-node');
 var fs          = require('fs-extra');
-var games       = require('./games.js');
 var config      = require("./config");
 var terminal    = require('term.js');
 
@@ -22,6 +21,7 @@ var metasockets = {};
 
 var home        = process.env.CUSTOM_HOME || '/home/angband';
 var localdb     = require("./localdb");
+var games       = localdb.fetchGames();
 
 
 
@@ -81,20 +81,20 @@ function chat(user, message){
 		}
 	};
 
-	// if this is a command message from devs (starts with / followed by command) then do what needs to be done
-	if(message[0] === "/" && user.roles.indexOf("dev") !== -1) {
+	// if this is a command message from devs or maintainers (starts with / followed by command) then do what needs to be done
+	if(message[0] === "/" && (user.roles.indexOf("dev") !== -1 || user.roles.indexOf("maintainer") !== -1)) {
 		var command = message.match(/\/\w+/)[0];
 		var msg = message.replace(command + " ", "");
 		
 		response.eventtype = "systemannounce";
 		
 		// announce text to all users as system message
-		if(command === "/announce" && command != msg) {
+		if(command === "/announce" && command != msg && user.roles.indexOf("dev") !== -1) {
 			response.content = msg;
 			localdb.pushMessage("--system--", msg);
 			announce(response);
 		}
-		else if(command === "/addrole" && command != msg) {
+		else if(command === "/addrole" && command != msg && user.roles.indexOf("dev") !== -1) {
 			var role = msg.match(/\w+/)[0];
 			var recipient = msg.replace(role + " ", "");
 			var roles = localdb.addRole(role,recipient);
@@ -102,9 +102,22 @@ function chat(user, message){
 			metasockets[user.name].send(JSON.stringify(response));
 			
 		}
-		else if(command === "/refresh"){
+		else if(command === "/refresh" && user.roles.indexOf("dev") !== -1){
 			localdb.refresh();
 			response.content = "db refreshed";
+			metasockets[user.name].send(JSON.stringify(response));
+		}
+		else if(command === "/rename" && command != msg) {
+			var game = msg.match(/\w+/)[0];
+			var gameinfo = getgameinfo(game);
+			var longname = msg.replace(game + " ", "");
+			if(typeof(gameinfo.owner)!= 'undefined' && gameinfo.owner == user.name) {
+				localdb.setVersionString(game,longname);
+				response.content = game+" renamed to "+longname;
+				localdb.refresh();
+			} else {
+				response.content = "You do not have the authority to rename "+game;
+			}
 			metasockets[user.name].send(JSON.stringify(response));
 		}
 		else {
@@ -458,6 +471,7 @@ function updategame(user, msg) {
 				catch (ex) {
 					// The WebSocket is not open, ignore
 				}
+				announce({eventtype:"system",content:msg.game+" has been updated by "+user.name});
 			});
 			misc[user.name]=term;
 		} 

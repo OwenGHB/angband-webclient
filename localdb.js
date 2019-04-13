@@ -146,6 +146,15 @@ module.exports.checkRole = function(role,user) {
    return roles.includes(role);
 }
 
+module.exports.fetchGames = function() {
+	return db.games.value().data;
+}
+
+module.exports.setVersionString = function(game,longname) {
+	db.games.get("data").find({name: game}).assign({longname: longname}).write
+	return longname;
+}
+
 // get last 10 news
 function getNews() {
    return db.news
