@@ -124,6 +124,21 @@ function chat(user, message){
 	}	
 }
 
+function checkForDeath(player){
+	if (!isalive(player,matches[player].game)) {
+		if (matches[player].alive) {
+			var msg = player+" was killed by "+getcharinfo(player,matches[player].game).killedBy;
+			if (killedBy == "Ripe Old Age") {
+				msg+=". Long live "+player+"!";
+				localdb.addRole("winner",player);
+			}
+			localdb.pushMessage("--deathangel--", msg);
+			announce({eventtype:"deathannounce",content:msg});
+		}
+	}
+	matches[player].alive=isalive(player,matches[player].game);
+}
+
 function announce(message){
 	for (var i in metasockets){
 		try {
@@ -454,6 +469,8 @@ function updategame(user, msg) {
 
 function closegame(player){
 	if (typeof(matches[player])!='undefined'){
+		//check for player death
+		checkForDeath(player);
 		//kill the process if it hasn't already
 		//horrific reverse engineering hack here
 		var term = matches[player].term;
@@ -495,18 +512,6 @@ function closegame(player){
 			catch (ex) {
 				// The WebSocket is not open, ignore
 			}
-			if (!isalive(player,matches[player].game)) {
-				if (matches[player].alive) {
-					var killedBy = getcharinfo(player,matches[player].game).killedBy
-					var msg = player+" was killed by "+killedBy;
-					if (killedBy == "(winner)") {
-						msg = player+" won the game!";
-					}
-					localdb.pushMessage("--deathangel--", msg);
-					announce({eventtype:"deathannounce",content:msg});
-				}
-			}
-			matches[player].alive=isalive(player,matches[player].game);
 			// Clean things up
 			delete matches[player]; 
 			announce({eventtype: 'matchupdate', content: getmatchlist(matches)});
@@ -653,18 +658,7 @@ lib.keepalive = function(){
 			closegame(i);
 		} 
 		
-		if (!isalive(i,matches[i].game)) {
-			if (matches[i].alive) {
-				var killedBy = getcharinfo(i,matches[i].game).killedBy
-				var msg = i+" was killed by "+killedBy;
-				if (killedBy == "(winner)") {
-					msg = i+" won the game!";
-				}
-				localdb.pushMessage("--deathangel--", msg);
-				announce({eventtype:"deathannounce",content:msg});
-			}
-		}
-		matches[i].alive=isalive(i,matches[i].game);
+		checkForDeath(i);
 	}
 	for (var i in metasockets) {
 		try {
