@@ -151,7 +151,7 @@ module.exports.fetchGames = function() {
 }
 
 module.exports.setVersionString = function(game,longname) {
-	db.games.get("data").find({name: game}).assign({longname: longname}).write
+	db.games.get("data").find({name: game}).assign({longname: longname}).write();
 	return longname;
 }
 
