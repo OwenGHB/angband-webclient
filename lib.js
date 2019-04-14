@@ -18,6 +18,9 @@ var misc		= {};
 // holds current socket connections
 var metasockets = {};
 
+//for more efficient file updates
+var filelists = {};
+
 var home        = process.env.CUSTOM_HOME || '/home/angband';
 var localdb     = require("./localdb");
 var games       = localdb.fetchGames();
@@ -621,13 +624,17 @@ lib.welcome = function(user,ws) {
 	
 	metasockets[user.name] = ws;
 	var player = user.name;
+	
+	//keep track of file list
+	filelists[user.name] = getfilelist(user.name);
+	
 	//send some info to the user upon connecting
 	try {
 		var last_chat_messages = localdb.readMessages(config.chat_last_messages);
 		metasockets[user.name].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist()}));
 		metasockets[user.name].send(JSON.stringify({eventtype: 'populate_chat', content: last_chat_messages}));
 		metasockets[user.name].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
-		metasockets[user.name].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.name)}));
+		metasockets[user.name].send(JSON.stringify({eventtype: 'fileupdate', content: filelists[user.name]}));
 		metasockets[user.name].send(JSON.stringify({eventtype: 'usercount', content: Object.keys(metasockets)}));
 	} 
 	catch (ex) {
@@ -707,9 +714,11 @@ lib.welcome = function(user,ws) {
 	});
 }
 
-
+//also checks for file diffs in lieu of fs.watch
 lib.keepalive = function(){
 	var matchlist=getmatchlist(matches);
+	var fileupdate=(getfilelist(i)!=filelists[i]);
+	filelists[i]=getfilelist(i);
 	for (var i in matches) {
 		if (matches[i].idle) {
 			matches[i].idletime++;
@@ -727,8 +736,7 @@ lib.keepalive = function(){
 		try {
 			metasockets[i].ping();
 			metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: matchlist}));
-			metasockets[i].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(i)}));
-		
+			if (fileupdate) metasockets[i].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(i)}));
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		}
