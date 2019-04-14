@@ -399,13 +399,20 @@ html, body, #container {
 	max-width: 400px;
     text-align: center;
 }
-#playbutton, #updatebutton {
-	padding: 0.4rem 2rem;
-    background-color: #212119;
+#playbutton {
+	padding: 0.5rem 2rem;
+    background-color: rgba(0,0,0,0.75);
     border: 2px outset #353515;
     color: #c7c6c6;
     text-decoration: none;
-    margin-bottom: 2rem;
+	margin-bottom: 1rem;
+}	
+#updatebutton, #deletebutton {
+	padding: 0.25rem 0.5rem;
+    background-color: rgba(0,0,0,0.75);
+    border: 2px outset #353515;
+    color: #c7c6c6;
+    text-decoration: none;
 }
 #playbutton:hover, , #updatebutton:hover { 
 	background-color: #353535; 

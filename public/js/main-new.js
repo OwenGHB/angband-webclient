@@ -494,6 +494,11 @@ function initGameList(games) {
 				} else {
 					$("#updatebutton").addClass('hidden');
 				}
+				if (typeof(games[i].savexists) != 'undefined' && games[i].savexists) {
+					$("#deletebutton").removeClass('hidden');
+				} else {
+					$("#deletebutton").addClass('hidden');
+				}
 				saveSelectedGameName(e.target.value);
 				loadDefaultGameOptions(e.target.value);
 				loadGameOptions(e.target.value);
@@ -506,6 +511,14 @@ function initGameList(games) {
 		var panels = $("#subwindows").val();
 		var walls = false;
 		applyTerminal("play", gamename, panels, walls, calculateIdealTerminalDimensions());
+	});
+	$("#deletebutton").click(function() {
+		var gamename = $("#gameselect").val();
+		requestDeletion('ownsave',gamename,false);
+		$(this).off('click');
+		$(this).addClass('hidden');
+		$(this).attr("target","_blank");
+		$(this).attr("href","/"+username+"/"+gamename+"/"+username);
 	});
 	$("#updatebutton").click(function() {
 		var gamename = $("#gameselect").val();

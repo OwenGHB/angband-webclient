@@ -253,7 +253,7 @@ function handleDeleteRequest(user,request){
 		filedir += '/user/'+user.name+'/'+request.game+'/';
 		filename = request.specifier;
 	} else if (request.filetype=='ownsave') {
-		filedir += '/games/'+game+'/lib/save/'
+		filedir += '/games/'+request.game+'/lib/save/'
 		fs.ensureDirSync(filedir);
 		var ls = fs.readdirSync(filedir);
 		if (ls.includes(user.name)) {
@@ -263,7 +263,7 @@ function handleDeleteRequest(user,request){
 		} else {
 			return "savefile does not exist";
 		}
-		//todo: move backup to download folder
+		fs.copyFileSync(filedir+filename,home+'/user/'+user.name+'/'+request.game+'/'+user.name);
 	} else if (request.filetype=='usersave') {
 		if (getgameinfo(request.game).owner == user.name) {
 			filedir += '/games/'+game+'/lib/save/'
@@ -293,14 +293,17 @@ function handleDeleteRequest(user,request){
 	}
 }
 
-function getgamelist() {
+function getgamelist(player) {
 	var gamelist = [];
 	for (var i in games){
+		var savexists=fs.existsSync(home+'/games/'+games[i].name+'/lib/save/'+player);
+		if (fs.existsSync(home+'/games/'+games[i].name+'/lib/save/1000.'+player)) savexists=true;
 		gamelist.push({
 			name:games[i].name, 
 			longname:games[i].longname, 
 			desc:games[i].desc,
-			owner:games[i].owner
+			owner:games[i].owner,
+			savexists:savexists
 		});
 	}
 	gamelist.sort(function(a, b) {
@@ -572,7 +575,8 @@ function closegame(player){
 			}
 			try {
 				metasockets[player].send(JSON.stringify({eventtype: 'gameover', content: []}));
-				metasockets[player].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.name)}));
+				metasockets[player].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(player)}));
+				metasockets[player].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist(player)}));
 			} 
 			catch (ex) {
 				// The WebSocket is not open, ignore
@@ -631,7 +635,7 @@ lib.welcome = function(user,ws) {
 	//send some info to the user upon connecting
 	try {
 		var last_chat_messages = localdb.readMessages(config.chat_last_messages);
-		metasockets[user.name].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist()}));
+		metasockets[user.name].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist(user.name)}));
 		metasockets[user.name].send(JSON.stringify({eventtype: 'populate_chat', content: last_chat_messages}));
 		metasockets[user.name].send(JSON.stringify({eventtype: 'matchupdate', content: getmatchlist(matches)}));
 		metasockets[user.name].send(JSON.stringify({eventtype: 'fileupdate', content: filelists[user.name]}));
