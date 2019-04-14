@@ -220,7 +220,7 @@ html, body, #container {
 	background-color: rgba(0,0,0,0.5);
 	border: 2px outset #252515;
 	margin-bottom: 0.15rem;
-	padding: 0.2rem;
+	padding: 0.25rem;
 	position: relative;
 }
 .tab-panels .panel {
@@ -277,7 +277,6 @@ html, body, #container {
     padding: 0;
 }
 .tab-panels .tab a {
-	display: block;
 	text-decoration: none;
 	color: #778990;
 }

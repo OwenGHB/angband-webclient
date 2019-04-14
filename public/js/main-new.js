@@ -5,6 +5,7 @@ var protocol = window.location.protocol === "https:" ? "wss" : "ws";
 var socketURL = protocol + '://' + window.location.hostname + ((window.location.port) ? (':' + window.location.port) : '') + '/meta';
 var socket;
 var user_list = [];
+
 var matched_user_list = [];
 var isAutocompleteOpened = false;
 var currentAutocompletePos = 0;
@@ -141,20 +142,25 @@ function listFiles(files) {
 		return;
 	$tab.html("");
 	for(var i=0; i<games.length; i++) {
-		var $game = $('<div class="game">' +games[i]+ '</div>');
 		var userfiles = files[games[i]];
 		if(userfiles.length > 0) {
+			var $game = $('<div class="game">' +games[i]+ '</div>');
+			var $list = $('<ul></ul>');
 			for(var f=0; f<userfiles.length; f++) {
-				$game.append('<a href="/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
+				var $listitem = $('<li></li>');
+				$listitem.append('<a href="#" onclick="requestDeletion(\'usergenerated\',\''+games[i]+'\',\''+userfiles[f]+'\')">✖</a>');
+				$listitem.append('<a href="/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
+				$list.append($listitem);
 			}
-		}
-		else
-			$game.append('<span>no files</span>');
-		$tab.append($game);
-	}
-	
+			$game.append($list);
+			$tab.append($game);
+		}		
+	}	
 }
 
+function requestDeletion(filetype,game,specifier) {
+	socket.send(JSON.stringify({eventtype:'deletefile',content:{filetype:filetype,game:game,specifier:specifier}}));
+}
 
 function showMenu(){
 	$("#terminal-pane").addClass("hidden");

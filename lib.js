@@ -18,7 +18,6 @@ var misc		= {};
 // holds current socket connections
 var metasockets = {};
 
-
 var home        = process.env.CUSTOM_HOME || '/home/angband';
 var localdb     = require("./localdb");
 var games       = localdb.fetchGames();
@@ -68,6 +67,9 @@ lib.respond = function(user, msg) {
 	}
 	else if(msg.eventtype == 'update') {
 		updategame(user, msg.content);
+	}
+	else if(msg.eventtype == 'deletefile') {
+		handleDeleteRequest(user, msg.content);
 	}
 }
 
@@ -230,7 +232,7 @@ function getfilelist(name) {
 				fs.ensureDirSync(path+games[i].name);
 				var varfiles = fs.readdirSync(path+games[i].name);
 				for (var j in varfiles){
-					if (varfiles[j].match(/\.([hH][tT][mM][lL]|[tT][xX][tT])/)) dumps.push(varfiles[j]);
+					dumps.push(varfiles[j]);
 				}
 				files[games[i].name]=dumps;
 			}
@@ -240,11 +242,52 @@ function getfilelist(name) {
 	return files;
 }
 
-function deletefile(username,filename) {
-	var path = home+'/user/'+username+'/';
-	fs.ensureDirSync(path);
+function handleDeleteRequest(user,request){
+	var filedir = home;
+	var filename;
+	if (request.filetype=='usergenerated'){
+		filedir += '/user/'+user.name+'/'+request.game+'/';
+		filename = request.specifier;
+	} else if (request.filetype=='ownsave') {
+		filedir += '/games/'+game+'/lib/save/'
+		fs.ensureDirSync(filedir);
+		var ls = fs.readdirSync(filedir);
+		if (ls.includes(user.name)) {
+			filename=user.name;
+		} else if (ls.includes('1000.'+user.name)) {
+			filename='1000.'+user.name;
+		} else {
+			return "savefile does not exist";
+		}
+		//todo: move backup to download folder
+	} else if (request.filetype=='usersave') {
+		if (getgameinfo(request.game).owner == user.name) {
+			filedir += '/games/'+game+'/lib/save/'
+			fs.ensureDirSync(filedir);
+			var ls = fs.readdirSync(filedir);
+			if (ls.includes(request.specifier)) {
+				filename=request.specifier;
+			} else {
+				return "savefile does not exist";
+			}
+		} else {
+			return "you cannot delete savefiles for "+request.game;
+		}
+	} else {
+		return "bad delete request"
+	}
+	fs.ensureDirSync(filedir);
+	var ls = fs.readdirSync(filedir);
+	if (ls.includes(filename)) {
+		fs.unlinkSync(filedir+filename);
+	}
+	try {
+		metasockets[user.name].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.name)}));
+	} 
+	catch (ex) {
+		// The WebSocket is not open, ignore
+	}
 }
-
 
 function getgamelist() {
 	var gamelist = [];
@@ -525,6 +568,7 @@ function closegame(player){
 			}
 			try {
 				metasockets[player].send(JSON.stringify({eventtype: 'gameover', content: []}));
+				metasockets[player].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(user.name)}));
 			} 
 			catch (ex) {
 				// The WebSocket is not open, ignore
@@ -573,6 +617,7 @@ function unsubscribe(user, message) {
 // EXPORTED FUNCTIONS
 // ===================================================================
 lib.welcome = function(user,ws) {
+	
 	metasockets[user.name] = ws;
 	var player = user.name;
 	//send some info to the user upon connecting
@@ -681,6 +726,8 @@ lib.keepalive = function(){
 		try {
 			metasockets[i].ping();
 			metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: matchlist}));
+			metasockets[i].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(i)}));
+		
 		} catch (ex) {
 			// The WebSocket is not open, ignore
 		}
