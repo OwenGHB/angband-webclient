@@ -111,8 +111,9 @@ function chat(user, message){
 			metasockets[user.name].send(JSON.stringify(response));
 		}
 		else if(command === "/rename" && command != msg) {
-			var game = msg.match(/\w+/)[0];
+			var game = msg.match(/[\w-]+/)[0];
 			var gameinfo = getgameinfo(game);
+			console.log(msg);
 			var longname = msg.replace(game + " ", "");
 			if(typeof(gameinfo.owner)!= 'undefined' && gameinfo.owner == user.name) {
 				localdb.setVersionString(game,longname);
@@ -228,7 +229,7 @@ function getfilelist(name) {
 		var ls = fs.readdirSync(path);
 		for (var i in games){
 			var dumps = [];
-			if (games[i].name.match(/^[a-zA-Z0-9_]+$/)){
+			if (games[i].name.match(/^[a-zA-Z0-9-_]+$/)){
 				fs.ensureDirSync(path+games[i].name);
 				var varfiles = fs.readdirSync(path+games[i].name);
 				for (var j in varfiles){
