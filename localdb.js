@@ -55,7 +55,6 @@ module.exports.db = db;
 
 // AUTEHNTICATION
 module.exports.verifyWithLocalDb = function(username, password, done) {
-   console.log("localdb verifyWithLocalDb: checking with", username, password);
    authenticate(username, password, function(error, user, more_info) {
       console.log("..verified as", error, user, more_info);
       return done(error, user, more_info);
