@@ -343,7 +343,7 @@ function newgame(user, msg) {
 	var panelargs = ['-b'];
 	console.log(`starting new game: user=${user.name} dimensions=${dimensions.cols}x${dimensions.rows}`);
 	if(panels > 1) {
-		if (game == 'poschengband' || game == 'elliposchengband' || game == 'composband') {
+		if (game == 'poschengband' || game == 'elliposchengband' || game == 'composband' || game == 'frogcomposband') {
 			panelargs = ['-right','40x*','-bottom','*x8'];
 		} 
 		else {
