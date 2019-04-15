@@ -4,7 +4,7 @@ html {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-
+}
 @media only screen and (min-width : 1921px) {
     html {
         background-image: url('/img/bgr_2560.jpg');
