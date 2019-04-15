@@ -1,13 +1,29 @@
 html {
-   background-color: black;
-   background-image: url("/img/bgr.jpg");
-   background-repeat: no-repeat;
-   background-size: cover;
-   background-position: top center;
+	background-color: black;
+    background-image: url("/img/bgr_1920.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
 
+@media only screen and (min-width : 1921px) {
+    html {
+        background-image: url('/img/bgr_2560.jpg');
+    }
 }
-body {
-   background-color: rgba(0,0,0,0.4)
+@media only screen and (max-width : 1280px) {
+    html {
+        background-image: url('/img/bgr_1280.jpg');
+    }
+}
+@media only screen and (max-width : 1000px) {
+    html {
+        background-image: url('/img/bgr_1000.jpg');
+    }
+}
+@media only screen and (max-width : 768px) {
+    html {
+        background-image: url('/img/bgr_768.jpg');
+    }
 }
 html, body {
    line-height: initial;
