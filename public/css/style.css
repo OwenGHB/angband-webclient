@@ -1,5 +1,3 @@
-
-
 a {
 	color: #00B7FF;
 }
@@ -55,7 +53,7 @@ body {
    overflow: hidden;
 }
 
-body,input,button,select,option {	
+body,input,button,select,option {
    font-family: monospace;
 	margin: 0;
 	padding: 0;
@@ -265,7 +263,7 @@ html, body, #container {
    margin-left: 1rem;
 }
 .tab-buttons a:last-of-type {
-   margin-right: 0;  
+   margin-right: 0;
 }
 .tab-buttons a:hover, .tab-buttons a.selected {
 	color: #00B7FF;
@@ -316,8 +314,8 @@ html, body, #container {
 
 
 /* TAB FILES */
-#tab-files .game { 
-	color: #dc8c45; 
+#tab-files .game {
+	color: #dc8c45;
 	margin-bottom: 5px;
 }
 #tab-files .game a { margin-left: 10px; }
@@ -368,7 +366,7 @@ html, body, #container {
 /* MAIN PANE: GAMES LOBBY */
 #gameselect:hover { box-shadow: none; }
 #games-lobby img { margin: 2rem 0; }
-#games-lobby h2 { 
+#games-lobby h2 {
 	color: #85a0ab;
    margin: 1rem 0;
    text-transform: uppercase;
@@ -383,16 +381,16 @@ html, body, #container {
 	justify-content: center;
 	margin-bottom: 2px;
 }
-#games-lobby .new-game .row div { 
-	min-width: 200px; 
-	padding: 0 0.5rem; 
+#games-lobby .new-game .row div {
+	min-width: 200px;
+	padding: 0 0.5rem;
 }
 #games-lobby .new-game .row input,
 #games-lobby .new-game .row select {
    width: 300px;
    -webkit-appearance: none;
    -moz-appearance: none;
-   padding: 3px 8px; 
+   padding: 3px 8px;
    background-color: rgba(0,0,0,0.75);
 }
 #game-description {
@@ -406,7 +404,7 @@ html, body, #container {
     color: #c7c6c6;
     text-decoration: none;
 	margin-bottom: 1rem;
-}	
+}
 #updatebutton, #deletebutton {
 	padding: 0.25rem 0.5rem;
     background-color: rgba(0,0,0,0.75);
@@ -414,8 +412,8 @@ html, body, #container {
     color: #c7c6c6;
     text-decoration: none;
 }
-#playbutton:hover, , #updatebutton:hover { 
-	background-color: #353535; 
+#playbutton:hover, , #updatebutton:hover {
+	background-color: #353535;
 }
 #watchmenu ul {
    padding: 0;
