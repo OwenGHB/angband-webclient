@@ -62,14 +62,14 @@ function addMessage(msg, extra_class, shouldNotify) {
 	var classes = [];
 	var ts = moment(msg.timestamp).format("HH:mm");
 
-	if(msg.extra) 
+	if(msg.extra)
 		classes = msg.extra.join(" ") + " " + msg.user;
-	
+
 	if(!extra_class && msg.user !== "--system--") {
 		var $m = $('<div class="message"><span class="time">['+ts+'] </span><span class="user '+classes+'">'+msg.user+'</span>: <span class="msg"></span></div>');
 		$m.find("span.msg").text(msg.message);
 		$("#chatlog .wrapper").append($m);
-		if(shouldNotify) 
+		if(shouldNotify)
 			notifyIfNeeded(username, msg.message);
 	}
 	else {
@@ -98,7 +98,7 @@ function notifyIfNeeded(user, message) {
 }
 
 
-function updateUserCount(users) { 
+function updateUserCount(users) {
 	$("#peoplelist .info").html("<p>there " + (users.length>1?"are":"is") + " <b>" + users.length + "</b> user" + (users.length>1?"s":"") + " online");
 	$("#peoplelist .people").html("");
 	for(var i=0; i<users.length; i++)
@@ -124,7 +124,7 @@ function listMatches(matches) {
 			   	else
 			      	applyTerminal("spectate", players[i], 1, "no", matches[players[i]].dimensions);
 			   });
-			}(i));			
+			}(i));
 		}
 	}
 	else {
@@ -154,8 +154,8 @@ function listFiles(files) {
 			}
 			$game.append($list);
 			$tab.append($game);
-		}		
-	}	
+		}
+	}
 }
 
 function requestDeletion(filetype,game,specifier) {
@@ -241,7 +241,7 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 
 		// alter font-size to fit player's row/cols to your screen
 		adjustFontSizeForSpectation(d);
-		
+
 
 		$terminal.html("");
 		spyglass[qualifier].open($terminal.get(0));
@@ -268,14 +268,14 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 		$terminal.html("");
 		spyglass['default'].open($terminal.get(0));
 	}
-	
+
 	// hide lobby and unhide terminal with fade
 	$("#games-lobby").addClass("hidden");
 	$("#terminal-pane").removeClass("hidden");
 }
 
 
-// does the same as listGameMatches?? 
+// does the same as listGameMatches??
 function cleanSpyGlass(matches){
 	$("#navigation ul").html("");
 	$("#navigation ul").append(function() {
@@ -297,14 +297,14 @@ function cleanSpyGlass(matches){
 						applyTerminal("play", gamename, panels, walls, );
 					});
 				}(i));
-			} 
+			}
 			else if (players.includes(i)) {
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#">' + i + '</a></li>').click(function() {
 						applyTerminal("spectate", i, 1, false, matches[i].dimensions);
 					});
-				}(i));	
-			} 
+				}(i));
+			}
 			else {
 				delete spyglass[i];
 			}
@@ -328,7 +328,7 @@ function closeGame(){
 					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
 						applyTerminal("spectate", i, 1, false);
 					});
-				}(i));	
+				}(i));
 			} else {
 				delete spyglass[i];
 			}
@@ -351,23 +351,23 @@ function initChat() {
 		var data = JSON.parse(ev.data);
 		switch(data.eventtype) {
 			case "populate_chat":
-				populateChat(data.content); 
-				initComplete = true; 
+				populateChat(data.content);
+				initComplete = true;
 				break;
 			case "gamelist":
-				initGameList(data.content); 
+				initGameList(data.content);
 				loadSelectedGameName();
 				break;
 			case "chat":
-				addMessage(data.content, false, initComplete); 
+				addMessage(data.content, false, initComplete);
 				if(initComplete)
 				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 				break;
 			case "usercount":
 				updateUserCount(data.content); break;
 			case "matchupdate":
-				listMatches(data.content); 
-				//cleanSpyGlass(data.content); 
+				listMatches(data.content);
+				//cleanSpyGlass(data.content);
 				break;
 			case "fileupdate":
 				listFiles(data.content); break;
@@ -389,7 +389,7 @@ function initChat() {
 			case "gameoutput":
 				if (typeof(spyglass[data.content.player])!='undefined') {
 					spyglass[data.content.player].write(data.content.data);
-				} 
+				}
 				else {
 					spyglass[data.content.player] = new Terminal({
 						termName: terminfo,
@@ -417,7 +417,7 @@ function initChat() {
 		addMessage("***Connected***", "system");
 		$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 	});
-	
+
 	$("#new-message-input input").on("keyup", function(e) {
 		if(e.keyCode !== 13) {
 			var current_input = (" " + e.target.value);
@@ -439,16 +439,16 @@ function initChat() {
 						highlight_counter++;
 					}
 				}
-				if(matched_user_list.length > 0) 
+				if(matched_user_list.length > 0)
 					showAutoCompleteBox(matched_user_list);
-				else 
+				else
 					hideAutoCompleteBox();
 			}
-			else 
+			else
 				hideAutoCompleteBox();
 		}
 	});
-	
+
 	$("#new-message-input input").on("keydown", function(e) {
 		if (!e) e = window.event;
 		var keyCode = e.keyCode || e.which;
@@ -504,7 +504,7 @@ function initGameList(games) {
 				loadGameOptions(e.target.value);
 			}
 		}
-		
+
 	});
 	$("#playbutton").click(function() {
 		var gamename = $("#gameselect").val();
@@ -513,6 +513,7 @@ function initGameList(games) {
 		applyTerminal("play", gamename, panels, walls, calculateIdealTerminalDimensions());
 	});
 	$("#deletebutton").click(function() {
+		if(!confirm('Are you sure you want to proceed?'+"\n"+'This will *delete* your savegame file for '+$("#gameselect :selected").text()+'!')) return;
 		var gamename = $("#gameselect").val();
 		requestDeletion('ownsave',gamename,false);
 		$(this).off('click');
@@ -530,7 +531,7 @@ function initGameList(games) {
 function adjustFontSizeForSpectation(remote_game_dimensions) {
 	console.log("calculating adjusted font size to fit remote terminal with dimensions", remote_game_dimensions);
 	var selected_font_family = $("#extra-fonts").val();
-	
+
 	var my_pane_height = $(".pane-main").height();
 	var my_pane_width  = $(".pane-main").width();
 
@@ -574,10 +575,10 @@ function calculateIdealTerminalDimensions() {
 	$("#tester").css("visibility", "hidden");
 	$("#tester").css("font-size", desired_font_size);
 	$("#tester").css("font-family", desired_font_family);
-	
+
 	var tester_width = $("#tester").width();
 	var tester_height = $("#tester").height();
-	
+
 	var pane_height = $(".pane-main").height() - 2 * parseInt(desired_font_size, 10);
 	var pane_width = $(".pane-main").width() - parseInt(desired_font_size, 10);
 
@@ -596,7 +597,7 @@ function calculateIdealTerminalDimensions() {
 
 
 	return {
-		rows: _height - 1, 
+		rows: _height - 1,
 		cols: _width - 1
 	};
 }
@@ -743,17 +744,17 @@ function highlightUser(e) {
 // ========================================================
 $(function() {
 	localStorage = window.localStorage;
-	
+
 	// add extra fonts
 	fonts = fonts.sort();
 	fonts.map(function(f,i) {
 		$("#extra-fonts").append('<option value="' + f + '">' + f + '</option>');
 	});
 	$("#extra-fonts, #games-font-size").change(function(e) { saveGameOptions(); });
-	
+
 	// add bottom sidebar force option
 	$("#opt-sidebar-bottom").change(function(e) { changeSidebarOnBottom(e.target.checked); });
-	
+
 	// add ui font size options
 	font_sizes.map(function(f,i) {
 		$("#opt-ui-font-size").append('<option value="' + f + 'px">' + f + 'px</option>');
@@ -775,25 +776,25 @@ $(function() {
 	$("#opt-ui-body-color").val($("body").css("background-color"));
 	$("#opt-ui-chat-color").val($(".panel").css("background-color"));
 	$("#opt-ui-chat-color").change(function() { changeMenuColor($("#opt-ui-border-style").val()); });
-	
+
 	// restore and apply options from local storage
 	loadAndApplyOptions();
-	
+
 	// init and open chat tab by default
 	initChat();
-	
+
 	// terminal resizer
 	// $(window).resize(function() { adjustTerminalFontSize(); });
-	
+
 	// navigation to home button
 	$("#navigation-home").click(function() {
     	$("#terminal-pane").addClass("hidden");
     	$("#games-lobby").removeClass("hidden");
 	});
-	
+
 	// game option change handlers
 	$("#term-cols,#term-rows,#subwindows,#ascii-walls").change(function() { saveGameOptions(); });
-	
+
 	// tablet ui
 	var ua = navigator.userAgent.toLowerCase();
 	var tablets = ["ipad", "android 5"];
