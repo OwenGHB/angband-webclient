@@ -140,6 +140,19 @@ module.exports.addRole = function(role,user) {
    return roles;
 }
 
+module.exports.unBanAll = function() {
+	var users = db.users.get("data").value();
+	for (var i=0; i<users.length; i++){ 
+		for (var j=0; j<users[i].roles.length; j++){
+			if (["mute","banned"].includes(users[i].roles[j])) {
+				users[i].roles.splice(j, 1); 
+				j--;
+			}
+		}
+		db.users.get("data").find({name: user}).assign({roles: users[i].roles}).write();
+	}
+}
+
 module.exports.checkRole = function(role,user) {
    var roles = db.users.get("data").find({name: user}).value().roles;
    return roles.includes(role);

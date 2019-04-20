@@ -113,6 +113,11 @@ function chat(user, message){
 			response.content = "db refreshed";
 			metasockets[user.name].send(JSON.stringify(response));
 		}
+		else if(command === "/unbanall" && user.roles.indexOf("dev") !== -1){
+			localdb.unBanAll();
+			response.content = "unbanned all users";
+			metasockets[user.name].send(JSON.stringify(response));
+		}
 		else if(command === "/rename" && command != msg) {
 			var game = msg.match(/[\w-]+/)[0];
 			var gameinfo = getgameinfo(game);
