@@ -204,6 +204,13 @@ html, body, #container {
 }
 .flex .pane-main,
 .flex .pane-side { border: 0 solid blue;}
+
+.flex .pane-main #game-lobby > div {
+	display: grid;
+	grid-template-rows: repeat(3,auto) 100%;
+	height: 100vh;
+}
+
 .tab-panels .hidden { display: none !important; }
 .tab-panels .panel,
 #new-message-input {
@@ -362,6 +369,7 @@ html, body, #container {
 	color: #85a0ab;
    margin: 1rem 0;
    text-transform: uppercase;
+   text-shadow: 0 0 5px #000;
 }
 #games-lobby .new-game {
 	display: flex;
@@ -411,6 +419,10 @@ html, body, #container {
    padding: 0;
 	margin: 0;
 	display: inline-block;
+	height: 100%;
+	overflow: auto;
+	width: 100%;
+	scrollbar-color: rgba(0, 0, 0, .5) rgba(37, 37, 21, .75);
 }
 #watchmenu ul li {
 	list-style-type: none;
