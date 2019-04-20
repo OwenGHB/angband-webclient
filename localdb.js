@@ -149,7 +149,7 @@ module.exports.unBanAll = function() {
 				j--;
 			}
 		}
-		db.users.get("data").find({name: user}).assign({roles: users[i].roles}).write();
+		db.users.get("data").find({name: users[i].name}).assign({roles: users[i].roles}).write();
 	}
 }
 
