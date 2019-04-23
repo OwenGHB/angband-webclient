@@ -14,7 +14,7 @@ a {
 
 
 html {
-    background: url('/img/bgr_1920.jpg') no-repeat fixed center top / cover;
+    background: url('/img/bgr_1920.jpg') no-repeat fixed center center / cover;
     font-size: 14px;
     font-family: 'Ubuntu Mono', monospace;
     line-height: initial;
