@@ -154,13 +154,15 @@ function checkForDeath(player){
 	if (!isalive(player,matches[player].game)) {
 		if (matches[player].alive) {
 			var killedBy = getcharinfo(player,matches[player].game).killedBy
-			var msg = player+" was killed by "+killedBy;
-			if (killedBy == "Ripe Old Age") {
-				msg+=". Long live "+player+"!";
-				localdb.addRole("winner",player);
+			if (!(['Quitting','his own hand','her own hand','their own hand'].includes(msg))){
+				var msg = player+" was killed by "+killedBy;
+				if (killedBy == "Ripe Old Age") {
+					msg+=". Long live "+player+"!";
+					localdb.addRole("winner",player);
+				}
+				localdb.pushMessage("--deathangel--", msg);
+				announce({eventtype:"deathannounce",content:msg});
 			}
-			localdb.pushMessage("--deathangel--", msg);
-			announce({eventtype:"deathannounce",content:msg});
 		}
 	}
 	matches[player].alive=isalive(player,matches[player].game);
@@ -504,8 +506,8 @@ function newgame(user, msg) {
 function updategame(user, msg) {
 	var gameinfo = getgameinfo(msg.game);
 	console.log(`update attempt by user ${user.name} of ${msg.game}`);
-	if(typeof(gameinfo.owner)!= 'undefined' && gameinfo.owner == user.name){
-	console.log(`proceeding with update`);
+	if(typeof(gameinfo.owner)!= 'undefined' && gameinfo.owner == user.name && typeof(misc[user.name])=='undefined'){
+		console.log(`proceeding with update`);
 		var path = process.cwd() + '/updategame.sh';
 		termdesc = {
 			path     : path,
@@ -531,12 +533,46 @@ function updategame(user, msg) {
 			});
 			term.on('close', function(data) {
 				try {
-					metasockets[user.name].send(JSON.stringify({eventtype: 'updateover', content: []}));
+					ps.lookup({ pid: term.pid }, function(err, resultList ) {
+						if (err) {
+							console.log( err );
+						}
+						var process = resultList[ 0 ];
+						if( process ){
+							setTimeout(function() {
+								try {
+									ps.kill( gamepid, function( err ) {
+										if (err) 
+											return console.log( err );
+										try {
+											term.kill();
+											console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
+										}
+										catch(e) { console.error(e); }
+									});
+								} 
+								catch(ex) {
+									console.error(ex);
+								}
+							},500);
+						} 
+						else {
+							console.log( 'Process %s was not found, expect user exited cleanly.',player );
+							announce({eventtype:"--system--",content:msg.game+" has been updated by "+user.name});
+						}
+						try {
+							metasockets[user.name].send(JSON.stringify({eventtype: 'updateover', content: []}));
+						} 
+						catch (ex) {
+							// The WebSocket is not open, ignore
+						}
+						// Clean things up
+						delete misc[user.name]; 
+					});
 				} 
 				catch (ex) {
 					// The WebSocket is not open, ignore
 				}
-				announce({eventtype:"--system--",content:msg.game+" has been updated by "+user.name});
 			});
 			misc[user.name]=term;
 		} 
