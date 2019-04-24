@@ -182,15 +182,20 @@ function getmatchlist(matches) {
 	var livematches = {};
 	for (var i in matches) {
 		var charinfo = getcharinfo(i, matches[i].game);
-		livematches[i] = {
+		var matchinfo = {
 			game       : matches[i].game,
 			idletime   : matches[i].idletime,
-			cLvl       : charinfo.cLvl,
-			race       : charinfo.race,
-			subrace    : charinfo.subrace,
-			class      : charinfo.class,
 			dimensions : {rows: matches[i].dimensions.rows, cols: matches[i].dimensions.cols} 
 		};
+		if (!charinfo.isDead) {
+			matchinfo.cLvl = charinfo.cLvl;
+			matchinfo.race = charinfo.race;
+			matchinfo.subrace = charinfo.subrace;
+			matchinfo.mRealm1 = charinfo.mRealm1;
+			matchinfo.mRealm2 = charinfo.mRealm2;
+			matchinfo.class = charinfo.class;
+		}
+		livematches[i] = matchinfo;
 	}
 	return livematches;
 }
@@ -528,7 +533,7 @@ function updategame(user, msg) {
 				catch (ex) {
 					// The WebSocket is not open, ignore
 				}
-				announce({eventtype:"system",content:msg.game+" has been updated by "+user.name});
+				announce({eventtype:"--system--",content:msg.game+" has been updated by "+user.name});
 			});
 			misc[user.name]=term;
 		} 
