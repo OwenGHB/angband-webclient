@@ -122,7 +122,7 @@ function listMatches(matches) {
 					if (typeof(matches[players[i]].mRealm1) != 'undefined') outputstring += ' ' + matches[players[i]].mRealm1;
 					if (typeof(matches[players[i]].mRealm2) != 'undefined') outputstring += '/' + matches[players[i]].mRealm2;
 					outputstring += ' ' + matches[players[i]].class;
-					outputstring += ' ' + '</span>' + idle + '</li>';
+					outputstring += '</span>' + idle + '</li>';
 				}
 			   return $(outputstring).click(function() {
 			   	if(players[i] === username)
