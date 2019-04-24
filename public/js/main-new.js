@@ -120,9 +120,14 @@ function listMatches(matches) {
 					if (typeof(matches[players[i]].cLvl) != 'undefined') outputstring +='Level ' + matches[players[i]].cLvl + ' ';
 					if (typeof(matches[players[i]].subrace) != 'undefined') outputstring += matches[players[i]].subrace + ' ';
 					outputstring += matches[players[i]].race;
-					if (typeof(matches[players[i]].mRealm1) != 'undefined') outputstring += ' ' + matches[players[i]].mRealm1;
-					if (typeof(matches[players[i]].mRealm2) != 'undefined') outputstring += '/' + matches[players[i]].mRealm2;
-					outputstring += ' ' + matches[players[i]].class;
+					if (typeof(matches[players[i]].class) != 'undefined' && matches[players[i]].class != "Monster") outputstring += '/' + matches[players[i]].mRealm2;
+					if (typeof(matches[players[i]].mRealm1) != 'undefined') {
+						outputstring += ' (' + matches[players[i]].mRealm1;
+						if (typeof(matches[players[i]].mRealm2) != 'undefined') {
+							outputstring += '/' + matches[players[i]].mRealm2+')';
+						} else outputstring += ')';
+					}
+					if (typeof(matches[players[i]].subClass) != 'undefined') outputstring += ' ('+subClass+')'
 					if (typeof(matches[players[i]].mapName) != 'undefined') {
 						if (typeof(matches[players[i]].dLvl) != 'undefined' && parseInt(matches[players[i]].dLvl) > 0) {
 							outputstring += ' on Level ' + matches[players[i]].dLvl;

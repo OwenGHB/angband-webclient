@@ -154,7 +154,7 @@ function checkForDeath(player){
 	if (!isalive(player,matches[player].game)) {
 		if (matches[player].alive) {
 			var killedBy = getcharinfo(player,matches[player].game).killedBy
-			if (!(['Quitting','his own hand','her own hand','their own hand'].includes(msg))){
+			if (!(['Quitting','his own hand','her own hand','their own hand'].includes(killedBy))){
 				var msg = player+" was killed by "+killedBy;
 				if (killedBy == "Ripe Old Age") {
 					msg+=". Long live "+player+"!";
@@ -196,6 +196,7 @@ function getmatchlist(matches) {
 			matchinfo.mRealm1 = charinfo.mRealm1;
 			matchinfo.mRealm2 = charinfo.mRealm2;
 			matchinfo.class = charinfo.class;
+			matchinfo.subClass = charinfo.subClass;
 			matchinfo.dLvl = charinfo.dLvl;
 			matchinfo.mapName = charinfo.mapName;
 			matchinfo.mDepth = charinfo.mDepth;
