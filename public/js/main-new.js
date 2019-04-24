@@ -115,13 +115,22 @@ function listMatches(matches) {
 			var idle = matches[players[i]].idletime > 0 ? ', idle for <span>'+matches[players[i]].idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append(function(i) {
 				var outputstring = '<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>';
-				if (typeof(matches[players[i]].cLvl) != 'undefined'){
-					outputstring += ' as a <span>Level ' + matches[players[i]].cLvl;
-					if (typeof(matches[players[i]].subrace) != 'undefined') outputstring += ' ' + matches[players[i]].subrace;
-					outputstring += ' ' + matches[players[i]].race;
+				if (typeof(matches[players[i]].race) != 'undefined'){
+					outputstring += ' as a <span>';
+					if (typeof(matches[players[i]].cLvl) != 'undefined') outputstring +='Level ' + matches[players[i]].cLvl + ' ';
+					if (typeof(matches[players[i]].subrace) != 'undefined') outputstring += matches[players[i]].subrace + ' ';
+					outputstring += matches[players[i]].race;
 					if (typeof(matches[players[i]].mRealm1) != 'undefined') outputstring += ' ' + matches[players[i]].mRealm1;
 					if (typeof(matches[players[i]].mRealm2) != 'undefined') outputstring += '/' + matches[players[i]].mRealm2;
 					outputstring += ' ' + matches[players[i]].class;
+					if (typeof(matches[players[i]].dLvl) != 'undefined') {
+						outputstring += ' on  level ' + matches[players[i]].dLvl;
+						if (typeof(matches[players[i]].mapName) != 'undefined') {
+							outputstring += ' of ' + matches[players[i]].mapName;
+						}
+					} else if (typeof(matches[players[i]].mDepth) != 'undefined') {
+						outputstring += ' (max depth ' + matches[players[i]].mDepth + '\')';
+					}
 					outputstring += '</span>' + idle + '</li>';
 				}
 			   return $(outputstring).click(function() {

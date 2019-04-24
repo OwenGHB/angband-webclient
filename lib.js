@@ -194,6 +194,9 @@ function getmatchlist(matches) {
 			matchinfo.mRealm1 = charinfo.mRealm1;
 			matchinfo.mRealm2 = charinfo.mRealm2;
 			matchinfo.class = charinfo.class;
+			matchinfo.dLvl = charinfo.dLvl;
+			matchinfo.mapName = charinfo.mapName;
+			matchinfo.mDepth = charinfo.mDepth;
 		}
 		livematches[i] = matchinfo;
 	}
