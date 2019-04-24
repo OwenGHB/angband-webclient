@@ -123,10 +123,12 @@ function listMatches(matches) {
 					if (typeof(matches[players[i]].mRealm1) != 'undefined') outputstring += ' ' + matches[players[i]].mRealm1;
 					if (typeof(matches[players[i]].mRealm2) != 'undefined') outputstring += '/' + matches[players[i]].mRealm2;
 					outputstring += ' ' + matches[players[i]].class;
-					if (typeof(matches[players[i]].dLvl) != 'undefined') {
-						outputstring += ' on  level ' + matches[players[i]].dLvl;
-						if (typeof(matches[players[i]].mapName) != 'undefined') {
+					if (typeof(matches[players[i]].mapName) != 'undefined') {
+						if (typeof(matches[players[i]].dLvl) != 'undefined' && parseInt(matches[players[i]].dLvl) > 0) {
+							outputstring += ' on Level ' + matches[players[i]].dLvl;
 							outputstring += ' of ' + matches[players[i]].mapName;
+						} else {
+							outputstring += ' in ' + matches[players[i]].mapName;
 						}
 					} else if (typeof(matches[players[i]].mDepth) != 'undefined') {
 						outputstring += ' (max depth ' + matches[players[i]].mDepth + '\')';
@@ -524,6 +526,7 @@ function initGameList(games) {
 		applyTerminal("play", gamename, panels, walls, calculateIdealTerminalDimensions());
 	});
 	$("#deletebutton").click(function() {
+		if(!confirm('Are you sure you want to proceed?'+"\n"+'This will *delete* your savegame file for '+$("#gameselect :selected").text()+'!')) return;
 		var gamename = $("#gameselect").val();
 		requestDeletion('ownsave',gamename,false);
 		$(this).off('click');
