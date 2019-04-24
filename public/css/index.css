@@ -1,5 +1,9 @@
 html {
-    background: url('/img/bgr_1920.jpg') no-repeat fixed center top / cover #000;
+	background-color: black;
+    background-image: url("/img/bgr_1920.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
 }
 @media only screen and (min-width : 1921px) {
     html {
@@ -66,23 +70,23 @@ section .title, section .footer {
 }
 section .content { padding: 1rem; }
 section .title {
-   background-color: #434242;
+   background-color: background-color: rgba(0,0,0,0.7);
    padding-top: 0.3rem;
    padding-bottom: 0.3rem;
    color: #bada55;
 }
-section .content { background-color: #171717 }
+section .content { background-color: rgba(0,0,0,0.5); }
 section .content a { color: coral; text-decoration: none; }
-section .content b,
+section .content b, 
 section .content strong
    { color: white; font-weight: 400; }
 section .content p:not(:last-of-type) { margin-bottom: 0.5rem; }
-section .footer {
-   background-color: #212121;
-   text-align: right;
-   color: #5e5e5e;
-   padding-top: 2px;
-   padding-bottom: 2px;
+section .footer { 
+   background-color: #212121; 
+   text-align: right; 
+   color: #5e5e5e; 
+   padding-top: 2px; 
+   padding-bottom: 2px; 
 }
 section .footer span { color: coral; }
 section .content ul {
@@ -103,7 +107,7 @@ section .content ul li {
 
 #login form label { display: block; }
 #login form input { width: 100%; box-sizing: border-box; }
-#login form div:not(:last-of-type) { margin-bottom: 1rem; }
+#login form div:not(:last-of-type) { margin-bottom: 1rem; } 
 
 /* lgog */
 #logo { padding: 3rem; }
@@ -141,7 +145,7 @@ section .content ul li {
       grid-column-gap: 2rem;
       grid-template-columns: 4fr 1fr;
       grid-template-rows: min-content min-content min-content min-content auto min-content;
-      grid-template-areas:
+      grid-template-areas: 
          "logo logo"
          "news login"
          "news games"
