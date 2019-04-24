@@ -541,12 +541,12 @@ function updategame(user, msg) {
 						if( process ){
 							setTimeout(function() {
 								try {
-									ps.kill( gamepid, function( err ) {
+									ps.kill( term.pid, function( err ) {
 										if (err) 
 											return console.log( err );
 										try {
 											term.kill();
-											console.log( 'Process %s did not exit and has been forcibly killed!', gamepid );
+											console.log( 'Process %s did not exit and has been forcibly killed!', term.pid );
 										}
 										catch(e) { console.error(e); }
 									});
@@ -557,8 +557,8 @@ function updategame(user, msg) {
 							},500);
 						} 
 						else {
-							console.log( 'Process %s was not found, expect user exited cleanly.',player );
-							announce({eventtype:"--system--",content:msg.game+" has been updated by "+user.name});
+							console.log( 'Process %s was not found, expect user exited cleanly.',user.name );
+							announce({eventtype:"systemannounce",content:msg.game+" has been updated"});
 						}
 						try {
 							metasockets[user.name].send(JSON.stringify({eventtype: 'updateover', content: []}));

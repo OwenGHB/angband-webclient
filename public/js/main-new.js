@@ -263,11 +263,6 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 	}
 	else if(mode === "update") {
 		spyglass['default'] = createTerminal(d);
-		$("#navigation ul").append(function() {
-			return $('<li><a href="#"> - ' + qualifier + ' (your game)</a></li>').click(function() {
-				applyTerminal("play", qualifier, panels, walls, d);
-			});
-		});
 		socket.send(JSON.stringify({
 			eventtype:'update',
 			content: {
@@ -400,6 +395,7 @@ function initChat() {
 			case "updateoutput":
 				spyglass['default'].write(data.content); break;
 			case "gameover":
+			case "updateover":
 				closeGame(); break;
 			case "gameoutput":
 				if (typeof(spyglass[data.content.player])!='undefined') {
