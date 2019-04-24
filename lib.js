@@ -187,7 +187,7 @@ function getmatchlist(matches) {
 			idletime   : matches[i].idletime,
 			dimensions : {rows: matches[i].dimensions.rows, cols: matches[i].dimensions.cols} 
 		};
-		if (!charinfo.isDead) {
+		if (charinfo.isDead == "0") {
 			matchinfo.cLvl = charinfo.cLvl;
 			matchinfo.race = charinfo.race;
 			matchinfo.subrace = charinfo.subrace;
