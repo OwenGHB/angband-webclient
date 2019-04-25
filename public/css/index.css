@@ -70,7 +70,7 @@ section .title, section .footer {
 }
 section .content { padding: 1rem; }
 section .title {
-   background-color: background-color: rgba(0,0,0,0.7);
+   background-color: background-color: rgba(0,0,0,0.3);
    padding-top: 0.3rem;
    padding-bottom: 0.3rem;
    color: #bada55;
