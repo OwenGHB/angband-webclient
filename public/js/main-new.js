@@ -118,8 +118,12 @@ function listMatches(matches) {
 				if (typeof(matches[players[i]].race) != 'undefined'){
 					outputstring += ' as a <span>';
 					if (typeof(matches[players[i]].cLvl) != 'undefined') outputstring +='Level ' + matches[players[i]].cLvl + ' ';
-					if (typeof(matches[players[i]].subRace) != 'undefined') outputstring += matches[players[i]].subRace + ' ';
-					outputstring += matches[players[i]].race;
+					if (typeof(matches[players[i]].subRace) != 'undefined') {
+						outputstring += matches[players[i]].subRace + ' ';
+						if (typeof(matches[players[i]].class) != 'undefined' && matches[players[i]].class != "Monster") outputstring += matches[players[i]].race;
+					} else {
+						outputstring += matches[players[i]].race;
+					}
 					if (typeof(matches[players[i]].class) != 'undefined' && matches[players[i]].class != "Monster") outputstring += ' ' + matches[players[i]].class;
 					if (typeof(matches[players[i]].mRealm1) != 'undefined') {
 						outputstring += ' (' + matches[players[i]].mRealm1;

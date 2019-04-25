@@ -192,7 +192,7 @@ function getmatchlist(matches) {
 		if (charinfo.isDead == "0") {
 			matchinfo.cLvl = charinfo.cLvl;
 			matchinfo.race = charinfo.race;
-			matchinfo.subrace = charinfo.subrace;
+			matchinfo.subRace = charinfo.subRace;
 			matchinfo.mRealm1 = charinfo.mRealm1;
 			matchinfo.mRealm2 = charinfo.mRealm2;
 			matchinfo.class = charinfo.class;
