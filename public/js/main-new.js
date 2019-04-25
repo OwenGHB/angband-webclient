@@ -130,8 +130,13 @@ function listMatches(matches) {
 					if (typeof(matches[players[i]].subClass) != 'undefined') outputstring += ' ('+matches[players[i]].subClass+')';
 					if (typeof(matches[players[i]].mapName) != 'undefined') {
 						if (typeof(matches[players[i]].dLvl) != 'undefined' && parseInt(matches[players[i]].dLvl) > 0) {
-							outputstring += ' on Level ' + matches[players[i]].dLvl;
-							outputstring += ' of ' + matches[players[i]].mapName;
+							if (mapName!='Quest') {
+								outputstring += ' on Level ' + matches[players[i]].dLvl;
+								outputstring += ' of ' + matches[players[i]].mapName;
+							} else {
+								outputstring += ' in a Level ' + matches[players[i]].dLvl;
+								outputstring += ' ' + matches[players[i]].mapName;
+							}
 						} else {
 							outputstring += ' in ' + matches[players[i]].mapName;
 						}
