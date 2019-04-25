@@ -114,6 +114,8 @@ function listMatches(matches) {
 		for(var i=0; i<players.length; i++) {
 			var idle = matches[players[i]].idletime > 0 ? ', idle for <span>'+matches[players[i]].idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append(function(i) {
+				//incoming grammar logic
+				var fixedrealmclasses = ["Samurai","Necromancer","Hexblade","Bard","Tourist","Rage-Mage","Lawyer","Ninja-Lawyer"];
 				var outputstring = '<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>';
 				if (typeof(matches[players[i]].race) != 'undefined'){
 					outputstring += ' as a <span>';
@@ -125,7 +127,7 @@ function listMatches(matches) {
 						outputstring += matches[players[i]].race;
 					}
 					if (typeof(matches[players[i]].class) != 'undefined' && matches[players[i]].class != "Monster") outputstring += ' ' + matches[players[i]].class;
-					if (typeof(matches[players[i]].mRealm1) != 'undefined') {
+					if (typeof(matches[players[i]].mRealm1) != 'undefined' && !(fixedrealmclasses.includes(matches[players[i]].class))) {
 						outputstring += ' (' + matches[players[i]].mRealm1;
 						if (typeof(matches[players[i]].mRealm2) != 'undefined') {
 							outputstring += '/' + matches[players[i]].mRealm2+')';
