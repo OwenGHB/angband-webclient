@@ -127,7 +127,7 @@ function listMatches(matches) {
 							outputstring += '/' + matches[players[i]].mRealm2+')';
 						} else outputstring += ')';
 					}
-					if (typeof(matches[players[i]].subClass) != 'undefined') outputstring += ' ('+subClass+')'
+					if (typeof(matches[players[i]].subClass) != 'undefined') outputstring += ' ('+subClass+')';
 					if (typeof(matches[players[i]].mapName) != 'undefined') {
 						if (typeof(matches[players[i]].dLvl) != 'undefined' && parseInt(matches[players[i]].dLvl) > 0) {
 							outputstring += ' on Level ' + matches[players[i]].dLvl;
