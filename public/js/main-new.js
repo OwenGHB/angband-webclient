@@ -145,7 +145,7 @@ function listMatches(matches) {
 							outputstring += ' in ' + matches[players[i]].mapName;
 						}
 					} else if (typeof(matches[players[i]].mDepth) != 'undefined') {
-						outputstring += ' (max depth ' + matches[players[i]].mDepth + '\')';
+						outputstring += ' at ' + matches[players[i]].mDepth + '\'';
 					}
 					outputstring += '</span>' + idle + '</li>';
 				}
