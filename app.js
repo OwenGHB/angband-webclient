@@ -20,8 +20,7 @@ if(!process.env.SESSION_SECRET) {
    process.exit(1);
 }
 
-// check for traces of a crash and do cleanup on them if necessary
-awc.startup();
+
 
 // =============================================================================
 //  S E R V E R   C O N F I G U R A T I O N
@@ -84,11 +83,6 @@ app.get('/', function(req, res) {
       games   : stats.games,
       players : stats.players
 	});
-});
-
-app.get("/db/refresh", function(req, res) {
-   localdb.refresh();
-   res.send("database refreshed");
 });
 
 app.post('/enter', passport.authenticate("local", {failureRedirect: '/forbidden'}), function(req, res) {
@@ -188,7 +182,6 @@ var server = app.listen(PORT, function() {
 process.on('SIGINT', function onSigterm() {
   console.info('Got SIGINT. Graceful shutdown started at', new Date().toISOString());
   // start graceul shutdown here
-  awc.shutdown();
   server.close();
   process.exit();
 });

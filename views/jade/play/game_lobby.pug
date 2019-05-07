@@ -2,7 +2,6 @@
 div
    .text-center
       img#logo(src="/img/logo.png")
-   h2.text-center start new game
    .new-game
       .row
          .right-flex game:
@@ -47,7 +46,11 @@ div
       .row
          p#game-description
       .row
-         a#playbutton(href="#") play
+         a#playbutton(href="#") PLAY
+      .row
+         a#deletebutton(href="#") delete & download savefile
+      .row
+         a#updatebutton(href="#").hidden update
 
    h2.text-center watch people playing
    #watchmenu.text-center

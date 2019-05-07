@@ -22,17 +22,15 @@ html
                   include game_terminal.pug
                #tester.terminal A
             .pane-side
-               .tab-buttons
-                  a(href="#", title="navigation", onclick="showMenu()")
+               .tab-buttons.uchel
+                  a.selected(href="#", title="navigation", onclick="showTab('tab-navigation',this)")
                      i.fas.fa-home
-                  a#link-chat.selected(href="#", title="chat", onclick="showTab('tab-chat',this)")
-                     i.fas.fa-comments
-                  a(href="#", title="people", onclick="showTab('tab-people',this)")
-                     i.fas.fa-users
                   a(href="#", title="files", onclick="showTab('tab-files',this)")
                      i.fas.fa-file-alt
                   a#btn-tabletui.hidden(href="#", title="tablet controls", onclick="showTab('tab-tabletui',this)")
                      i.fas.fa-tablet-alt
+                  a.hidden(href="#", title="tools", onclick="showTab('tab-tools',this)")
+                     i.fas.fa-wrench
                   a(href="#", title="settings", onclick="showTab('tab-settings',this)")
                      i.fas.fa-cog
                   
@@ -41,19 +39,32 @@ html
                   a.float-right(href="/", target="_blank",title="news")
                      i.fas.fa-newspaper
 
-               .tab-panels
-                  #tab-navigation.tab.hidden
+               .tab-panels.uchel
+                  #tab-navigation.tab
                      include tab_navigation.pug
-                  #tab-chat.tab
-                     include tab_chat.pug
-                  #tab-people.tab.hidden
-                     include tab_people.pug
                   #tab-files.tab.hidden
                      include tab_files.pug
                   #tab-tabletui.tab.hidden
                      include tab_tabletui.pug
+                  #tab-tools.tab.hidden
+                     #tools.flex-grow.panel
+                        .wrapper
+                           p#keystrokeinput
                   #tab-settings.tab.hidden
                      include tab_settings.pug
+					 
+               .tab-buttons.isaf
+                  a#link-chat.selected(href="#", title="chat", onclick="showTab('tab-chat',this)")
+                     i.fas.fa-comments
+                  a(href="#", title="people", onclick="showTab('tab-people',this)")
+                     i.fas.fa-users
+					 
+               .tab-panels.isaf
+                  #tab-chat.tab
+                     include tab_chat.pug
+                  #tab-people.tab.hidden
+                     include tab_people.pug
+                  
       script.
          var username = "#{user.name}";
          console.log("user name:", username);

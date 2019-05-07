@@ -1,13 +1,29 @@
 html {
-   background-color: black;
-   background-image: url("/img/bgr1.jpg");
-   background-repeat: no-repeat;
-   background-size: cover;
-   background-position: top center;
-
+	background-color: black;
+    background-image: url("/img/bgr_1920.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
 }
-body {
-   background-color: rgba(0,0,0,0.4)
+@media only screen and (min-width : 1921px) {
+    html {
+        background-image: url('/img/bgr_2560.jpg');
+    }
+}
+@media only screen and (max-width : 1280px) {
+    html {
+        background-image: url('/img/bgr_1280.jpg');
+    }
+}
+@media only screen and (max-width : 1000px) {
+    html {
+        background-image: url('/img/bgr_1000.jpg');
+    }
+}
+@media only screen and (max-width : 768px) {
+    html {
+        background-image: url('/img/bgr_768.jpg');
+    }
 }
 html, body {
    line-height: initial;
@@ -54,19 +70,19 @@ section .title, section .footer {
 }
 section .content { padding: 1rem; }
 section .title {
-   background-color: #434242;
+   background-color: rgba(0,0,0,0.7);
    padding-top: 0.3rem;
    padding-bottom: 0.3rem;
    color: #bada55;
 }
-section .content { background-color: #171717 }
+section .content { background-color: rgba(0,0,0,0.5); }
 section .content a { color: coral; text-decoration: none; }
 section .content b, 
 section .content strong
    { color: white; font-weight: 400; }
 section .content p:not(:last-of-type) { margin-bottom: 0.5rem; }
 section .footer { 
-   background-color: #212121; 
+   background-color: rgba(0,0,0,0.7); 
    text-align: right; 
    color: #5e5e5e; 
    padding-top: 2px; 

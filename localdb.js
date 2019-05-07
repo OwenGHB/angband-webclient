@@ -5,11 +5,10 @@ var config   = require("./config");
 
 
 var db       = {
-   games      : lowdb(new FileSync("./db/games.json")),
-   news       : lowdb(new FileSync("./db/news.json")),
-   chat       : lowdb(new FileSync("./db/chat.json")),
-   users      : lowdb(new FileSync("./db/users.json")),
-   livematches: lowdb(new FileSync("./db/livematches.json"))
+   games    : lowdb(new FileSync("./db/games.json")),
+   news     : lowdb(new FileSync("./db/news.json")),
+   chat     : lowdb(new FileSync("./db/chat.json")),
+   users    : lowdb(new FileSync("./db/users.json"))
 };
 var SALT_ROUNDS   = 5;
 var DEFAULT_ROLES = ["basic"];
@@ -43,11 +42,10 @@ var DEFAULT_ROLES = ["basic"];
 
 */
 // set default data if db files are empty
-db.games      .defaults({data:[]}).write();
-db.news       .defaults({data:[]}).write();
-db.users      .defaults({data:[]}).write();
-db.chat       .defaults({data:[]}).write();
-db.livematches.defaults({data:[]}).write();
+db.games .defaults({data:[]}).write();
+db.news  .defaults({data:[]}).write();
+db.users .defaults({data:[]}).write();
+db.chat  .defaults({data:[]}).write();
 
 
 // export db object
@@ -57,7 +55,6 @@ module.exports.db = db;
 
 // AUTEHNTICATION
 module.exports.verifyWithLocalDb = function(username, password, done) {
-   console.log("localdb verifyWithLocalDb: checking with", username, password);
    authenticate(username, password, function(error, user, more_info) {
       console.log("..verified as", error, user, more_info);
       return done(error, user, more_info);
@@ -133,17 +130,41 @@ module.exports.readMessages = function(limit) {
       .value();
 }
 
-// write games info to db for crash recovery
-module.exports.registerGame = function(gamepid) {
-	 return db.livematches.get("data").push({gamepid:gamepid}).write();
+
+
+//user roles
+module.exports.addRole = function(role,user) {
+   var roles = db.users.get("data").find({name: user}).value().roles;
+   if (!(roles.includes(role))) roles.push(role);
+   db.users.get("data").find({name: user}).assign({roles: roles}).write();
+   return roles;
 }
 
-module.exports.deregisterGame = function(gamepid) {
-	 return db.livematches.get("data").remove({gamepid:gamepid}).write();
+module.exports.unBanAll = function() {
+	var users = db.users.get("data").value();
+	for (var i=0; i<users.length; i++){ 
+		for (var j=0; j<users[i].roles.length; j++){
+			if (["mute","banned"].includes(users[i].roles[j])) {
+				users[i].roles.splice(j, 1); 
+				j--;
+			}
+		}
+		db.users.get("data").find({name: users[i].name}).assign({roles: users[i].roles}).write();
+	}
 }
 
-module.exports.processCheck = function(gamepid) {
-	 return db.livematches.get("data").value();
+module.exports.checkRole = function(role,user) {
+   var roles = db.users.get("data").find({name: user}).value().roles;
+   return roles.includes(role);
+}
+
+module.exports.fetchGames = function() {
+	return db.games.value().data;
+}
+
+module.exports.setVersionString = function(game,longname) {
+	db.games.get("data").find({name: game}).assign({longname: longname}).write();
+	return longname;
 }
 
 // get last 10 news

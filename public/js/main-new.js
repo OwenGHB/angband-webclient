@@ -1,10 +1,11 @@
-var safety = 10;            // for font size calculation
+var safety = 2;            // for font size calculation
 var initComplete = false    // used to do some stuff only after this will be true
 
 var protocol = window.location.protocol === "https:" ? "wss" : "ws";
 var socketURL = protocol + '://' + window.location.hostname + ((window.location.port) ? (':' + window.location.port) : '') + '/meta';
 var socket;
 var user_list = [];
+
 var matched_user_list = [];
 var isAutocompleteOpened = false;
 var currentAutocompletePos = 0;
@@ -12,6 +13,8 @@ var currentAutocompletePos = 0;
 var spyglass = {};
 var playing = false;
 var dimensions= {};
+
+//var username also available
 
 var fonts = [
 	"Share Tech Mono",
@@ -41,7 +44,13 @@ var notify_sound = $("#notification").get(0);
 
 function populateChat(messages) {
 	messages.forEach(function(message) {
-		addMessage(message, false, false);
+		if (message.user=='--system--') {
+			addMessage(message, "system", false);
+		} else if (message.user=='--deathangel--') {
+			addMessage(message, "deathangel", false);
+		} else {
+			addMessage(message, false, false);
+		}
 	});
 	$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
    initComplete = true;
@@ -61,11 +70,11 @@ function addMessage(msg, extra_class, shouldNotify) {
 		$m.find("span.msg").text(msg.message);
 		$("#chatlog .wrapper").append($m);
 		if(shouldNotify) 
-			notifyIfNeeded(msg.user, msg.message);
+			notifyIfNeeded(username, msg.message);
 	}
 	else {
 		var _m = typeof msg === "object" ? msg.message : msg;
-		$("#chatlog .wrapper").append('<div class="message"><span class="time">['+ts+'] </span><span class="system">' + _m + '</span></div>');
+		$("#chatlog .wrapper").append('<div class="message"><span class="time">['+ts+'] </span><span class="'+extra_class+'">' + _m + '</span></div>');
 	}
 
 	// if user is outside chat tab and new msg arrive blink chat icon
@@ -105,9 +114,42 @@ function listMatches(matches) {
 		for(var i=0; i<players.length; i++) {
 			var idle = matches[players[i]].idletime > 0 ? ', idle for <span>'+matches[players[i]].idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append(function(i) {
+				//incoming grammar logic
+				var fixedrealmclasses = ["Samurai","Necromancer","Hexblade","Bard","Tourist","Rage-Mage","Lawyer","Ninja-Lawyer"];
 				var outputstring = '<li><span>'+players[i]+'</span> playing <span>'+matches[players[i]].game+'</span>';
-				if (typeof(matches[players[i]].cLvl) != 'undefined'){
-					outputstring += ' as a <span>Level ' + matches[players[i]].cLvl + ' ' + matches[players[i]].race + ' ' + matches[players[i]].class + '</span>' + idle + '</li>';
+				if (typeof(matches[players[i]].race) != 'undefined'){
+					outputstring += ' as a <span>';
+					if (typeof(matches[players[i]].cLvl) != 'undefined') outputstring +='Level ' + matches[players[i]].cLvl + ' ';
+					if (typeof(matches[players[i]].subRace) != 'undefined') {
+						outputstring += matches[players[i]].subRace + ' ';
+						if (typeof(matches[players[i]].class) != 'undefined' && matches[players[i]].class != "Monster") outputstring += matches[players[i]].race;
+					} else {
+						outputstring += matches[players[i]].race;
+					}
+					if (typeof(matches[players[i]].class) != 'undefined' && matches[players[i]].class != "Monster") outputstring += ' ' + matches[players[i]].class;
+					if (typeof(matches[players[i]].mRealm1) != 'undefined' && !(fixedrealmclasses.includes(matches[players[i]].class))) {
+						outputstring += ' (' + matches[players[i]].mRealm1;
+						if (typeof(matches[players[i]].mRealm2) != 'undefined') {
+							outputstring += '/' + matches[players[i]].mRealm2+')';
+						} else outputstring += ')';
+					}
+					if (typeof(matches[players[i]].subClass) != 'undefined') outputstring += ' ('+matches[players[i]].subClass+')';
+					if (typeof(matches[players[i]].mapName) != 'undefined') {
+						if (typeof(matches[players[i]].dLvl) != 'undefined' && parseInt(matches[players[i]].dLvl) > 0) {
+							if (matches[players[i]].mapName!='Quest') {
+								outputstring += ' on Level ' + matches[players[i]].dLvl;
+								outputstring += ' of ' + matches[players[i]].mapName;
+							} else {
+								outputstring += ' in a Level ' + matches[players[i]].dLvl;
+								outputstring += ' ' + matches[players[i]].mapName;
+							}
+						} else {
+							outputstring += ' in ' + matches[players[i]].mapName;
+						}
+					} else if (typeof(matches[players[i]].mDepth) != 'undefined') {
+						outputstring += ' at ' + matches[players[i]].mDepth + '\'';
+					}
+					outputstring += '</span>' + idle + '</li>';
 				}
 			   return $(outputstring).click(function() {
 			   	if(players[i] === username)
@@ -133,20 +175,25 @@ function listFiles(files) {
 		return;
 	$tab.html("");
 	for(var i=0; i<games.length; i++) {
-		var $game = $('<div class="game">' +games[i]+ '</div>');
 		var userfiles = files[games[i]];
 		if(userfiles.length > 0) {
+			var $game = $('<div class="game">' +games[i]+ '</div>');
+			var $list = $('<ul></ul>');
 			for(var f=0; f<userfiles.length; f++) {
-				$game.append('<a href="/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
+				var $listitem = $('<li></li>');
+				$listitem.append('<a href="#" onclick="requestDeletion(\'usergenerated\',\''+games[i]+'\',\''+userfiles[f]+'\')">✖</a>');
+				$listitem.append('<a href="/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
+				$list.append($listitem);
 			}
-		}
-		else
-			$game.append('<span>no files</span>');
-		$tab.append($game);
-	}
-	
+			$game.append($list);
+			$tab.append($game);
+		}		
+	}	
 }
 
+function requestDeletion(filetype,game,specifier) {
+	socket.send(JSON.stringify({eventtype:'deletefile',content:{filetype:filetype,game:game,specifier:specifier}}));
+}
 
 function showMenu(){
 	$("#terminal-pane").addClass("hidden");
@@ -155,10 +202,16 @@ function showMenu(){
 
 
 function showTab(id, el) {
-	const tabs = $(".tab-panels").children().map(function(i,e){return e.id;});
-	$(".tab-panels div.tab").addClass("hidden");
-	$("#" + id).removeClass("hidden");
-	$(".tab-buttons a").removeClass("selected");
+	//ugly hack but a lot of things are ugly right now
+	if (['tab-chat','tab-people'].includes(id)){
+		$(".isaf div.tab").addClass("hidden");
+		$("#" + id).removeClass("hidden");
+		$(".isaf a").removeClass("selected");
+	} else {
+		$(".uchel div.tab").addClass("hidden");
+		$("#" + id).removeClass("hidden");
+		$(".uchel a").removeClass("selected");
+	}
 	$(el).addClass("selected");
 
 	if(id === "tab-chat")
@@ -201,6 +254,7 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 				}
 			}));
 			spyglass['default'].on('data', function(data) {
+				$("#keystrokeinput").html(JSON.stringify(data));
 				socket.send(JSON.stringify({eventtype: 'gameinput', content: data}));
 			});
 		}
@@ -225,8 +279,25 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 		$terminal.html("");
 		spyglass[qualifier].open($terminal.get(0));
 	}
+	else if(mode === "update") {
+		spyglass['default'] = createTerminal(d);
+		socket.send(JSON.stringify({
+			eventtype:'update',
+			content: {
+				game: qualifier,
+				dimensions: d,
+			}
+		}));
+		spyglass['default'].on('data', function(data) {
+			$("#keystrokeinput").html(JSON.stringify(data));
+			socket.send(JSON.stringify({eventtype: 'updateinput', content: data}));
+		});
+
+		$terminal.html("");
+		spyglass['default'].open($terminal.get(0));
+	}
 	
-	// hide lobby and unhide terminal
+	// hide lobby and unhide terminal with fade
 	$("#games-lobby").addClass("hidden");
 	$("#terminal-pane").removeClass("hidden");
 }
@@ -234,40 +305,39 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 
 // does the same as listGameMatches?? 
 function cleanSpyGlass(matches){
-	console.warn("cleanSpyGlass deprecated");
-	// $("#navigation ul").html("");
-	// // $("#navigation ul").append(function() {
-	// // 	return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
-	// // 		$("#terminal-pane").addClass("hidden");
-	// // 		$("#games-lobby").removeClass("hidden");
-	// // 	});
-	// // });
-	// var players = Object.keys(matches);
-	// if(Object.keys(spyglass).length > 0) {
-	// 	for(var i in spyglass) {
-	// 		if (i == username) {
-	// 			$("#navigation ul").append(function(i) {
-	// 				return $('<li><a href="#"> - your game</a></li>').click(function() {
-	// 					var panels = $("#subwindows").val();
-	// 					var walls = false;
-	// 					var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
-	// 					var gamename = $("#gameselect").val();
-	// 					applyTerminal("play", gamename, panels, walls, );
-	// 				});
-	// 			}(i));
-	// 		} 
-	// 		else if (players.includes(i)) {
-	// 			$("#navigation ul").append(function(i) {
-	// 				return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
-	// 					applyTerminal("spectate", i, 1, false, matches[i].dimensions);
-	// 				});
-	// 			}(i));	
-	// 		} 
-	// 		else {
-	// 			delete spyglass[i];
-	// 		}
-	// 	}
-	// }
+	$("#navigation ul").html("");
+	$("#navigation ul").append(function() {
+		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
+			$("#terminal-pane").addClass("hidden");
+			$("#games-lobby").removeClass("hidden");
+		});
+	});
+	var players = Object.keys(matches);
+	if(Object.keys(spyglass).length > 0) {
+		for(var i in spyglass) {
+			if (i == username) {
+				$("#navigation ul").append(function(i) {
+					return $('<li><a href="#">' + i + '</a></li>').click(function() {
+						var panels = $("#subwindows").val();
+						var walls = false;
+						var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
+						var gamename = $("#gameselect").val();
+						applyTerminal("play", gamename, panels, walls, );
+					});
+				}(i));
+			} 
+			else if (players.includes(i)) {
+				$("#navigation ul").append(function(i) {
+					return $('<li><a href="#">' + i + '</a></li>').click(function() {
+						applyTerminal("spectate", i, 1, false, matches[i].dimensions);
+					});
+				}(i));	
+			} 
+			else {
+				delete spyglass[i];
+			}
+		}
+	}
 }
 
 
@@ -318,13 +388,15 @@ function initChat() {
 				break;
 			case "chat":
 				addMessage(data.content, false, initComplete); 
-				// if(initComplete)
+				if(initComplete)
 				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 				break;
 			case "usercount":
 				updateUserCount(data.content); break;
 			case "matchupdate":
-				listMatches(data.content); /*cleanSpyGlass(data.content);*/ break;
+				listMatches(data.content); 
+				//cleanSpyGlass(data.content); 
+				break;
 			case "fileupdate":
 				listFiles(data.content); break;
 			case "systemannounce":
@@ -332,9 +404,16 @@ function initChat() {
 				if(initComplete)
 				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
 				break;
+			case "deathannounce":
+				addMessage(data.content, "deathangel", initComplete);
+				if(initComplete)
+				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+				break;
 			case "owngameoutput":
+			case "updateoutput":
 				spyglass['default'].write(data.content); break;
 			case "gameover":
+			case "updateover":
 				closeGame(); break;
 			case "gameoutput":
 				if (typeof(spyglass[data.content.player])!='undefined') {
@@ -436,7 +515,19 @@ function initGameList(games) {
 	$("#gameselect").change(function(e) {
 		for(var i=0; i<games.length; i++) {
 			if(e.target.value === games[i].name) {
+				var desc = games[i].desc;
+				if (typeof(games[i].owner) != 'undefined') desc +=' Maintained by '+games[i].owner;
 				$("#game-description").html(games[i].desc);
+				if (typeof(games[i].owner) != 'undefined' && username == games[i].owner) {
+					$("#updatebutton").removeClass('hidden');
+				} else {
+					$("#updatebutton").addClass('hidden');
+				}
+				if (typeof(games[i].savexists) != 'undefined' && games[i].savexists) {
+					$("#deletebutton").removeClass('hidden');
+				} else {
+					$("#deletebutton").addClass('hidden');
+				}
 				saveSelectedGameName(e.target.value);
 				loadDefaultGameOptions(e.target.value);
 				loadGameOptions(e.target.value);
@@ -449,6 +540,19 @@ function initGameList(games) {
 		var panels = $("#subwindows").val();
 		var walls = false;
 		applyTerminal("play", gamename, panels, walls, calculateIdealTerminalDimensions());
+	});
+	$("#deletebutton").click(function() {
+		if(!confirm('Are you sure you want to proceed?'+"\n"+'This will *delete* your savegame file for '+$("#gameselect :selected").text()+'!')) return;
+		var gamename = $("#gameselect").val();
+		requestDeletion('ownsave',gamename,false);
+		$(this).off('click');
+		$(this).addClass('hidden');
+		$(this).attr("target","_blank");
+		$(this).attr("href","/"+username+"/"+gamename+"/"+username);
+	});
+	$("#updatebutton").click(function() {
+		var gamename = $("#gameselect").val();
+		applyTerminal("update", gamename, 1, "no", calculateIdealTerminalDimensions());
 	});
 }
 
