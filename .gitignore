@@ -57,3 +57,4 @@ home
 package-lock.json
 yarn.lock
 db
+run.sh

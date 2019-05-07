@@ -25,6 +25,15 @@ if(!process.env.SESSION_SECRET) {
 // =============================================================================
 //  S E R V E R   C O N F I G U R A T I O N
 // =============================================================================
+
+
+/**
+ * CUSTOM_USER variable defines where user files are stored. If environment variable
+ * was not specified a default value of '/home/angband/user' will be used.
+ */
+const CUSTOM_USER = process.env.CUSTOM_USER || '/home/angband/user'
+
+
 //set up our pinging
 setInterval(function() { awc.keepalive(); }, 10000);
 
@@ -53,7 +62,7 @@ app.use(session({
 ));
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('/home/angband/user'));
+app.use(express.static(CUSTOM_USER));
 
 // configure passport middleware
 app.use(passport.initialize());

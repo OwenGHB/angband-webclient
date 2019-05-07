@@ -828,7 +828,7 @@ $(function() {
 	var ua = navigator.userAgent.toLowerCase();
 	var tablets = ["ipad", "android 5"];
 	var onTablet = false;
-	tablets.map(function(model) {
+	tablets.forEach(function(model) {
 		if(ua.indexOf(model) !== -1)
 			onTablet = true;
 	});
