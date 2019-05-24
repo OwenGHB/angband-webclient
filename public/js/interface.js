@@ -4,38 +4,38 @@ var initComplete = false    // used to do some stuff only after this will be tru
 
 function buildMatchListEntry(player) {
 	var fixedrealmclasses = ["Samurai","Necromancer","Hexblade","Bard","Tourist","Rage-Mage","Lawyer","Ninja-Lawyer","Beastmaster"];
-	var outputstring = '<li><span>'+player+'</span> playing <span>'+matches[player].game+'</span>';
-	if (typeof(matches[player].race) != 'undefined'){
+	var outputstring = '<li><span>'+player+'</span> playing <span>'+player.game+'</span>';
+	if (typeof(player.race) != 'undefined'){
 		outputstring += ' as a <span>';
-		if (typeof(matches[player].cLvl) != 'undefined') outputstring +='Level ' + matches[player].cLvl + ' ';
-		if (typeof(matches[player].subRace) != 'undefined') {
-			outputstring += matches[player].subRace + ' ';
-			if (typeof(matches[player].class) != 'undefined' && matches[player].class != "Monster") outputstring += matches[player].race;
+		if (typeof(player.cLvl) != 'undefined') outputstring +='Level ' + player.cLvl + ' ';
+		if (typeof(player.subRace) != 'undefined') {
+			outputstring += player.subRace + ' ';
+			if (typeof(player.class) != 'undefined' && player.class != "Monster") outputstring += player.race;
 		} else {
-			outputstring += matches[player].race;
+			outputstring += player.race;
 		}
-		if (typeof(matches[player].class) != 'undefined' && matches[player].class != "Monster") outputstring += ' ' + matches[player].class;
-		if (typeof(matches[player].mRealm1) != 'undefined' && !(fixedrealmclasses.includes(matches[player].class))) {
-			outputstring += ' (' + matches[player].mRealm1;
-			if (typeof(matches[player].mRealm2) != 'undefined') {
-				outputstring += '/' + matches[player].mRealm2+')';
+		if (typeof(player.class) != 'undefined' && player.class != "Monster") outputstring += ' ' + player.class;
+		if (typeof(player.mRealm1) != 'undefined' && !(fixedrealmclasses.includes(player.class))) {
+			outputstring += ' (' + player.mRealm1;
+			if (typeof(player.mRealm2) != 'undefined') {
+				outputstring += '/' + player.mRealm2+')';
 			} else outputstring += ')';
 		}
-		if (typeof(matches[player].subClass) != 'undefined') outputstring += ' ('+matches[player].subClass+')';
-		if (typeof(matches[player].mapName) != 'undefined') {
-			if (typeof(matches[player].dLvl) != 'undefined' && parseInt(matches[player].dLvl) > 0) {
-				if (matches[player].mapName!='Quest') {
-					outputstring += ' on Level ' + matches[player].dLvl;
-					outputstring += ' of ' + matches[player].mapName;
+		if (typeof(player.subClass) != 'undefined') outputstring += ' ('+player.subClass+')';
+		if (typeof(player.mapName) != 'undefined') {
+			if (typeof(player.dLvl) != 'undefined' && parseInt(player.dLvl) > 0) {
+				if (player.mapName!='Quest') {
+					outputstring += ' on Level ' + player.dLvl;
+					outputstring += ' of ' + player.mapName;
 				} else {
-					outputstring += ' in a Level ' + matches[player].dLvl;
-					outputstring += ' ' + matches[player].mapName;
+					outputstring += ' in a Level ' + player.dLvl;
+					outputstring += ' ' + player.mapName;
 				}
 			} else {
-				outputstring += ' in ' + matches[player].mapName;
+				outputstring += ' in ' + player.mapName;
 			}
-		} else if (typeof(matches[player].mDepth) != 'undefined') {
-			outputstring += ' at ' + matches[player].mDepth + '\'';
+		} else if (typeof(player.mDepth) != 'undefined') {
+			outputstring += ' at ' + player.mDepth + '\'';
 		}
 		outputstring += '</span>' + idle + '</li>';
 	}
@@ -49,7 +49,7 @@ function listMatches(matches) {
 		for(var i=0; i<players.length; i++) {
 			var idle = matches[players[i]].idletime > 0 ? ', idle for <span>'+matches[players[i]].idletime+'0</span> seconds' : "";
 			$("#watchmenu ul").append(function(i) {
-				var outputstring = buildMatchListEntry(players[i]);
+				var outputstring = buildMatchListEntry(matches[players[i]]);
 				return $(outputstring).click(function(){
 					if(players[i] === username)
 						applyTerminal("play", players[i], 1, "no", matches[players[i]].dimensions);
