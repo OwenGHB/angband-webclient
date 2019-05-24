@@ -105,7 +105,7 @@ function cleanSpyGlass(matches){
 						var walls = false;
 						var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
 						var gamename = $("#gameselect").val();
-						applyTerminal("play", gamename, panels, walls, );
+						applyTerminal("play", gamename, panels, walls, matches[i].dimensions);
 					});
 				}(i));
 			} 
