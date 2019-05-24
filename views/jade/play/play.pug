@@ -23,20 +23,20 @@ html
                #tester.terminal A
             .pane-side
                .tab-buttons.uchel
-                  a#btn-navigation.selected(href="#", title="navigation", onclick="showTab('tab-navigation',this)")
+                  a.selected(href="#", title="navigation", onclick="showTab('tab-navigation',this)")
                      i.fas.fa-home
-                  a#btn-files(href="#", title="files", onclick="showTab('tab-files',this)")
+                  a(href="#", title="files", onclick="showTab('tab-files',this)")
                      i.fas.fa-file-alt
                   a#btn-tabletui.hidden(href="#", title="tablet controls", onclick="showTab('tab-tabletui',this)")
                      i.fas.fa-tablet-alt
-                  a#btn-tools.hidden(href="#", title="tools", onclick="showTab('tab-tools',this)")
+                  a.hidden(href="#", title="tools", onclick="showTab('tab-tools',this)")
                      i.fas.fa-wrench
-                  a#btn-settings(href="#", title="settings", onclick="showTab('tab-settings',this)")
+                  a(href="#", title="settings", onclick="showTab('tab-settings',this)")
                      i.fas.fa-cog
                   
-                  a#btn-logout.float-right(href="/logout", title="logout")
+                  a.float-right(href="/logout", title="logout")
                      i.fas.fa-sign-out-alt
-                  a#btn-news.float-right(href="/", target="_blank",title="news")
+                  a.float-right(href="/", target="_blank",title="news")
                      i.fas.fa-newspaper
 
                .tab-panels.uchel
@@ -56,7 +56,7 @@ html
                .tab-buttons.isaf
                   a#link-chat.selected(href="#", title="chat", onclick="showTab('tab-chat',this)")
                      i.fas.fa-comments
-                  a#btn-people(href="#", title="people", onclick="showTab('tab-people',this)")
+                  a(href="#", title="people", onclick="showTab('tab-people',this)")
                      i.fas.fa-users
 					 
                .tab-panels.isaf
@@ -69,4 +69,9 @@ html
          var username = "#{user.name}";
          console.log("user name:", username);
       script(type="text/javascript", src="/js/tablet-ui.js")
-      script(type="text/javascript", src="/js/main-new.js")
+      script(type="text/javascript", src="/js/localopts.js")
+      script(type="text/javascript", src="/js/interface.js")
+      script(type="text/javascript", src="/js/terminal.js")
+      script(type="text/javascript", src="/js/chat.js")
+      script(type="text/javascript", src="/js/init.js")
+      script(type="text/javascript", src="/js/main.js")
