@@ -1,57 +1,52 @@
 
-div
-   .text-center
-      img#logo(src="/img/logo.png")
-   .new-game
-      .row
-         .right-flex game:
-         .text-left
-            select#gameselect
-      //- .row
-      //-    .right-flex terminal width (cols):
-      //-    .text-left
-      //-       select#term-cols
-      //- .row
-      //-    .right-flex terminal height (rows):
-      //-    .text-left
-      //-       select#term-rows
+.text-center
+   img#logo(src="/img/logo.png")
+.new-game
+   .row
+      .right-flex game:
+      .text-left
+         select#gameselect
+   //- .row
+   //-    .right-flex terminal width (cols):
+   //-    .text-left
+   //-       select#term-cols
+   //- .row
+   //-    .right-flex terminal height (rows):
+   //-    .text-left
+   //-       select#term-rows
 
-      .row
-         .right-flex game font:
-         .text-left
-            select#extra-fonts
-               option(value="monospace") default
-
-      .row
-         .right-flex game font size:
-         .text-left
-            select#games-font-size
-
-      .row
-         .right-flex subwindows:
-         .text-left
-            select#subwindows
-               option(value="1") 1
-               option(value="2") 2
-               option(value="3") 3
-               option(value="4") 4
-               option(value="5") 5
-               option(value="6") 6
-      .hidden.row
-         .right-flex ASCII walls:
-         .text-left
-            select#ascii-walls
-               option(value="no") no
-               option(value="yes") yes
-      .row
-         p#game-description
-      .row
-         a#playbutton(href="#") PLAY
-      .row
-         a#deletebutton(href="#") delete & download savefile
-      .row
-         a#updatebutton(href="#").hidden update
-
-   h2.text-center watch people playing
-   #watchmenu.text-center
-      ul
+   .row
+      .right-flex game font:
+      .text-left
+         select#extra-fonts
+            option(value="monospace") default
+   .row
+     .right-flex game font size:
+     .text-left
+        select#games-font-size
+   .row
+     .right-flex subwindows:
+     .text-left
+        select#subwindows
+           option(value="1") 1
+           option(value="2") 2
+           option(value="3") 3
+           option(value="4") 4
+           option(value="5") 5
+           option(value="6") 6
+   .hidden.row
+      .right-flex ASCII walls:
+      .text-left
+         select#ascii-walls
+            option(value="no") no
+            option(value="yes") yes
+   .row
+      p#game-description
+   .row
+      a#playbutton(href="#") PLAY
+   .row
+      a#deletebutton(href="#") delete & download savefile
+   .row
+      a#updatebutton(href="#").hidden update
+#watchmenu
+  table

@@ -1,3 +1,5 @@
+var initComplete = false    // used to do some stuff only after this will be true
+
 function initChat() {
 	socket = new WebSocket(socketURL);
 	socket.addEventListener('message', function (ev) {

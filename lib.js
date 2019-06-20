@@ -18,8 +18,11 @@ var misc		= {};
 // holds current socket connections
 var metasockets = {};
 
-//for more efficient file updates
-var filelists = {};
+// for more efficient file updates
+var filelists   = {};
+
+// for more efficient game list updates
+var lastmatchlist = {};
 
 var home        = process.env.CUSTOM_HOME || '/home/angband';
 var localdb     = require("./localdb");
@@ -771,6 +774,8 @@ lib.welcome = function(user,ws) {
 //also checks for file diffs in lieu of fs.watch
 lib.keepalive = function(){
 	var matchlist=getmatchlist(matches);
+	var matchupdate=(lastmatchlist!=matchlist);
+	lastmatchlist=matchlist;
 	var fileupdate=(getfilelist(i)!=filelists[i]);
 	filelists[i]=getfilelist(i);
 	for (var i in matches) {
@@ -789,7 +794,7 @@ lib.keepalive = function(){
 	for (var i in metasockets) {
 		try {
 			metasockets[i].ping();
-			metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: matchlist}));
+			if (matchupdate) metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: matchlist}));
 			if (fileupdate) metasockets[i].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(i)}));
 		} catch (ex) {
 			// The WebSocket is not open, ignore

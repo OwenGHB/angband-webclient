@@ -205,10 +205,11 @@ html, body, #container {
 .flex .pane-main,
 .flex .pane-side { border: 0 solid blue;}
 
-.flex .pane-main #game-lobby > div {
-	display: grid;
-	grid-template-rows: repeat(3,auto) 100%;
-	height: 100vh;
+#games-lobby {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+    height: 100%;
 }
 
 .tab-panels .hidden { display: none !important; }
@@ -412,39 +413,34 @@ html, body, #container {
     color: #c7c6c6;
     text-decoration: none;
 }
-#playbutton:hover, , #updatebutton:hover {
-	background-color: #353535;
+#playbutton:hover, #updatebutton:hover {
+	background-color: rgba(37, 37, 21, .75);
 }
 #watchmenu {
-   padding: 0;
-	margin: 0;
-	display: inline-block;
-	height: 100%;
+	flex-grow: 1;
 	overflow: auto;
-	width: 100%;
 	scrollbar-color: rgba(0, 0, 0, .5) rgba(37, 37, 21, .75);
 }
-#watchmenu ul {
-   padding: 0;
-	margin: 0;
-	display: inline-block;
-	height: 100%;
-	overflow: auto;
+#watchmenu table {
+    color: #c7c6c6;
 	width: 100%;
-	scrollbar-color: rgba(0, 0, 0, .5) rgba(37, 37, 21, .75);
 }
-#watchmenu ul li {
-	list-style-type: none;
-	cursor: pointer;
-	padding: 1px 4px;
-}
-#watchmenu ul li:hover {
-	background-color: #1d2226;
-}
-#watchmenu ul li span {
+#watchmenu table tr {
+	text-align:left;
 	color: #ddd;
 }
-#watchmenu ul li:hover span {
+#watchmenu table tr th {
+	text-align:left;
+	border: 1px outset #353515;
+	background-color: rgba(0, 0, 0, .55);
+	color: #ddd;
+}
+#watchmenu table tr td {
+	cursor: pointer;
+	color: #ddd;
+}
+#watchmenu table tr:hover td {
+	background-color: rgba(0, 0, 0, .35);
 	color: #bada55;
 }
 
