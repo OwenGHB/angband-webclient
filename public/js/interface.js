@@ -37,6 +37,9 @@ function buildMatchListEntry(player, match) {
 			outputstring += ' at ' + match.mDepth + '\'';
 		}
 		outputstring += '</td>'
+	} else {
+		//three empty cells
+		outputstring += '<td></td><td></td><td></td>';
 	}
 	outputstring += '<td>' + (parseInt(match.idletime)*10) + '</td>';
 	outputstring += '</tr>';
