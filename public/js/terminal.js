@@ -2,6 +2,7 @@ var playing = false;
 var dimensions = {};
 
 var safety = 2;            // for font size calculation
+var font_sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20,22,24,26,28,32,36,40];
 
 function createTerminal(dimensions) {
 	return new Terminal({
