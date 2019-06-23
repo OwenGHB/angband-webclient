@@ -35,6 +35,12 @@ function buildMatchListEntry(player, match) {
 			}
 		} else if (typeof(match.mDepth) != 'undefined') {
 			outputstring += ' at ' + match.mDepth + '\'';
+		} else if (typeof(match.dLvl) != 'undefined') {
+			if (parseInt(match.dLvl) > 0) {
+				outputstring += ' on Level ' + match.dLvl;
+			} else {
+				outputstring += ' in Town';
+			}
 		}
 		outputstring += '</td>'
 	} else {

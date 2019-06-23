@@ -220,25 +220,71 @@ function isalive(user,game){
 	return alive;
 }
 
-
+//hacked for V-like savefile header reading to avert Exo patch megahack. Un-hardcode this.
 function getcharinfo(user, game) {
-	var dirpath = home+'/user/'+user+'/'+game;
-	fs.ensureDirSync(dirpath);
-	var files = fs.readdirSync(dirpath);
+	var vlikes = ["angband-master","coffeeband"];
 	var charinfo = {};
-	if (files.includes('CharOutput.txt')) {
-		var json=fs.readFileSync(dirpath + '/CharOutput.txt','utf8');
-		json = json.replace(/\n/gm,"\n\"");
-		json = json.replace(/:/gm,'":');
-		json = json.replace(/"{/gm,'{');
-		json = json.replace(/"}/gm,'}');
-		try {
-			charinfo=JSON.parse(json);
-		} 
-		catch (ex) {
+	if (vlikes.includes(game)) {
+		var savefilepath = home+'/games/'+game+'/lib/save/'+user;
+		charinfo = readVlikeHeader(savefilepath);
+	} else {
+		var dirpath = home+'/user/'+user+'/'+game;
+		fs.ensureDirSync(dirpath);
+		var files = fs.readdirSync(dirpath);
+		if (files.includes('CharOutput.txt')) {
+			var json=fs.readFileSync(dirpath + '/CharOutput.txt','utf8');
+			json = json.replace(/\n/gm,"\n\"");
+			json = json.replace(/:/gm,'":');
+			json = json.replace(/"{/gm,'{');
+			json = json.replace(/"}/gm,'}');
+			try {
+				charinfo=JSON.parse(json);
+			} 
+			catch (ex) {
+			}
 		}
 	}
 	return charinfo;
+}
+
+//horror story of a function feel free to demolish and rebuild
+function readVlikeHeader(filename){
+	try {
+		var infoobj = {};
+		var buffer = Buffer.alloc(64);
+		var fd = fs.openSync(filename,'r');
+		fs.readSync(fd,buffer,0,64,36);
+		var charstring = buffer.toString();
+		var startpos = charstring.indexOf(',');
+		var endpos = charstring.lastIndexOf('rng');
+		if (endpos > -1) {
+			charstring = charstring.substr(startpos+2,endpos-startpos-2);
+		} else {
+			return false;
+		}
+		while (charstring.lastIndexOf('x')==charstring.length-1) {
+			charstring = charstring.substr(0,charstring.length-1);
+		}
+		var deathstart = charstring.indexOf('(')+1;
+		var deathend = charstring.lastIndexOf(')');
+		if (deathstart) {
+			infoobj.killedBy=charstring.substr(deathstart,deathend-deathstart);
+			infoobj.isDead=1;
+		} else {
+			var dpos = charstring.indexOf(',')+7;
+			var rpos = charstring.indexOf(' ')+1;
+			var cpos = charstring.indexOf(' ',rpos)+1;
+			infoobj.dLvl = charstring.substr(dpos,charstring.length-dpos-1);
+			infoobj.cLvl = charstring.substr(1,rpos-2);
+			infoobj.race = charstring.substr(rpos,cpos-rpos-1);
+			infoobj.class = charstring.substr(cpos,dpos-cpos-7);
+			infoobj.isDead = 0;
+		}
+		return infoobj;
+	} catch(e) {
+		console.log(e);
+		return false;
+	}
 }
 
 
