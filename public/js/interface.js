@@ -5,7 +5,8 @@ function buildMatchListEntry(player, match) {
 	var outputstring = '<tr><td>'+player+'</td><td>'+match.game+'</td>';
 	if (typeof(match.race) != 'undefined'){
 		outputstring += '<td>';
-		if (typeof(match.cLvl) != 'undefined') outputstring += match.cLvl + '</td><td>';
+		if (typeof(match.cLvl) != 'undefined') outputstring += match.cLvl;
+		outputstring += '</td><td>';
 		if (typeof(match.subRace) != 'undefined') {
 			outputstring += match.subRace + ' ';
 			if (typeof(match.class) != 'undefined' && match.class != "Monster") outputstring += match.race;
