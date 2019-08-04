@@ -187,7 +187,7 @@ function announce(message){
 function getmatchlist(matches) {
 	var livematches = {};
 	for (var i in matches) {
-		var charinfo = getcharinfo(i, matches[i].game);
+		var charinfo = getcharinfo(i,matches[i].game,matches[i].version);
 		var matchinfo = {
 			game       : matches[i].game,
 			version    : matches[i].version,
