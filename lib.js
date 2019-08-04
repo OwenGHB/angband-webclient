@@ -155,7 +155,7 @@ function chat(user, message){
 }
 
 function checkForDeath(player){
-	if (!isalive(player,matches[player].game)) {
+	if (!isalive(player,matches[player].game,matches[player].version)) {
 		if (matches[player].alive) {
 			var killedBy = getcharinfo(player,matches[player].game).killedBy
 			if (!(['abortion','Quitting','his own hand','her own hand','their own hand'].includes(killedBy))){
@@ -213,9 +213,9 @@ function getmatchlist(matches) {
 
 
 //check player alive status for recording purposes
-function isalive(user,game){
+function isalive(user,game,version){
 	var alive = true;
-	var charinfo = getcharinfo(user,game);
+	var charinfo = getcharinfo(user,game,version);
 	if (charinfo.isAlive == "0" || charinfo.isDead == "1") {
 		alive = false;
 	}
