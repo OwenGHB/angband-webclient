@@ -22,6 +22,9 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 	if(mode === "play") {
 		if (!playing){
 			playing = true;
+			var gameversion = qualifier.split(":");
+			var game = gameversion[0];
+			var version = gameversion[1];
 			spyglass['default'] = createTerminal(d);
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + ' (your game)</a></li>').click(function() {
@@ -31,7 +34,8 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 			socket.send(JSON.stringify({
 				eventtype:'newgame',
 				content: {
-					game: qualifier,
+					game: game,
+					version: version,
 					panels: panels,
 					dimensions: d,
 					walls: walls
@@ -49,7 +53,7 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 		if (typeof(spyglass[qualifier]) == 'undefined') {
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + '</a></li>').click(function() {
-					applyTerminal("spectate", qualifier, panels, walls, d);
+					applyTerminal("spectate", qualifier, false, panels, walls, d);
 				});
 			});
 			spyglass[qualifier] = createTerminal(d);

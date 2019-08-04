@@ -69,10 +69,7 @@ $(function() {
 	
 	// init and open chat tab by default
 	initChat();
-	
-	// terminal resizer
-	// $(window).resize(function() { adjustTerminalFontSize(); });
-	
+
 	// navigation to home button
 	$("#navigation-home").click(function() {
     	$("#terminal-pane").addClass("hidden");

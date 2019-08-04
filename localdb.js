@@ -290,12 +290,6 @@ function authenticate(username, password, callback) {
          return callback(null, null, "banned");
       }
 
-      // check for special unwanted names
-      if(user.name.toLowerCase() === "anton") {
-         console.warn(`Suspicious user ${user.name} tried to log in`);
-         return callback(null, null, "banned");  
-      }
-
       // if not compare password hashes
       bcrypt.compare(password, user.password_hash, function(error, they_match) {
          if(error)

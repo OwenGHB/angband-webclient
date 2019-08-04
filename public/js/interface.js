@@ -2,7 +2,7 @@ var spyglass = {};
 
 function buildMatchListEntry(player, match) {
 	var fixedrealmclasses = ["Samurai","Necromancer","Hexblade","Bard","Tourist","Rage-Mage","Lawyer","Ninja-Lawyer","Beastmaster"];
-	var outputstring = '<tr><td>'+player+'</td><td>'+match.game+'</td>';
+	var outputstring = '<tr><td>'+player+'</td><td>'+match.game+'</td><td>'+match.version+'</td>';
 	if (typeof(match.race) != 'undefined'){
 		outputstring += '<td>';
 		if (typeof(match.cLvl) != 'undefined') outputstring += match.cLvl;
@@ -54,7 +54,7 @@ function buildMatchListEntry(player, match) {
 }
 
 function listMatches(matches) {
-	$("#watchmenu table").html("<tr><th>Player</th><th>Game</th><th>cLvl</th><th>Race/Class</th><th>Place</th><th>Idle</th></tr>");
+	$("#watchmenu table").html("<tr><th>Player</th><th>Game</th><th>Version</th><th>cLvl</th><th>Race/Class</th><th>Place</th><th>Idle</th></tr>");
 	var players = Object.keys(matches);
 	if (players.length > 0) {
 		for(var i=0; i<players.length; i++) {
@@ -165,23 +165,26 @@ function listFiles(files) {
 	if(games.length === 0)
 		return;
 	$tab.html("");
-	for(var i=0; i<games.length; i++) {
-		var userfiles = files[games[i]];
-		if(userfiles.length > 0) {
-			var $game = $('<div class="game">' +games[i]+ '</div>');
+	for (var i=0; i<games.length; i++) {
+		var gameversions = Object.keys(files[games[i]]);
+		var $game = $('<div class="game">' +games[i]+ '</div>');
+		for (var j=0; j<gameversions.length; j++) {
+			var $version = $('<div class="version">' +gameversions[j]+ '</div>');
 			var $list = $('<ul></ul>');
-			for(var f=0; f<userfiles.length; f++) {
+			var versionfiles = files[games[i]][gameversions[j]];
+			for(var k=0; k<versionfiles.length; k++) {
 				var $listitem = $('<li></li>');
-				$listitem.append('<a href="#" onclick="requestDeletion(\'usergenerated\',\''+games[i]+'\',\''+userfiles[f]+'\')">✖</a>');
-				$listitem.append('<a href="/' +user+ '/' +games[i]+ '/' +userfiles[f]+ '" target="_blank">' +userfiles[f]+ '</a>');
+				$listitem.append('<a href="#" onclick="requestDeletion(\'usergenerated\',\''+games[i]+'\',\''+gameversions[j]+'\',\''+versionfiles[k]+'\')">✖</a>');
+				$listitem.append('<a href="/'+user+'/'+games[i]+'/'+gameversions[j]+'/'+versionfiles[k]+ '" target="_blank">'+versionfiles[k]+'</a>');
 				$list.append($listitem);
 			}
-			$game.append($list);
-			$tab.append($game);
-		}		
+			$version.append($list);
+			$game.append($version);
+		}
+		$tab.append($game);
 	}	
 }
 
-function requestDeletion(filetype,game,specifier) {
-	socket.send(JSON.stringify({eventtype:'deletefile',content:{filetype:filetype,game:game,specifier:specifier}}));
+function requestDeletion(filetype,game,version,specifier) {
+	socket.send(JSON.stringify({eventtype:'deletefile',content:{filetype:filetype,game:game,version:version,specifier:specifier}}));
 }

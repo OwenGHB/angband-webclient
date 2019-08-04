@@ -157,7 +157,7 @@ function checkForDeath(player){
 	if (!isalive(player,matches[player].game)) {
 		if (matches[player].alive) {
 			var killedBy = getcharinfo(player,matches[player].game).killedBy
-			if (!(['Quitting','his own hand','her own hand','their own hand'].includes(killedBy))){
+			if (!(['abortion','Quitting','his own hand','her own hand','their own hand'].includes(killedBy))){
 				var msg = player+" was killed by "+killedBy;
 				if (killedBy == "Ripe Old Age") {
 					msg+=". Long live "+player+"!";
@@ -189,6 +189,7 @@ function getmatchlist(matches) {
 		var charinfo = getcharinfo(i, matches[i].game);
 		var matchinfo = {
 			game       : matches[i].game,
+			version    : matches[i].version,
 			idletime   : matches[i].idletime,
 			dimensions : {rows: matches[i].dimensions.rows, cols: matches[i].dimensions.cols} 
 		};
@@ -221,14 +222,14 @@ function isalive(user,game){
 }
 
 //hacked for V-like savefile header reading to avert Exo patch megahack. Un-hardcode this.
-function getcharinfo(user, game) {
+function getcharinfo(user, game, version) {
 	var vlikes = ["angband-master","coffeeband"];
 	var charinfo = {};
 	if (vlikes.includes(game)) {
-		var savefilepath = home+'/games/'+game+'/lib/save/'+user;
+		var savefilepath = home+'/games/'+game+'/'+version+'/lib/save/'+user;
 		charinfo = readVlikeHeader(savefilepath);
 	} else {
-		var dirpath = home+'/user/'+user+'/'+game;
+		var dirpath = home+'/user/'+user+'/'+game+'/'+version;
 		fs.ensureDirSync(dirpath);
 		var files = fs.readdirSync(dirpath);
 		if (files.includes('CharOutput.txt')) {
@@ -296,12 +297,17 @@ function getfilelist(name) {
 		fs.ensureDirSync(path);
 		var ls = fs.readdirSync(path);
 		for (var i in games){
-			var dumps = [];
 			if (games[i].name.match(/^[a-zA-Z0-9-_]+$/)){
+				var dumps = {};
 				fs.ensureDirSync(path+games[i].name);
-				var varfiles = fs.readdirSync(path+games[i].name);
-				for (var j in varfiles){
-					dumps.push(varfiles[j]);
+				for (var j in games[i].versions) {
+					var version = games[i].versions[j];
+					dumps[version] = [];
+					fs.ensureDirSync(path+games[i].name+'/'+version);
+					var filestmp = fs.readdirSync(path+games[i].name+'/'+version);
+					for (var k in filestmp) {
+						dumps[version].push(filestmp[k]);
+					}
 				}
 				files[games[i].name]=dumps;
 			}
@@ -315,10 +321,10 @@ function handleDeleteRequest(user,request){
 	var filedir = home;
 	var filename;
 	if (request.filetype=='usergenerated'){
-		filedir += '/user/'+user.name+'/'+request.game+'/';
+		filedir += '/user/'+user.name+'/'+request.game+'/'+request.version+'/';
 		filename = request.specifier;
 	} else if (request.filetype=='ownsave') {
-		filedir += '/games/'+request.game+'/lib/save/'
+		filedir += '/games/'+request.game+'/'+request.version+'/lib/save/';
 		fs.ensureDirSync(filedir);
 		var ls = fs.readdirSync(filedir);
 		if (ls.includes(user.name)) {
@@ -328,10 +334,10 @@ function handleDeleteRequest(user,request){
 		} else {
 			return "savefile does not exist";
 		}
-		fs.copyFileSync(filedir+filename,home+'/user/'+user.name+'/'+request.game+'/'+user.name);
+		fs.copyFileSync(filedir+filename,home+'/user/'+user.name+'/'+request.game+'/'+request.version+'/'+user.name);
 	} else if (request.filetype=='usersave') {
 		if (getgameinfo(request.game).owner == user.name) {
-			filedir += '/games/'+game+'/lib/save/'
+			filedir += '/games/'+request.game+'/'+request.version+'/lib/save/'
 			fs.ensureDirSync(filedir);
 			var ls = fs.readdirSync(filedir);
 			if (ls.includes(request.specifier)) {
@@ -361,12 +367,13 @@ function handleDeleteRequest(user,request){
 function getgamelist(player) {
 	var gamelist = [];
 	for (var i in games){
-		var savexists=fs.existsSync(home+'/games/'+games[i].name+'/lib/save/'+player);
-		if (fs.existsSync(home+'/games/'+games[i].name+'/lib/save/1000.'+player)) savexists=true;
+		var savexists=fs.existsSync(home+'/games/'+games[i].name+'/'+games[i].version+'/lib/save/'+player);
+		if (fs.existsSync(home+'/games/'+games[i].name+'/'+games[i].version+'/lib/save/1000.'+player)) savexists=true;
 		gamelist.push({
-			name:games[i].name, 
-			longname:games[i].longname, 
+			name:games[i].name,
+			longname:games[i].longname,
 			desc:games[i].desc,
+			versions:games[i].versions,
 			owner:games[i].owner,
 			savexists:savexists
 		});
@@ -394,6 +401,7 @@ function getgameinfo(game) {
 			info.restrict_paths=games[i].restrict_paths;
 			info.data_paths=games[i].data_paths;
 			info.args=games[i].args;
+			info.versions=games[i].versions;
 			info.owner=games[i].owner;
 		}
 	}
@@ -403,16 +411,14 @@ function getgameinfo(game) {
 
 function newgame(user, msg) {
 	var game = msg.game;
+	var version = msg.version;
 	var gameinfo = getgameinfo(game);
 	var panels = msg.panels;
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.name;
 	var alive = isalive(player,game);
-	var compgame = 'silq';
-	var compnumber = '217';
 	var panelargs = ['-b'];
-	console.log(`starting new game: user=${user.name} dimensions=${dimensions.cols}x${dimensions.rows}`);
 	if(panels > 1) {
 		if (game == 'poschengband' || game == 'elliposchengband' || game == 'composband' || game == 'frogcomposband') {
 			panelargs = ['-right','40x*','-bottom','*x8'];
@@ -421,27 +427,19 @@ function newgame(user, msg) {
 			panelargs = ['-n'+panels];
 		}
 	}
-	var path = home + '/games/' + game + '/' + game;
+	var path = home+'/games/'+game+'/'+version+'/'+game;
 	var args = [];
 	var terminfo = 'xterm-256color';
 	if(game == 'umoria') {
-		args.push(home + '/games/' + game + '/' + user.name);
+		args.push(home+'/games/'+game+'/'+version+'/'+user.name);
 	} 
 	else {
-		if (game == 'competition') {
-			args.push('-u'+compnumber+'-'+user.name);
+		args.push('-u'+user.name);
+		if (gameinfo.restrict_paths){
+			args.push('-d'+home+'/user/'+user.name+'/'+game+'/'+version);
 		} 
 		else {
-			args.push('-u'+user.name);
-		}
-		if (game == 'competition') {
-			args.push('-duser='+home+'/user/'+user.name+'/'+compgame);
-		} 
-		else if (gameinfo.restrict_paths){
-			args.push('-d'+home+'/user/'+user.name+'/'+game);
-		} 
-		else {
-			args.push('-duser='+home+'/user/'+user.name+'/'+game);
+			args.push('-duser='+home+'/user/'+user.name+'/'+game+'/'+version);
 		}
 		for (var i in gameinfo.args) {
 			args.push('-'+gameinfo.args[i]);
@@ -454,46 +452,18 @@ function newgame(user, msg) {
 	}
 	if (msg.walls) 
 		args.push('-a');
-	var termdesc = {};
-	if (game == 'competition') {
-		var newattempt = true;
-		var newtty = false;
-		var savegames = fs.readdirSync(home+'/'+compgame+'/lib/save/');
-		if (savegames.includes('1002.'+compnumber+''+user.name)){
-			newattempt = !isalive(user.name,compgame);
-		}
-		fs.ensureDirSync(home+'/user/'+user.name);
-		var ttydir = fs.readdirSync(home+'/ttyrec');
-		var ttyfile = home+'/ttyrec/'+compnumber+'-'+user.name+'.ttyrec';
-		if (ttydir.includes(ttyfile)){
-			newtty=true;
-		}
-		var command = home+'/games/'+compgame+' '+args.join(' ');
-		path = 'ttyrec';
-		args = [
-			'-e',
-			command,
-			ttyfile
-		];
-		if (!newattempt) {
-			if (!newtty) 
-				args.unshift('-a');
-		} 
-		else {
-			fs.copySync(home+'/games/'+compgame+'/lib/save/1002.'+compnumber, home+'/games/'+compgame+'/lib/save/1002.'+compnumber+''+user.name);
-		}
-	}
-	termdesc = {
+	var termdesc = {
 		path     : path,
 		args     : args,
 		terminfo : terminfo
 	};
+	console.log(`starting new game: path=${path}`);
 	try {
 		var term_opts = {
 			name              : termdesc.terminfo,
 			cols              : parseInt(dimensions.cols),
 			rows              : parseInt(dimensions.rows),
-			cwd               : home + '/games/' + game,
+			cwd               : home+'/games/'+game+'/'+version,
 			applicationCursor : true
 		};
 		var term = pty.fork(termdesc.path,termdesc.args, term_opts);
@@ -530,6 +500,7 @@ function newgame(user, msg) {
 		matches[user.name] = {
 			term: term,
 			game: game,
+			version: version,
 			idle: false,
 			idletime: 0,
 			alive: alive,
@@ -638,14 +609,8 @@ function closegame(player){
 		//check for player death
 		checkForDeath(player);
 		//kill the process if it hasn't already
-		//horrific reverse engineering hack here
 		var term = matches[player].term;
-		if (matches[player].game == 'competition'){
-			var gamepid = parseInt(term.pid) + 3;
-		} 
-		else {
-			var gamepid=term.pid;
-		}
+		var gamepid=term.pid;
 		ps.lookup({ pid: gamepid }, function(err, resultList ) {
 			if (err) {
 				console.log( err );

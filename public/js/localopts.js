@@ -69,7 +69,8 @@ function saveGameOptions() {
 			subwindows: $("#subwindows").val(),
 			ascii_walls: $("#ascii-walls").val(),
 			font: $("#extra-fonts").val(),
-			font_size: $("#games-font-size").val()
+			font_size: $("#games-font-size").val(),
+			version: $("#games-version").val()
 		};
 		localStorage.setItem("aw_options_" + game, JSON.stringify(opts));
 	}
@@ -85,6 +86,7 @@ function loadGameOptions(game) {
 		$("#ascii-walls").val(opts.ascii_walls);
 		$("#extra-fonts").val(opts.font);
 		$("#games-font-size").val(opts.font_size);
+		$("#games-version").val(opts.version);
 	}
 	else
 		loadDefaultGameOptions(game);
@@ -96,5 +98,5 @@ function loadDefaultGameOptions(game) {
 	var $$subwindows, $walls;
 	$("#subwindows").val(subwindows);
 	$("#ascii-walls").val(ascii_walls);
-	$("#games-font-size").val("14px");
+	$("#games-font-size").val("12px");
 }

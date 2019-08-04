@@ -133,13 +133,13 @@ function initChat() {
 
 function initGameList(games) {
 	// populate select
-	for(var i=0; i<games.length; i++) {
-		var g=games[i];
-		$("#gameselect").append('<option value='+g.name+' title="'+g.desc+'">'+g.longname+'</option>');
+	$("#gameselect").html("");
+	for (var i=0; i<games.length; i++) {
+		$("#gameselect").append('<option value='+games[i].name+' title="'+games[i].desc+'">'+games[i].longname+'</option>');
 	}
 	// select onchange
 	$("#gameselect").change(function(e) {
-		for(var i=0; i<games.length; i++) {
+		for (var i=0; i<games.length; i++) {
 			if(e.target.value === games[i].name) {
 				var desc = games[i].desc;
 				if (typeof(games[i].owner) != 'undefined') desc +=' Maintained by '+games[i].owner;
@@ -157,12 +157,16 @@ function initGameList(games) {
 				saveSelectedGameName(e.target.value);
 				loadDefaultGameOptions(e.target.value);
 				loadGameOptions(e.target.value);
+				$("#versionselect").html("");
+				for (var j=0; j<games[i].versions.length; j++){
+					$("#versionselect").append('<option value='+games[i].versions[j]+'>'+games[i].versions[j]+'</option>');
+				}
 			}
 		}
 		
 	});
 	$("#playbutton").click(function() {
-		var gamename = $("#gameselect").val();
+		var gamename = $("#gameselect").val()+":"+$("#versionselect").val();
 		var panels = $("#subwindows").val();
 		var walls = false;
 		applyTerminal("play", gamename, panels, walls, calculateIdealTerminalDimensions());
