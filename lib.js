@@ -113,6 +113,7 @@ function chat(user, message){
 		}
 		else if(command === "/refresh" && user.roles.indexOf("dev") !== -1){
 			localdb.refresh();
+			games = localdb.fetchGames();
 			response.content = "db refreshed";
 			metasockets[user.name].send(JSON.stringify(response));
 		}

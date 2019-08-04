@@ -167,21 +167,25 @@ function listFiles(files) {
 	$tab.html("");
 	for (var i=0; i<games.length; i++) {
 		var gameversions = Object.keys(files[games[i]]);
+		var hasfiles = false;
 		var $game = $('<div class="game">' +games[i]+ '</div>');
 		for (var j=0; j<gameversions.length; j++) {
 			var $version = $('<div class="version">' +gameversions[j]+ '</div>');
 			var $list = $('<ul></ul>');
 			var versionfiles = files[games[i]][gameversions[j]];
-			for(var k=0; k<versionfiles.length; k++) {
-				var $listitem = $('<li></li>');
-				$listitem.append('<a href="#" onclick="requestDeletion(\'usergenerated\',\''+games[i]+'\',\''+gameversions[j]+'\',\''+versionfiles[k]+'\')">✖</a>');
-				$listitem.append('<a href="/'+user+'/'+games[i]+'/'+gameversions[j]+'/'+versionfiles[k]+ '" target="_blank">'+versionfiles[k]+'</a>');
-				$list.append($listitem);
+			if (versionfiles.length > 0) {
+				for (var k=0; k<versionfiles.length; k++) {
+					var $listitem = $('<li></li>');
+					$listitem.append('<a href="#" onclick="requestDeletion(\'usergenerated\',\''+games[i]+'\',\''+gameversions[j]+'\',\''+versionfiles[k]+'\')">✖</a>');
+					$listitem.append('<a href="/'+user+'/'+games[i]+'/'+gameversions[j]+'/'+versionfiles[k]+ '" target="_blank">'+versionfiles[k]+'</a>');
+					$list.append($listitem);
+				}
+				hasfiles = true;
+				$version.append($list);
+				$game.append($version);
 			}
-			$version.append($list);
-			$game.append($version);
 		}
-		$tab.append($game);
+		if (hasfiles) $tab.append($game);
 	}	
 }
 

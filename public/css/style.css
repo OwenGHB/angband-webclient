@@ -315,8 +315,12 @@ html, body, #container {
 
 /* TAB FILES */
 #tab-files .game {
-	color: #dc8c45;
+	color: #D09090;
 	margin-bottom: 5px;
+}
+#tab-files .version {
+	color: #D0C0A0;
+	margin-left: 10px;
 }
 #tab-files .game a { margin-left: 10px; }
 #tab-files .game span {
