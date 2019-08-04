@@ -158,7 +158,7 @@ function checkForDeath(player){
 	if (!isalive(player,matches[player].game,matches[player].version)) {
 		if (matches[player].alive) {
 			var killedBy = getcharinfo(player,matches[player].game,matches[player].version).killedBy
-			if (typeof(killedBy)!='undefined' && !(['abortion','Quitting','his own hand','her own hand','their own hand'].includes(killedBy))){
+			if ((typeof(killedBy)!='undefined') && (!(['abortion','Quitting','his own hand','her own hand','their own hand'].includes(killedBy)))){
 				var msg = player+" was killed by "+killedBy;
 				if (killedBy == "Ripe Old Age") {
 					msg+=". Long live "+player+"!";
@@ -214,9 +214,9 @@ function getmatchlist(matches) {
 
 //check player alive status for recording purposes
 function isalive(user,game,version){
-	var alive = true;
+	var alive = false;
 	var charinfo = getcharinfo(user,game,version);
-	if (charinfo.isAlive == "0" || charinfo.isDead == "1") {
+	if (charinfo.isAlive == "1" || charinfo.isDead == "0") {
 		alive = false;
 	}
 	return alive;
