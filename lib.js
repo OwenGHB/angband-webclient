@@ -157,8 +157,8 @@ function chat(user, message){
 function checkForDeath(player){
 	if (!isalive(player,matches[player].game,matches[player].version)) {
 		if (matches[player].alive) {
-			var killedBy = getcharinfo(player,matches[player].game).killedBy
-			if (!(['abortion','Quitting','his own hand','her own hand','their own hand'].includes(killedBy))){
+			var killedBy = getcharinfo(player,matches[player].game,matches[player].version).killedBy
+			if (typeof(killedBy)!='undefined' && !(['abortion','Quitting','his own hand','her own hand','their own hand'].includes(killedBy))){
 				var msg = player+" was killed by "+killedBy;
 				if (killedBy == "Ripe Old Age") {
 					msg+=". Long live "+player+"!";
@@ -169,7 +169,7 @@ function checkForDeath(player){
 			}
 		}
 	}
-	matches[player].alive=isalive(player,matches[player].game);
+	matches[player].alive=isalive(player,matches[player].game,matches[player].version);
 }
 
 function announce(message){
