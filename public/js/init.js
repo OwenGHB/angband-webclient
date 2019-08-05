@@ -155,12 +155,12 @@ function initGameList(games) {
 					$("#deletebutton").addClass('hidden');
 				}
 				saveSelectedGameName(e.target.value);
-				loadDefaultGameOptions(e.target.value);
-				loadGameOptions(e.target.value);
 				$("#versionselect").html("");
 				for (var j=0; j<games[i].versions.length; j++){
 					$("#versionselect").append('<option value='+games[i].versions[j]+'>'+games[i].versions[j]+'</option>');
 				}
+				loadDefaultGameOptions(e.target.value);
+				loadGameOptions(e.target.value);
 			}
 		}
 		

@@ -214,7 +214,7 @@ function getmatchlist(matches) {
 
 //check player alive status for recording purposes
 function isalive(user,game,version){
-	var alive = false;
+	var alive = true;
 	var charinfo = getcharinfo(user,game,version);
 	if (charinfo.isAlive == "1" || charinfo.isDead == "0") {
 		alive = false;
@@ -222,11 +222,12 @@ function isalive(user,game,version){
 	return alive;
 }
 
-//hacked for V-like savefile header reading to avert Exo patch megahack. Un-hardcode this.
+//hacked for savefile header reading to avert Exo patch megahack. Un-hardcode this.
 function getcharinfo(user, game, version) {
-	var vlikes = ["angband-master","coffeeband"];
+	var game_have_headers = ["angband","coffeeband"];
+	var version_have_headers = ["4.1.3","nightly"];
 	var charinfo = {};
-	if (vlikes.includes(game)) {
+	if (game_have_headers.includes(game) && version_have_headers.includes(version)) {
 		var savefilepath = home+'/games/'+game+'/'+version+'/lib/save/'+user;
 		charinfo = readVlikeHeader(savefilepath);
 	} else {
