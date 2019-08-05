@@ -216,7 +216,7 @@ function getmatchlist(matches) {
 function isalive(user,game,version){
 	var alive = true;
 	var charinfo = getcharinfo(user,game,version);
-	if (charinfo.isAlive == "1" || charinfo.isDead == "0") {
+	if (charinfo.isAlive == "0" || charinfo.isDead == "1") {
 		alive = false;
 	}
 	return alive;
