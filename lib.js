@@ -423,7 +423,7 @@ function newgame(user, msg) {
 	var panelargs = ['-b'];
 	if(panels > 1) {
 		if (game == 'poschengband' || game == 'elliposchengband' || game == 'composband' || game == 'frogcomposband') {
-			panelargs = ['-right','40x*','-bottom','*x8'];
+			panelargs = ['-right','40x27,*','-bottom','*x8'];
 		} 
 		else {
 			panelargs = ['-n'+panels];
