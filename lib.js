@@ -225,7 +225,7 @@ function isalive(user,game,version){
 //hacked for savefile header reading to avert Exo patch megahack. Un-hardcode this.
 function getcharinfo(user, game, version) {
 	var game_have_headers = ["angband","coffeeband"];
-	var version_have_headers = ["4.1.3","nightly"];
+	var version_have_headers = ["3.5.1","4.0.5","4.1.3","nightly"];
 	var charinfo = {};
 	if (game_have_headers.includes(game) && version_have_headers.includes(version)) {
 		var savefilepath = home+'/games/'+game+'/'+version+'/lib/save/'+user;
@@ -422,7 +422,7 @@ function newgame(user, msg) {
 	var alive = isalive(player,game);
 	var panelargs = ['-b'];
 	if(panels > 1) {
-		if (game == 'poschengband' || game == 'elliposchengband' || game == 'composband' || game == 'frogcomposband') {
+		if (['poschengband','elliposchengband','composband','frogcomposband','kangband'].includes(game)) {
 			panelargs = ['-right','40x27,*','-bottom','*x8'];
 		} 
 		else {
