@@ -41,18 +41,8 @@ $(function() {
 	// add bottom sidebar force option
 	$("#opt-sidebar-bottom").change(function(e) { changeSidebarOnBottom(e.target.checked); });
 	
-	// add ui font size options
-	var font_sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20,22,24,26,28,32,36,40];
-	font_sizes.map(function(f,i) {
-		$("#opt-ui-font-size").append('<option value="' + f + 'px">' + f + 'px</option>');
-	});
 	$("#opt-ui-font-size").change(function(e) { changeUIFontSize(e.target.value); });
 	$("#opt-ui-font-size").val($("html").css("font-size"));
-
-	// add ui font size options
-	font_sizes.map(function(f,i) {
-		$("#games-font-size").append('<option value="' + f + 'px">' + f + 'px</option>');
-	});
 
 	// add more options
 	var borderstyles = ['solid','inset','outset','ridge','groove','none'];
@@ -77,7 +67,7 @@ $(function() {
 	});
 	
 	// game option change handlers
-	$("#term-cols,#term-rows,#subwindows,#ascii-walls").change(function() { saveGameOptions(); });
+	$("#term-cols,#term-rows,#subwindows,#ascii-walls,#version").change(function() { saveGameOptions(); });
 	
 	// tablet ui
 	var ua = navigator.userAgent.toLowerCase();

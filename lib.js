@@ -158,7 +158,7 @@ function checkForDeath(player){
 	if (!isalive(player,matches[player].game,matches[player].version)) {
 		if (matches[player].alive) {
 			var killedBy = getcharinfo(player,matches[player].game,matches[player].version).killedBy
-			if ((typeof(killedBy)!='undefined') && (!(['abortion','Quitting','his own hand','her own hand','their own hand'].includes(killedBy)))){
+			if ((typeof(killedBy)!='undefined') && (!(['Abortion','Quitting','his own hand','her own hand','their own hand'].includes(killedBy)))){
 				var msg = player+" was killed by "+killedBy;
 				if (killedBy == "Ripe Old Age") {
 					msg+=". Long live "+player+"!";
@@ -377,6 +377,7 @@ function getgamelist(player) {
 			desc:games[i].desc,
 			versions:games[i].versions,
 			owner:games[i].owner,
+			custom_subpanels:games[i].custom_subpanels,
 			savexists:savexists
 		});
 	}
@@ -410,25 +411,27 @@ function getgameinfo(game) {
 	return info;
 }
 
+function validatepanelargs(args){
+	var okay = true;
+	for (var i in args) {
+		var arg = args[i];
+		okay = /^-(?:b|top|bottom|left|right|n\d)$/.test(arg);
+		if (!okay) okay = /^[\d\*]\d?x?[\d\*]?\d?,?[\d\*]?\d?x?[\d\*]?\d?$/.test(arg);
+		if (!okay) break;
+	}
+	return okay;
+}
 
 function newgame(user, msg) {
 	var game = msg.game;
 	var version = msg.version;
 	var gameinfo = getgameinfo(game);
-	var panels = msg.panels;
+	var panelargs = msg.panelargs;
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.name;
 	var alive = isalive(player,game);
-	var panelargs = ['-b'];
-	if(panels > 1) {
-		if (['poschengband','elliposchengband','composband','frogcomposband','kangband'].includes(game)) {
-			panelargs = ['-right','40x27,*','-bottom','*x8'];
-		} 
-		else {
-			panelargs = ['-n'+panels];
-		}
-	}
+	if (!validatepanelargs(panelargs)) panelargs = ['-b'];
 	var path = home+'/games/'+game+'/'+version+'/'+game;
 	var args = [];
 	var terminfo = 'xterm-256color';
@@ -437,14 +440,9 @@ function newgame(user, msg) {
 	} 
 	else {
 		args.push('-u'+user.name);
-		if (gameinfo.restrict_paths){
-			args.push('-d'+home+'/user/'+user.name+'/'+game+'/'+version);
-		} 
-		else {
-			args.push('-duser='+home+'/user/'+user.name+'/'+game+'/'+version);
-		}
+		args.push('-duser='+home+'/user/'+user.name+'/'+game+'/'+version);
 		for (var i in gameinfo.args) {
-			args.push('-'+gameinfo.args[i]);
+			args.push(gameinfo.args[i]);
 		}
 		args.push('-mgcu');
 		args.push('--');
@@ -459,7 +457,6 @@ function newgame(user, msg) {
 		args     : args,
 		terminfo : terminfo
 	};
-	console.log(`starting new game: path=${path}`);
 	try {
 		var term_opts = {
 			name              : termdesc.terminfo,

@@ -2,7 +2,6 @@ var playing = false;
 var dimensions = {};
 
 var safety = 2;            // for font size calculation
-var font_sizes = [8,9,10,10.5,11,12,13,14,15,16,17,18,19,20,22,24,26,28,32,36,40];
 
 function createTerminal(dimensions) {
 	return new Terminal({
@@ -15,8 +14,8 @@ function createTerminal(dimensions) {
 	});
 }
 
-function applyTerminal(mode, qualifier, panels, walls, d) {
-	//console.log(`applying terminal: mode=${mode}, qualifier=${qualifier}, panels=${panels}, walls=${walls}, dimensions=${d.rows}x${d.cols}`);
+function applyTerminal(mode, qualifier, panelargs, walls, d) {
+	//console.log(`applying terminal: mode=${mode}, qualifier=${qualifier}, panelargs=${panelargs}, walls=${walls}, dimensions=${d.rows}x${d.cols}`);
 	$terminal = $("#terminal-container");
 	dimensions = d;
 	if(mode === "play") {
@@ -36,7 +35,7 @@ function applyTerminal(mode, qualifier, panels, walls, d) {
 				content: {
 					game: game,
 					version: version,
-					panels: panels,
+					panelargs: panelargs,
 					dimensions: d,
 					walls: walls
 				}

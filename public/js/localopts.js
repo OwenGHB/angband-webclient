@@ -67,6 +67,10 @@ function saveGameOptions() {
 		var game = $("#gameselect").val();
 		var opts = {
 			subwindows: $("#subwindows").val(),
+			subwindow_right: $("#subwindow-right").val(),
+			subwindow_right_split: $("#subwindow-right-split").val(),
+			subwindow_top: $("#subwindow-top").val(),
+			subwindow_bottom: $("#subwindow-bottom").val(),
 			ascii_walls: $("#ascii-walls").val(),
 			font: $("#extra-fonts").val(),
 			font_size: $("#games-font-size").val(),
@@ -82,11 +86,31 @@ function loadGameOptions(game) {
 		if(!opts)
 			return loadDefaultGameOptions(game);
 		opts = JSON.parse(opts);
-		$("#subwindows").val(opts.subwindows);
-		$("#ascii-walls").val(opts.ascii_walls);
-		$("#extra-fonts").val(opts.font);
-		$("#games-font-size").val(opts.font_size);
-		$("#games-version").val(opts.version);
+		if (typeof(opts.subwindows)!='undefined') $("#subwindows").val(opts.subwindows);
+		if (typeof(opts.subwindow_right)!='undefined') {
+			$("#subwindow-right").val(opts.subwindow_right);
+		} else if ($("#subwindows").val(opts.subwindows)==1) {
+			$("#subwindow-right").val(0);
+		}
+		if (typeof(opts.subwindow_right_split)!='undefined'){
+			$("#subwindow-right-split").val(opts.subwindow_right_split);
+		} else if ($("#subwindows").val(opts.subwindows)==1) {
+			$("#subwindow-right-split").val(0);
+		}
+		if (typeof(opts.subwindow_top)!='undefined') {
+			$("#subwindow-top").val(opts.subwindow_top);
+		} else if ($("#subwindows").val(opts.subwindows)==1) {
+			$("#subwindow-top").val(0);
+		}
+		if (typeof(opts.subwindow_bottom)!='undefined') {
+			$("#subwindow-bottom").val(opts.subwindow_bottom);
+		} else if ($("#subwindows").val(opts.subwindows)==1) {
+			$("#subwindow-bottom").val(0);
+		}
+		if (typeof(opts.ascii_walls)!='undefined') $("#ascii-walls").val(opts.ascii_walls);
+		if (typeof(opts.font)!='undefined') $("#extra-fonts").val(opts.font);
+		if (typeof(opts.font_size)!='undefined') $("#games-font-size").val(parseInt(opts.font_size));
+		if (typeof(opts.version)!='undefined') $("#games-version").val(opts.version);
 	}
 	else
 		loadDefaultGameOptions(game);
@@ -98,5 +122,9 @@ function loadDefaultGameOptions(game) {
 	var $$subwindows, $walls;
 	$("#subwindows").val(subwindows);
 	$("#ascii-walls").val(ascii_walls);
-	$("#games-font-size").val("12px");
+	$("#subwindow-right").val(50);
+	$("#subwindow-right-split").val(24);
+	$("#subwindow-top").val(0);
+	$("#subwindow-bottom").val(6);
+	$("#games-font-size").val(12);
 }

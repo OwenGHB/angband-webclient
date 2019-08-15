@@ -1,4 +1,5 @@
 var initComplete = false    // used to do some stuff only after this will be true
+var custom_subpanels = false;
 
 function initChat() {
 	socket = new WebSocket(socketURL);
@@ -154,6 +155,15 @@ function initGameList(games) {
 				} else {
 					$("#deletebutton").addClass('hidden');
 				}
+				if (typeof(games[i].custom_subpanels) != 'undefined' && games[i].custom_subpanels) {
+					$(".subwindow-extra").removeClass('hidden');
+					$(".subwindow-basic").addClass('hidden');
+					custom_subpanels = true;
+				} else {
+					$(".subwindow-extra").addClass('hidden');
+					$(".subwindow-basic").removeClass('hidden');
+					custom_subpanels = false;
+				}
 				saveSelectedGameName(e.target.value);
 				$("#versionselect").html("");
 				for (var j=0; j<games[i].versions.length; j++){
@@ -167,14 +177,35 @@ function initGameList(games) {
 	});
 	$("#playbutton").click(function() {
 		var gamename = $("#gameselect").val()+":"+$("#versionselect").val();
-		var panels = $("#subwindows").val();
+		var panels = [];
+		if (custom_subpanels){
+			var tmp = false;
+			if ($("#subwindow-right").val() > 0) {
+				panels.push("-right");
+				tmp = $("#subwindow-right").val()+"x";
+			}
+			if ($("#subwindow-right-split").val() > 0) {
+				tmp += $("#subwindow-right-split").val()+",*";
+			} else if (tmp) {
+				tmp += "*";
+			}
+			if (tmp) panels.push(tmp);
+			if ($("#subwindow-top").val() > 0) {
+				panels.push("-top");
+				panels.push("*x"+$("#subwindow-top").val());
+			}
+			if ($("#subwindow-bottom").val() > 0) {
+				panels.push("-bottom");
+				panels.push("*x"+$("#subwindow-bottom").val());
+			}
+		} else panels = ["-n"+$("#subwindows").val()];
 		var walls = false;
 		applyTerminal("play", gamename, panels, walls, calculateIdealTerminalDimensions());
 	});
 	$("#deletebutton").click(function() {
 		if(!confirm('Are you sure you want to proceed?'+"\n"+'This will *delete* your savegame file for '+$("#gameselect :selected").text()+'!')) return;
 		var gamename = $("#gameselect").val();
-		requestDeletion('ownsave',gamename,false);
+		requestDeletion('ownsave',gamename,version,false);
 		$(this).off('click');
 		$(this).addClass('hidden');
 		$(this).attr("target","_blank");

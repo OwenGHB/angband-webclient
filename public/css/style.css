@@ -137,15 +137,15 @@ input[type="checkbox"] { width: initial; }
 
 /* UTILITY CLASSES */
 .text-center { text-align: center; }
-.text-left { text-align: left; }
+.text-left { text-align: right; display: inline;}
 .text-right { text-align: right; }
 .flex-grow { flex-grow: 1; }
 .float-right { float: right; }
 .hidden { display: none !important; }
 .right-flex {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
+	float: left;
+	padding: 0 0.5em;
+	text-align: right;
 }
 .height-100p { height: 100%; }
 .invisible { visibility: hidden !important; }
@@ -369,7 +369,6 @@ html, body, #container {
 
 /* MAIN PANE: GAMES LOBBY */
 #gameselect:hover { box-shadow: none; }
-#games-lobby img { margin: 2rem 0; }
 #games-lobby h2 {
 	color: #85a0ab;
    margin: 1rem 0;
@@ -377,30 +376,38 @@ html, body, #container {
    text-shadow: 0 0 5px #000;
 }
 #games-lobby .new-game {
-	display: flex;
-	flex-direction: column;
+		display: flex;
+		flex-direction: row;
 }
 #games-lobby .new-game .row {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
+	display: block;
+	text-align: right;
 	margin-bottom: 2px;
+}
+#games-lobby .new-game .buttonrow {
+	text-align: right;
+}
+#games-lobby .buttonrow {
+	text-align: center;
+	margin: 0.6em 0;
 }
 #games-lobby .new-game .row div {
 	min-width: 200px;
-	padding: 0 0.5rem;
 }
 #games-lobby .new-game .row input,
 #games-lobby .new-game .row select {
    width: 300px;
-   -webkit-appearance: none;
-   -moz-appearance: none;
+   -webkit-appearance: textfield;
+   -moz-appearance: textfield;
    padding: 3px 8px;
    background-color: rgba(0,0,0,0.75);
+   border: 1px outset #353515;
+   outline: none;
 }
 #game-description {
 	max-width: 400px;
     text-align: center;
+	display: inline-block;
 }
 #playbutton {
 	padding: 0.5rem 2rem;
@@ -409,6 +416,7 @@ html, body, #container {
     color: #c7c6c6;
     text-decoration: none;
 	margin-bottom: 1rem;
+	display: inline-block;
 }
 #updatebutton, #deletebutton {
 	padding: 0.25rem 0.5rem;
