@@ -397,9 +397,9 @@ html, body, #container {
 #games-lobby .new-game .row input,
 #games-lobby .new-game .row select {
    width: 300px;
-   -webkit-appearance: textfield;
-   -moz-appearance: textfield;
-   padding: 3px 8px;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   padding: 3px 0;
    background-color: rgba(0,0,0,0.75);
    border: 1px outset #353515;
    outline: none;
