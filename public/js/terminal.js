@@ -132,7 +132,7 @@ function adjustFontSizeForSpectation(remote_game_dimensions) {
 	$("#tester").css("visibility", "hidden");
 	for(var i = 8; i < 40 && !found; i+=0.5) {
 		// set new font size to tester
-		$("#tester").css("font-size", font_sizes[i]);
+		$("#tester").css("font-size", i);
 
 		// get tester new size
 		var tester_width = $("#tester").width();
@@ -150,7 +150,7 @@ function adjustFontSizeForSpectation(remote_game_dimensions) {
 	}
 
 	// apply selected font settings to terminal pane
-	$("#terminal-container").css("font-size", font_sizes[checked_font_index - 1]);
+	$("#terminal-container").css("font-size", checked_font_index);
 	$("#terminal-container").css("font-family", selected_font_family);
 	$("#terminal-container").css("line-height", "initial");
 }
