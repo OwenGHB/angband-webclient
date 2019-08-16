@@ -184,9 +184,9 @@ function initGameList(games) {
 				panels.push("-right");
 				tmp = $("#subwindow-right").val()+"x";
 				if ($("#subwindow-right-split").val() > 0) {
-					tmp += $("#subwindow-right-split").val()+"*,*";
+					tmp += $("#subwindow-right-split").val()+",*";
 					if ($("#subwindow-right-split-2").val() > 0) {
-						tmp += "x"+$("#subwindow-right-split-2").val();
+						tmp += "x"+$("#subwindow-right-split-2").val()+",*";
 					}
 				} else if (tmp) {
 					tmp += "*";
