@@ -98,7 +98,7 @@ function loadGameOptions(game) {
 			$("#subwindow-top").val(opts.subwindow_top);
 		}
 		if (typeof(opts.subwindow_top_split)!='undefined'){
-			$("#subwindow-bottom-split").val(opts.subwindow_top_split);
+			$("#subwindow-top-split").val(opts.subwindow_top_split);
 		}
 		if (typeof(opts.subwindow_bottom)!='undefined') {
 			$("#subwindow-bottom").val(opts.subwindow_bottom);
