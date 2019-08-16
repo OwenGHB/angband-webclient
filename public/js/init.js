@@ -193,19 +193,11 @@ function initGameList(games) {
 			tmp = false;
 			if ($("#subwindow-top").val() > 0) {
 				panels.push("-top");
-				if ($("#subwindow-top-split").val() > 0) {
-					panels.push($("#subwindow-top-split").val()+"x"+$("#subwindow-top").val()+",*");
-				} else {
-					panels.push("*x"+$("#subwindow-top").val());
-				}
+				panels.push("*x"+$("#subwindow-top").val());
 			}
 			if ($("#subwindow-bottom").val() > 0) {
 				panels.push("-bottom");
-				if ($("#subwindow-bottom-split").val() > 0) {
-					panels.push($("#subwindow-bottom-split").val()+"x"+$("#subwindow-bottom").val()+",*");
-				} else {
-					panels.push("*x"+$("#subwindow-bottom").val());
-				}
+				panels.push("*x"+$("#subwindow-bottom").val());
 			}
 		} else if (parseInt($("#subwindows").val())==1) {
 			panels = ["-b"];
