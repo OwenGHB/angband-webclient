@@ -164,11 +164,11 @@ function initGameList(games) {
 					$(".subwindow-basic").removeClass('hidden');
 					custom_subpanels = false;
 				}
-				saveSelectedGameName(e.target.value);
 				$("#versionselect").html("");
 				for (var j=0; j<games[i].versions.length; j++){
 					$("#versionselect").append('<option value='+games[i].versions[j]+'>'+games[i].versions[j]+'</option>');
 				}
+				saveSelectedGameName(e.target.value);
 				loadDefaultGameOptions(e.target.value);
 				loadGameOptions(e.target.value);
 			}
@@ -200,7 +200,7 @@ function initGameList(games) {
 			}
 		} else panels = ["-n"+$("#subwindows").val()];
 		var walls = false;
-		applyTerminal("play", gamename, panels, walls, calculateIdealTerminalDimensions());
+		applyTerminal("play", gamename, panels, calculateIdealTerminalDimensions());
 	});
 	$("#deletebutton").click(function() {
 		if(!confirm('Are you sure you want to proceed?'+"\n"+'This will *delete* your savegame file for '+$("#gameselect :selected").text()+'!')) return;
@@ -213,6 +213,6 @@ function initGameList(games) {
 	});
 	$("#updatebutton").click(function() {
 		var gamename = $("#gameselect").val();
-		applyTerminal("update", gamename, 1, "no", calculateIdealTerminalDimensions());
+		applyTerminal("update", gamename, [], calculateIdealTerminalDimensions());
 	});
 }

@@ -63,9 +63,9 @@ function listMatches(matches) {
 				var outputstring = buildMatchListEntry(players[i],matches[players[i]]);
 				return $(outputstring).click(function(){
 					if(players[i] === username)
-						applyTerminal("play", players[i], 1, "no", matches[players[i]].dimensions);
+						applyTerminal("play", players[i], [], matches[players[i]].dimensions);
 					else
-						applyTerminal("spectate", players[i], 1, "no", matches[players[i]].dimensions);
+						applyTerminal("spectate", players[i], [], matches[players[i]].dimensions);
 				});
 			}(i));			
 		}
@@ -107,7 +107,7 @@ function closeGame(){
 			if (i!='default') {
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
-						applyTerminal("spectate", i, 1, "no", matches[i].dimensions);
+						applyTerminal("spectate", i, [], matches[i].dimensions);
 					});
 				}(i));	
 			} else {
@@ -136,17 +136,16 @@ function cleanSpyGlass(matches){
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#">' + i + '</a></li>').click(function() {
 						var panels = $("#subwindows").val();
-						var walls = false;
 						var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
 						var gamename = $("#gameselect").val();
-						applyTerminal("play", gamename, panels, walls, matches[i].dimensions);
+						applyTerminal("play", gamename, panels, matches[i].dimensions);
 					});
 				}(i));
 			} 
 			else if (players.includes(i)) {
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#">' + i + '</a></li>').click(function() {
-						applyTerminal("spectate", i, 1, "no", matches[i].dimensions);
+						applyTerminal("spectate", i, [], matches[i].dimensions);
 					});
 				}(i));	
 			} 
