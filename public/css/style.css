@@ -376,8 +376,9 @@ html, body, #container {
    text-shadow: 0 0 5px #000;
 }
 #games-lobby .new-game {
-		display: flex;
-		flex-direction: row;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 }
 #games-lobby .new-game .row {
 	display: block;
