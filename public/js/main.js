@@ -36,7 +36,7 @@ $(function() {
 	fonts.map(function(f,i) {
 		$("#extra-fonts").append('<option value="' + f + '">' + f + '</option>');
 	});
-	$("#extra-fonts, #games-font-size").change(function(e) { saveGameOptions(); });
+	$("#extra-fonts, #games-font-size", "#versionselect").change(function(e) { saveGameOptions(); });
 	
 	// add bottom sidebar force option
 	$("#opt-sidebar-bottom").change(function(e) { changeSidebarOnBottom(e.target.checked); });
@@ -67,7 +67,7 @@ $(function() {
 	});
 	
 	// game option change handlers
-	$("#term-cols,#term-rows,#subwindows,#subwindow-right,#subwindow-right-split,#subwindow-top,#subwindow-bottom,#ascii-walls,#versionselect").change(function() { saveGameOptions(); });
+	$("#term-cols,#term-rows,#subwindows,#subwindow-right,#subwindow-right-split,#subwindow-top,#subwindow-bottom").change(function() { saveGameOptions(); });
 	
 	// tablet ui
 	var ua = navigator.userAgent.toLowerCase();
