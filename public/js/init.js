@@ -177,7 +177,7 @@ function initGameList(games) {
 	});
 	$("#playbutton").click(function() {
 		var gamename = $("#gameselect").val()+":"+$("#versionselect").val();
-		var panels = ["-spacer","0x1"];
+		var panels = ["-spacer","1x0"];
 		if (custom_subpanels){
 			var tmp = false;
 			if ($("#subwindow-right").val() > 0) {
