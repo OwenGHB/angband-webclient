@@ -198,7 +198,7 @@ function initGameList(games) {
 				panels.push("-bottom");
 				panels.push("*x"+$("#subwindow-bottom").val());
 			}
-		} else (if parseInt($("#subwindows").val())==1) {
+		} else if (parseInt($("#subwindows").val())==1) {
 			panels = ["-b"];
 		} else panels = ["-n"+$("#subwindows").val()];
 		var walls = false;
