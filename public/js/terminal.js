@@ -130,7 +130,7 @@ function adjustFontSizeForSpectation(remote_game_dimensions) {
 	$("#tester").css("font-family", selected_font_family);
 	$("#tester").css("display", "initial");
 	$("#tester").css("visibility", "hidden");
-	for(var i = 0; i < font_sizes.length && !found; i++) {
+	for(var i = 8; i < 40 && !found; i+=0.5) {
 		// set new font size to tester
 		$("#tester").css("font-size", font_sizes[i]);
 
