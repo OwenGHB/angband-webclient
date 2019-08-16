@@ -120,9 +120,9 @@ function loadDefaultGameOptions(game) {
 	var $$subwindows, $walls;
 	$("#subwindows").val(subwindows);
 	$("#ascii-walls").val(ascii_walls);
-	$("#subwindow-right").val(50);
-	$("#subwindow-right-split").val(24);
+	$("#subwindow-right").val(0);
+	$("#subwindow-right-split").val(0);
 	$("#subwindow-top").val(0);
-	$("#subwindow-bottom").val(6);
+	$("#subwindow-bottom").val(0);
 	$("#games-font-size").val(12);
 }
