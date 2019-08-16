@@ -67,7 +67,7 @@ $(function() {
 	});
 	
 	// game option change handlers
-	$("#extra-fonts,#games-font-size,#versionselect,#subwindows,#subwindow-right,#subwindow-right-split,#subwindow-top,#subwindow-bottom").change(function() { saveGameOptions(); });
+	$("#extra-fonts,#games-font-size,#versionselect,#subwindows,#subwindow-right,#subwindow-right-split,#subwindow-right-split-2,#subwindow-top,#subwindow-bottom,#subwindow-bottom-split").change(function() { saveGameOptions(); });
 	
 	// tablet ui
 	var ua = navigator.userAgent.toLowerCase();

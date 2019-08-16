@@ -27,7 +27,7 @@
         .text-left
            input(type="number", min="1", max="6")#subwindows
       .hidden.row.subwindow-extra
-        .right-flex subwindow right
+        .right-flex subwindow right cols
         .text-left
            input(type="number", min="0", max="80")#subwindow-right
       .hidden.row.subwindow-extra
@@ -35,13 +35,21 @@
         .text-left
            input(type="number", min="0", max="80")#subwindow-right-split
       .hidden.row.subwindow-extra
-        .right-flex subwindow top
+        .right-flex subwindow right split 2
+        .text-left
+           input(type="number", min="0", max="80")#subwindow-right-split-2
+      .hidden.row.subwindow-extra
+        .right-flex subwindow top rows
         .text-left
            input(type="number", min="0", max="80")#subwindow-top
       .hidden.row.subwindow-extra
-        .right-flex subwindow bottom
+        .right-flex subwindow bottom rows
         .text-left
            input(type="number", min="0", max="80")#subwindow-bottom
+      .hidden.row.subwindow-extra
+        .right-flex subwindow bottom split
+        .text-left
+           input(type="number", min="0", max="80")#subwindow-bottom-split
       .hidden.row
          .right-flex ASCII walls
          .text-left

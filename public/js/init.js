@@ -183,20 +183,28 @@ function initGameList(games) {
 			if ($("#subwindow-right").val() > 0) {
 				panels.push("-right");
 				tmp = $("#subwindow-right").val()+"x";
-			}
-			if ($("#subwindow-right-split").val() > 0) {
-				tmp += $("#subwindow-right-split").val()+",*";
-			} else if (tmp) {
-				tmp += "*";
+				if ($("#subwindow-right-split").val() > 0) {
+					tmp += $("#subwindow-right-split").val()+",*";
+					if ($("#subwindow-right-split-2").val() > 0) {
+						tmp += "x"+$("#subwindow-right-split-2").val();
+					}
+				} else if (tmp) {
+					tmp += "*";
+				}
 			}
 			if (tmp) panels.push(tmp);
+			tmp = false;
 			if ($("#subwindow-top").val() > 0) {
 				panels.push("-top");
 				panels.push("*x"+$("#subwindow-top").val());
 			}
 			if ($("#subwindow-bottom").val() > 0) {
 				panels.push("-bottom");
-				panels.push("*x"+$("#subwindow-bottom").val());
+				if ($("#subwindow-bottom-split").val() > 0) {
+					panels.push($("#subwindow-bottom-split").val()+"x"+$("#subwindow-bottom").val()+",*");
+				} else {
+					panels.push("*x"+$("#subwindow-bottom").val());
+				}
 			}
 		} else if (parseInt($("#subwindows").val())==1) {
 			panels = ["-b"];
