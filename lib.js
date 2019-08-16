@@ -415,7 +415,7 @@ function validatepanelargs(args){
 	var okay = true;
 	for (var i in args) {
 		var arg = args[i];
-		okay = /^-(?:b|top|bottom|left|right|n\d)$/.test(arg);
+		okay = /^-(?:b|top|bottom|left|right|spacer|n\d)$/.test(arg);
 		if (!okay) okay = /^[\d\*]\d?x?[\d\*]?\d?,?[\d\*]?\d?x?[\d\*]?\d?$/.test(arg);
 		if (!okay) break;
 	}
