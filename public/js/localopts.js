@@ -89,22 +89,22 @@ function loadGameOptions(game) {
 		if (typeof(opts.subwindows)!='undefined') $("#subwindows").val(opts.subwindows);
 		if (typeof(opts.subwindow_right)!='undefined') {
 			$("#subwindow-right").val(opts.subwindow_right);
-		} else if ($("#subwindows").val(opts.subwindows)==1) {
+		} else if (parseInt($("#subwindows").val(opts.subwindows))==1) {
 			$("#subwindow-right").val(0);
 		}
 		if (typeof(opts.subwindow_right_split)!='undefined'){
 			$("#subwindow-right-split").val(opts.subwindow_right_split);
-		} else if ($("#subwindows").val(opts.subwindows)==1) {
+		} else if (parseInt($("#subwindows").val(opts.subwindows))==1) {
 			$("#subwindow-right-split").val(0);
 		}
 		if (typeof(opts.subwindow_top)!='undefined') {
 			$("#subwindow-top").val(opts.subwindow_top);
-		} else if ($("#subwindows").val(opts.subwindows)==1) {
+		} else if (parseInt($("#subwindows").val(opts.subwindows))==1) {
 			$("#subwindow-top").val(0);
 		}
 		if (typeof(opts.subwindow_bottom)!='undefined') {
 			$("#subwindow-bottom").val(opts.subwindow_bottom);
-		} else if ($("#subwindows").val(opts.subwindows)==1) {
+		} else if (parseInt($("#subwindows").val(opts.subwindows))==1) {
 			$("#subwindow-bottom").val(0);
 		}
 		if (typeof(opts.ascii_walls)!='undefined') $("#ascii-walls").val(opts.ascii_walls);

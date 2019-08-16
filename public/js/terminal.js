@@ -102,7 +102,7 @@ function closeGame(){
 			if (i!='default') {
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
-						applyTerminal("spectate", i, 1, false);
+						applyTerminal("spectate", i, 1, "no", matches[i].dimensions);
 					});
 				}(i));	
 			} else {
