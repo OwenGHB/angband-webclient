@@ -263,6 +263,43 @@ var TU = function(socket) {
         
         init: function() {
             console.log("initializing tablet ui");
+
+            // move bottom panels to panel block on top
+            $(".tab-panels.isaf .tab").each(function(index, tab) {
+               $(".tab-panels.uchel").append(tab);
+            });
+            
+            // move bottom panel buttons to top button block
+            $(".tab-buttons.isaf a").each(function(index, tab) {
+               $(".tab-buttons.uchel").append(tab);
+            });
+
+            // remove isaf panel and buttons
+            $(".isaf").remove();
+
+            // alter top panel css to occupy full height
+            $('.tab-panels.uchel').css('flex-grow', 1);
+            
+            // select default panel and button
+            $(".tab-buttons.uchel a").removeClass("selected");
+            $('.tab-panels.uchel .tab').addClass('hidden');
+            $('#link-chat').addClass('selected');
+            $('#tab-chat').removeClass('hidden');
+
+            // reinit onclick handlers of top button bar
+            $(".tab-buttons.uchel a").off('click')
+            $(".tab-buttons.uchel a").click(function(e) {
+               if(this.id === 'btn-logout' || this.id === 'btn-news')
+                  return;
+               
+               e.preventDefault();
+               $(".tab-buttons.uchel a").removeClass("selected");
+               $(this).addClass("selected");
+               $('.tab-panels.uchel .tab').addClass('hidden');
+               panel_id = '#tab-' + this.id.split('-')[1];
+               $(panel_id).removeClass('hidden');
+            });
+
             this.unhideControlTab();
             this.loadShortcuts();
             this.initArrowKeys();

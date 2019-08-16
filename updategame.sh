@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd ~/games/$1
+cd ~/games/$1/nightly
 git pull
 if test $1 = 'coffeeband'
 then

@@ -18,8 +18,11 @@ var misc		= {};
 // holds current socket connections
 var metasockets = {};
 
-//for more efficient file updates
-var filelists = {};
+// for more efficient file updates
+var filelists   = {};
+
+// for more efficient game list updates
+var lastmatchlist = {};
 
 var home        = process.env.CUSTOM_HOME || '/home/angband';
 var localdb     = require("./localdb");
@@ -110,6 +113,7 @@ function chat(user, message){
 		}
 		else if(command === "/refresh" && user.roles.indexOf("dev") !== -1){
 			localdb.refresh();
+			games = localdb.fetchGames();
 			response.content = "db refreshed";
 			metasockets[user.name].send(JSON.stringify(response));
 		}
@@ -151,10 +155,10 @@ function chat(user, message){
 }
 
 function checkForDeath(player){
-	if (!isalive(player,matches[player].game)) {
+	if (!isalive(player,matches[player].game,matches[player].version)) {
 		if (matches[player].alive) {
-			var killedBy = getcharinfo(player,matches[player].game).killedBy
-			if (!(['Quitting','his own hand','her own hand','their own hand'].includes(killedBy))){
+			var killedBy = getcharinfo(player,matches[player].game,matches[player].version).killedBy
+			if ((typeof(killedBy)!='undefined') && (!(['Abortion','Quitting','his own hand','her own hand','their own hand'].includes(killedBy)))){
 				var msg = player+" was killed by "+killedBy;
 				if (killedBy == "Ripe Old Age") {
 					msg+=". Long live "+player+"!";
@@ -165,7 +169,7 @@ function checkForDeath(player){
 			}
 		}
 	}
-	matches[player].alive=isalive(player,matches[player].game);
+	matches[player].alive=isalive(player,matches[player].game,matches[player].version);
 }
 
 function announce(message){
@@ -183,9 +187,10 @@ function announce(message){
 function getmatchlist(matches) {
 	var livematches = {};
 	for (var i in matches) {
-		var charinfo = getcharinfo(i, matches[i].game);
+		var charinfo = getcharinfo(i,matches[i].game,matches[i].version);
 		var matchinfo = {
 			game       : matches[i].game,
+			version    : matches[i].version,
 			idletime   : matches[i].idletime,
 			dimensions : {rows: matches[i].dimensions.rows, cols: matches[i].dimensions.cols} 
 		};
@@ -208,34 +213,81 @@ function getmatchlist(matches) {
 
 
 //check player alive status for recording purposes
-function isalive(user,game){
+function isalive(user,game,version){
 	var alive = true;
-	var charinfo = getcharinfo(user,game);
-	if (charinfo.isAlive == "0" || charinfo.isDead == "1") {
+	var charinfo = getcharinfo(user,game,version);
+	if (charinfo.isAlive == "0" || charinfo.isDead == "1" || (typeof(charinfo.isAlive)=='undefined' && typeof(charinfo.isDead)=='undefined')) {
 		alive = false;
 	}
 	return alive;
 }
 
-
-function getcharinfo(user, game) {
-	var dirpath = home+'/user/'+user+'/'+game;
-	fs.ensureDirSync(dirpath);
-	var files = fs.readdirSync(dirpath);
+//hacked for savefile header reading to avert Exo patch megahack. Un-hardcode this.
+function getcharinfo(user, game, version) {
+	var game_have_headers = ["angband","coffeeband"];
+	var version_have_headers = ["3.5.1","4.0.5","4.1.3","nightly"];
 	var charinfo = {};
-	if (files.includes('CharOutput.txt')) {
-		var json=fs.readFileSync(dirpath + '/CharOutput.txt','utf8');
-		json = json.replace(/\n/gm,"\n\"");
-		json = json.replace(/:/gm,'":');
-		json = json.replace(/"{/gm,'{');
-		json = json.replace(/"}/gm,'}');
-		try {
-			charinfo=JSON.parse(json);
-		} 
-		catch (ex) {
+	if (game_have_headers.includes(game) && version_have_headers.includes(version)) {
+		var savefilepath = home+'/games/'+game+'/'+version+'/lib/save/'+user;
+		charinfo = readVlikeHeader(savefilepath);
+	} else {
+		var dirpath = home+'/user/'+user+'/'+game+'/'+version;
+		fs.ensureDirSync(dirpath);
+		var files = fs.readdirSync(dirpath);
+		if (files.includes('CharOutput.txt')) {
+			var json=fs.readFileSync(dirpath + '/CharOutput.txt','utf8');
+			json = json.replace(/\n/gm,"\n\"");
+			json = json.replace(/:/gm,'":');
+			json = json.replace(/"{/gm,'{');
+			json = json.replace(/"}/gm,'}');
+			try {
+				charinfo=JSON.parse(json);
+			} 
+			catch (ex) {
+			}
 		}
 	}
 	return charinfo;
+}
+
+//horror story of a function feel free to demolish and rebuild
+function readVlikeHeader(filename){
+	try {
+		var infoobj = {};
+		var buffer = Buffer.alloc(64);
+		var fd = fs.openSync(filename,'r');
+		fs.readSync(fd,buffer,0,64,36);
+		var charstring = buffer.toString();
+		var startpos = charstring.indexOf(',');
+		var endpos = charstring.lastIndexOf('rng');
+		if (endpos > -1) {
+			charstring = charstring.substr(startpos+2,endpos-startpos-2);
+		} else {
+			return false;
+		}
+		while (charstring.lastIndexOf('x')==charstring.length-1) {
+			charstring = charstring.substr(0,charstring.length-1);
+		}
+		var deathstart = charstring.indexOf('(')+1;
+		var deathend = charstring.lastIndexOf(')');
+		if (deathstart) {
+			infoobj.killedBy=charstring.substr(deathstart,deathend-deathstart);
+			infoobj.isDead=1;
+		} else {
+			var dpos = charstring.indexOf(',')+7;
+			var rpos = charstring.indexOf(' ')+1;
+			var cpos = charstring.indexOf(' ',rpos)+1;
+			infoobj.dLvl = charstring.substr(dpos,charstring.length-dpos-1);
+			infoobj.cLvl = charstring.substr(1,rpos-2);
+			infoobj.race = charstring.substr(rpos,cpos-rpos-1);
+			infoobj.class = charstring.substr(cpos,dpos-cpos-7);
+			infoobj.isDead = 0;
+		}
+		return infoobj;
+	} catch(e) {
+		console.log(e);
+		return false;
+	}
 }
 
 
@@ -247,12 +299,17 @@ function getfilelist(name) {
 		fs.ensureDirSync(path);
 		var ls = fs.readdirSync(path);
 		for (var i in games){
-			var dumps = [];
 			if (games[i].name.match(/^[a-zA-Z0-9-_]+$/)){
+				var dumps = {};
 				fs.ensureDirSync(path+games[i].name);
-				var varfiles = fs.readdirSync(path+games[i].name);
-				for (var j in varfiles){
-					dumps.push(varfiles[j]);
+				for (var j in games[i].versions) {
+					var version = games[i].versions[j];
+					dumps[version] = [];
+					fs.ensureDirSync(path+games[i].name+'/'+version);
+					var filestmp = fs.readdirSync(path+games[i].name+'/'+version);
+					for (var k in filestmp) {
+						dumps[version].push(filestmp[k]);
+					}
 				}
 				files[games[i].name]=dumps;
 			}
@@ -266,10 +323,10 @@ function handleDeleteRequest(user,request){
 	var filedir = home;
 	var filename;
 	if (request.filetype=='usergenerated'){
-		filedir += '/user/'+user.name+'/'+request.game+'/';
+		filedir += '/user/'+user.name+'/'+request.game+'/'+request.version+'/';
 		filename = request.specifier;
 	} else if (request.filetype=='ownsave') {
-		filedir += '/games/'+request.game+'/lib/save/'
+		filedir += '/games/'+request.game+'/'+request.version+'/lib/save/';
 		fs.ensureDirSync(filedir);
 		var ls = fs.readdirSync(filedir);
 		if (ls.includes(user.name)) {
@@ -279,10 +336,10 @@ function handleDeleteRequest(user,request){
 		} else {
 			return "savefile does not exist";
 		}
-		fs.copyFileSync(filedir+filename,home+'/user/'+user.name+'/'+request.game+'/'+user.name);
+		fs.copyFileSync(filedir+filename,home+'/user/'+user.name+'/'+request.game+'/'+request.version+'/'+user.name);
 	} else if (request.filetype=='usersave') {
 		if (getgameinfo(request.game).owner == user.name) {
-			filedir += '/games/'+game+'/lib/save/'
+			filedir += '/games/'+request.game+'/'+request.version+'/lib/save/'
 			fs.ensureDirSync(filedir);
 			var ls = fs.readdirSync(filedir);
 			if (ls.includes(request.specifier)) {
@@ -312,13 +369,15 @@ function handleDeleteRequest(user,request){
 function getgamelist(player) {
 	var gamelist = [];
 	for (var i in games){
-		var savexists=fs.existsSync(home+'/games/'+games[i].name+'/lib/save/'+player);
-		if (fs.existsSync(home+'/games/'+games[i].name+'/lib/save/1000.'+player)) savexists=true;
+		var savexists=fs.existsSync(home+'/games/'+games[i].name+'/'+games[i].version+'/lib/save/'+player);
+		if (fs.existsSync(home+'/games/'+games[i].name+'/'+games[i].version+'/lib/save/1000.'+player)) savexists=true;
 		gamelist.push({
-			name:games[i].name, 
-			longname:games[i].longname, 
+			name:games[i].name,
+			longname:games[i].longname,
 			desc:games[i].desc,
+			versions:games[i].versions,
 			owner:games[i].owner,
+			custom_subpanels:games[i].custom_subpanels,
 			savexists:savexists
 		});
 	}
@@ -345,57 +404,45 @@ function getgameinfo(game) {
 			info.restrict_paths=games[i].restrict_paths;
 			info.data_paths=games[i].data_paths;
 			info.args=games[i].args;
+			info.versions=games[i].versions;
 			info.owner=games[i].owner;
 		}
 	}
 	return info;
 }
 
+function validatepanelargs(args){
+	var okay = true;
+	for (var i in args) {
+		var arg = args[i];
+		okay = /^-(?:b|top|bottom|left|right|n\d)$/.test(arg);
+		if (!okay) okay = /^[\d\*]\d?x?[\d\*]?\d?,?[\d\*]?\d?x?[\d\*]?\d?$/.test(arg);
+		if (!okay) break;
+	}
+	return okay;
+}
 
 function newgame(user, msg) {
 	var game = msg.game;
+	var version = msg.version;
 	var gameinfo = getgameinfo(game);
-	var panels = msg.panels;
+	var panelargs = msg.panelargs;
 	var dimensions = msg.dimensions;
 	var asciiwalls = msg.walls;
 	var player = user.name;
 	var alive = isalive(player,game);
-	var compgame = 'silq';
-	var compnumber = '217';
-	var panelargs = ['-b'];
-	console.log(`starting new game: user=${user.name} dimensions=${dimensions.cols}x${dimensions.rows}`);
-	if(panels > 1) {
-		if (game == 'poschengband' || game == 'elliposchengband' || game == 'composband' || game == 'frogcomposband') {
-			panelargs = ['-right','40x*','-bottom','*x8'];
-		} 
-		else {
-			panelargs = ['-n'+panels];
-		}
-	}
-	var path = home + '/games/' + game + '/' + game;
+	if (!validatepanelargs(panelargs)) panelargs = ['-b'];
+	var path = home+'/games/'+game+'/'+version+'/'+game;
 	var args = [];
 	var terminfo = 'xterm-256color';
 	if(game == 'umoria') {
-		args.push(home + '/games/' + game + '/' + user.name);
+		args.push(home+'/games/'+game+'/'+version+'/'+user.name);
 	} 
 	else {
-		if (game == 'competition') {
-			args.push('-u'+compnumber+'-'+user.name);
-		} 
-		else {
-			args.push('-u'+user.name);
-		}
-		if (game == 'competition') {
-			args.push('-duser='+home+'/user/'+user.name+'/'+compgame);
-		} 
-		else if (gameinfo.restrict_paths){
-			args.push('-d'+home+'/user/'+user.name+'/'+game);
-		} 
-		else {
-			args.push('-duser='+home+'/user/'+user.name+'/'+game);
-		}
+		args.push('-u'+user.name);
+		args.push('-duser='+home+'/user/'+user.name+'/'+game+'/'+version);
 		for (var i in gameinfo.args) {
-			args.push('-'+gameinfo.args[i]);
+			args.push(gameinfo.args[i]);
 		}
 		args.push('-mgcu');
 		args.push('--');
@@ -405,36 +452,7 @@ function newgame(user, msg) {
 	}
 	if (msg.walls) 
 		args.push('-a');
-	var termdesc = {};
-	if (game == 'competition') {
-		var newattempt = true;
-		var newtty = false;
-		var savegames = fs.readdirSync(home+'/'+compgame+'/lib/save/');
-		if (savegames.includes('1002.'+compnumber+''+user.name)){
-			newattempt = !isalive(user.name,compgame);
-		}
-		fs.ensureDirSync(home+'/user/'+user.name);
-		var ttydir = fs.readdirSync(home+'/ttyrec');
-		var ttyfile = home+'/ttyrec/'+compnumber+'-'+user.name+'.ttyrec';
-		if (ttydir.includes(ttyfile)){
-			newtty=true;
-		}
-		var command = home+'/games/'+compgame+' '+args.join(' ');
-		path = 'ttyrec';
-		args = [
-			'-e',
-			command,
-			ttyfile
-		];
-		if (!newattempt) {
-			if (!newtty) 
-				args.unshift('-a');
-		} 
-		else {
-			fs.copySync(home+'/games/'+compgame+'/lib/save/1002.'+compnumber, home+'/games/'+compgame+'/lib/save/1002.'+compnumber+''+user.name);
-		}
-	}
-	termdesc = {
+	var termdesc = {
 		path     : path,
 		args     : args,
 		terminfo : terminfo
@@ -444,7 +462,7 @@ function newgame(user, msg) {
 			name              : termdesc.terminfo,
 			cols              : parseInt(dimensions.cols),
 			rows              : parseInt(dimensions.rows),
-			cwd               : home + '/games/' + game,
+			cwd               : home+'/games/'+game+'/'+version,
 			applicationCursor : true
 		};
 		var term = pty.fork(termdesc.path,termdesc.args, term_opts);
@@ -481,6 +499,7 @@ function newgame(user, msg) {
 		matches[user.name] = {
 			term: term,
 			game: game,
+			version: version,
 			idle: false,
 			idletime: 0,
 			alive: alive,
@@ -589,14 +608,8 @@ function closegame(player){
 		//check for player death
 		checkForDeath(player);
 		//kill the process if it hasn't already
-		//horrific reverse engineering hack here
 		var term = matches[player].term;
-		if (matches[player].game == 'competition'){
-			var gamepid = parseInt(term.pid) + 3;
-		} 
-		else {
-			var gamepid=term.pid;
-		}
+		var gamepid=term.pid;
 		ps.lookup({ pid: gamepid }, function(err, resultList ) {
 			if (err) {
 				console.log( err );
@@ -771,6 +784,8 @@ lib.welcome = function(user,ws) {
 //also checks for file diffs in lieu of fs.watch
 lib.keepalive = function(){
 	var matchlist=getmatchlist(matches);
+	var matchupdate=(lastmatchlist!=matchlist);
+	lastmatchlist=matchlist;
 	var fileupdate=(getfilelist(i)!=filelists[i]);
 	filelists[i]=getfilelist(i);
 	for (var i in matches) {
@@ -789,7 +804,7 @@ lib.keepalive = function(){
 	for (var i in metasockets) {
 		try {
 			metasockets[i].ping();
-			metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: matchlist}));
+			if (matchupdate) metasockets[i].send(JSON.stringify({eventtype: 'matchupdate', content: matchlist}));
 			if (fileupdate) metasockets[i].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(i)}));
 		} catch (ex) {
 			// The WebSocket is not open, ignore
