@@ -27,7 +27,7 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 			spyglass['default'] = createTerminal(d);
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + ' (your game)</a></li>').click(function() {
-					applyTerminal("play", qualifier, panels, d);
+					applyTerminal("play", qualifier, [], d);
 				});
 			});
 			socket.send(JSON.stringify({
@@ -37,7 +37,6 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 					version: version,
 					panelargs: panelargs,
 					dimensions: d,
-					walls: walls
 				}
 			}));
 			spyglass['default'].on('data', function(data) {
@@ -52,7 +51,7 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 		if (typeof(spyglass[qualifier]) == 'undefined') {
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + '</a></li>').click(function() {
-					applyTerminal("spectate", qualifier, panels, d);
+					applyTerminal("spectate", qualifier, [], d);
 				});
 			});
 			spyglass[qualifier] = createTerminal(d);
