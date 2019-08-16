@@ -70,6 +70,7 @@ function saveGameOptions() {
 			subwindow_right: $("#subwindow-right").val(),
 			subwindow_right_split: $("#subwindow-right-split").val(),
 			subwindow_top: $("#subwindow-top").val(),
+			subwindow_top_split: $("#subwindow-top-split").val(),
 			subwindow_bottom: $("#subwindow-bottom").val(),
 			subwindow_bottom_split: $("#subwindow-bottom-split").val(),
 			font: $("#extra-fonts").val(),
@@ -96,6 +97,9 @@ function loadGameOptions(game) {
 		if (typeof(opts.subwindow_top)!='undefined') {
 			$("#subwindow-top").val(opts.subwindow_top);
 		}
+		if (typeof(opts.subwindow_top_split)!='undefined'){
+			$("#subwindow-bottom-split").val(opts.subwindow_top_split);
+		}
 		if (typeof(opts.subwindow_bottom)!='undefined') {
 			$("#subwindow-bottom").val(opts.subwindow_bottom);
 		}
@@ -119,6 +123,7 @@ function loadDefaultGameOptions(game) {
 	$("#subwindow-right").val(0);
 	$("#subwindow-right-split").val(0);
 	$("#subwindow-top").val(0);
+	$("#subwindow-top-split").val(0);
 	$("#subwindow-bottom").val(0);
 	$("#subwindow-bottom-split").val(0);
 	$("#games-font-size").val(12);
