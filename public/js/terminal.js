@@ -52,7 +52,7 @@ function applyTerminal(mode, qualifier, panelargs, walls, d) {
 		if (typeof(spyglass[qualifier]) == 'undefined') {
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + '</a></li>').click(function() {
-					applyTerminal("spectate", qualifier, false, panels, walls, d);
+					applyTerminal("spectate", qualifier, false, panels, d);
 				});
 			});
 			spyglass[qualifier] = createTerminal(d);
