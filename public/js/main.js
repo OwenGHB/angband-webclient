@@ -36,7 +36,7 @@ $(function() {
 	fonts.map(function(f,i) {
 		$("#extra-fonts").append('<option value="' + f + '">' + f + '</option>');
 	});
-	$("#extra-fonts, #games-font-size", "#versionselect").change(function(e) { saveGameOptions(); });
+	$("#extra-fonts, #games-font-size, #versionselect").change(function(e) { saveGameOptions(); });
 	
 	// add bottom sidebar force option
 	$("#opt-sidebar-bottom").change(function(e) { changeSidebarOnBottom(e.target.checked); });
