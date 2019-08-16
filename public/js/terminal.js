@@ -150,7 +150,7 @@ function adjustFontSizeForSpectation(remote_game_dimensions) {
 	}
 
 	// apply selected font settings to terminal pane
-	$("#terminal-container").css("font-size", checked_font_index);
+	$("#terminal-container").css("font-size", checked_font_index-0.5);
 	$("#terminal-container").css("font-family", selected_font_family);
 	$("#terminal-container").css("line-height", "initial");
 }
