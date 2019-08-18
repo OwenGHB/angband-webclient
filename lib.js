@@ -225,7 +225,7 @@ function isalive(user,game,version){
 //hacked for savefile header reading to avert Exo patch megahack. Un-hardcode this.
 function getcharinfo(user, game, version) {
 	var game_have_headers = ["angband","coffeeband"];
-	var version_have_headers = ["3.5.1","4.0.5","4.1.3","nightly"];
+	var version_have_headers = ["3.5.1","4.0.5","4.1.3","4.2.0","nightly"];
 	var charinfo = {};
 	if (game_have_headers.includes(game) && version_have_headers.includes(version)) {
 		var savefilepath = home+'/games/'+game+'/'+version+'/lib/save/'+user;
