@@ -53,6 +53,13 @@ function addMessage(msg, extra_class, shouldNotify) {
 	}
 }
 
+function scrollChatBar(){
+	var chatwrap = $('#chatlog .wrapper');
+	if(initComplete && ((chatwrap.prop("scrollTop")+chatwrap.prop("clientHeight"))>=(chatwrap.prop("scrollHeight")-chatwrap.prop("clientHeight")))) {
+		$("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+	}
+}
+
 function notifyIfNeeded(user, message) {
 	if(message.indexOf("@" + user) !== -1)
 		notify_sound.play();

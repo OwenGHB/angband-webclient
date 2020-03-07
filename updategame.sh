@@ -7,7 +7,7 @@ git reset --hard origin/coffeeband
 else
 git reset --hard origin/master
 fi
-if test $1 = 'angband-master' || test $1 = 'composband' || test $1 = 'frogcomposband' || test $1 = 'angband' || test $1 = 'coffeeband'
+if test $1 = 'angband-master' || test $1 = 'composband' || test $1 = 'frogcomposband' || test $1 = 'angband' || test $1 = 'coffeeband' || test $1 = 'firstageangband'
 then
 printf "Rebuild makefiles? (use for version changes or build configuration changes) [y/n]"
 read -n 1 ans
@@ -15,6 +15,12 @@ if test $ans = 'y'
 then
 ./autogen.sh
 ./configure --with-no-install --disable-x11
+fi
+printf "clean object files?"
+read -n 1 ans
+if test $ans = 'y'
+then
+make clean
 fi
 make
 elif test $1 = 'silq-dev' || test $1 = 'silq'
@@ -40,6 +46,10 @@ rm $1
 if test $1 = 'angband-master' || test $1 = 'coffeeband'
 then
 cp src/angband ./$1
+fi
+if test $1 = 'firstageangband'
+then
+cp src/faangband ./$1
 fi
 if test $1 = 'composband' || test $1 = 'frogcomposband' || test $1 = 'angband'
 then

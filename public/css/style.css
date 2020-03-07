@@ -550,6 +550,13 @@ html, body, #container {
   background: -moz-radial-gradient(rgba(0,0,0,1),rgba(64,64,0,0.2), rgba(128,128,0,0.5),rgba(192,192,0,0.1)); /*Fx 3.6-15*/
   background: radial-gradient(rgba(0,0,0,1),rgba(64,64,0,0.2), rgba(128,128,0,0.5),rgba(192,192,0,0.1)); /*Standard*/
 }
+#chatlog .orangeglow {
+  background: orange; /* For browsers that do not support gradients */
+  background: -webkit-radial-gradient(rgba(0,0,0,1),rgba(64,32,0,0.2), rgba(128,64,0,0.5),rgba(192,96,0,0.1)); /*Safari 5.1-6*/
+  background: -o-radial-gradient(rgba(0,0,0,1),rgba(64,32,0,0.2), rgba(128,64,0,0.5),rgba(192,96,0,0.1)); /*Opera 11.1-12*/
+  background: -moz-radial-gradient(rgba(0,0,0,1),rgba(64,32,0,0.2), rgba(128,64,0,0.5),rgba(192,96,0,0.1)); /*Fx 3.6-15*/
+  background: radial-gradient(rgba(0,0,0,1),rgba(64,32,0,0.2), rgba(128,64,0,0.5),rgba(192,96,0,0.1)); /*Standard*/
+}
 #chatlog .clouded{
   color: #9f609f;
 }

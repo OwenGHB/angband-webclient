@@ -16,8 +16,7 @@ function initChat() {
 				break;
 			case "chat":
 				addMessage(data.content, false, initComplete); 
-				if(initComplete)
-				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+				scrollChatBar();
 				break;
 			case "usercount":
 				updateUserCount(data.content); break;
@@ -29,13 +28,11 @@ function initChat() {
 				listFiles(data.content); break;
 			case "systemannounce":
 				addMessage(data.content, "system", initComplete);
-				if(initComplete)
-				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+				scrollChatBar();
 				break;
 			case "deathannounce":
 				addMessage(data.content, "deathangel", initComplete);
-				if(initComplete)
-				    $("#chatlog .wrapper").animate({ scrollTop: $('#chatlog .wrapper').prop("scrollHeight")}, 300);
+				scrollChatBar();
 				break;
 			case "owngameoutput":
 			case "updateoutput":

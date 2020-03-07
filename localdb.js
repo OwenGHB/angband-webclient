@@ -11,7 +11,7 @@ var db       = {
    users    : lowdb(new FileSync("./db/users.json"))
 };
 var SALT_ROUNDS   = 5;
-var DEFAULT_ROLES = ["basic"];
+const DEFAULT_ROLES = ["basic"];
 
 
 /* SHEMAS
