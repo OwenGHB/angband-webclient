@@ -221,11 +221,13 @@ var TU = function(socket) {
         },
 
         fireKey: function(key) {
-            if(!this.socket)
+            if(!this.socket) {
                 return console.error("no socket");
-            if(!key)
+            }
+            if(!key) {
                 return console.error("no key", key);
-                console.log("key:", key);
+            }
+            console.log("key:", key);
             this.socket.send(JSON.stringify({
         		eventtype:'gameinput',
         		content: key
@@ -303,11 +305,14 @@ var TU = function(socket) {
 
 
         init: function() {
-            console.log("initializing tablet ui");
+
+            this.socket = socket;
 
             // guess what
+            console.log("initializing tablet ui");
             this.transformUI();
 
+            console.log("assigning visual keybinds");
             this.unhideControlTab();
             this.loadShortcuts();
             this.initArrowKeys();

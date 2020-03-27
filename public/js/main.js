@@ -70,10 +70,10 @@ $(function() {
 	$("#extra-fonts,#games-font-size,#versionselect,#subwindows,#subwindow-right,#subwindow-right-split,#subwindow-top,#subwindow-bottom").change(function() { saveGameOptions(); });
 
 	// tablet ui
-	$("#tablet-ui-toggle").click(function (socket) {
+	$("#tablet-ui-toggle").click(function () {
 		if (confirm("Transform to tablet UI? This can be undone by reloading this page.")) {
 			TU = TU(socket).init();
 		}
-	})(socket);
+	});
 
 });
