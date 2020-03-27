@@ -10,7 +10,7 @@ var TU;
 // ========================================================
 $(function() {
 	localStorage = window.localStorage;
-	
+
 	// add extra fonts
 	var fonts = [
 		"Share Tech Mono",
@@ -37,10 +37,10 @@ $(function() {
 		$("#extra-fonts").append('<option value="' + f + '">' + f + '</option>');
 	});
 	$("#extra-fonts, #games-font-size, #versionselect").change(function(e) { saveGameOptions(); });
-	
+
 	// add bottom sidebar force option
 	$("#opt-sidebar-bottom").change(function(e) { changeSidebarOnBottom(e.target.checked); });
-	
+
 	$("#opt-ui-font-size").change(function(e) { changeUIFontSize(e.target.value); });
 	$("#opt-ui-font-size").val($("html").css("font-size"));
 
@@ -53,10 +53,10 @@ $(function() {
 	$("#opt-ui-body-color").val($("body").css("background-color"));
 	$("#opt-ui-chat-color").val($(".panel").css("background-color"));
 	$("#opt-ui-chat-color").change(function() { changeMenuColor($("#opt-ui-border-style").val()); });
-	
+
 	// restore and apply options from local storage
 	loadAndApplyOptions();
-	
+
 	// init and open chat tab by default
 	initChat();
 
@@ -65,19 +65,15 @@ $(function() {
     	$("#terminal-pane").addClass("hidden");
     	$("#games-lobby").removeClass("hidden");
 	});
-	
+
 	// game option change handlers
 	$("#extra-fonts,#games-font-size,#versionselect,#subwindows,#subwindow-right,#subwindow-right-split,#subwindow-top,#subwindow-bottom").change(function() { saveGameOptions(); });
-	
+
 	// tablet ui
-	var ua = navigator.userAgent.toLowerCase();
-	var tablets = ["ipad", "android 5"];
-	var onTablet = false;
-	tablets.map(function(model) {
-		if(ua.indexOf(model) !== -1)
-			onTablet = true;
-	});
-	if(onTablet) {
-		TU = TU(socket).init();
-	}
+	$("#tablet-ui-toggle").click(function (socket) {
+		if (confirm("Transform to tablet UI? This can be undone by reloading this page.")) {
+			TU = TU(socket).init();
+		}
+	})(socket);
+
 });

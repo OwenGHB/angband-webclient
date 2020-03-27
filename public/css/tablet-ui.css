@@ -34,7 +34,7 @@
 }
 #tablet-ui button.edit-mode {
     background-color: #753c3c;
-     border: 1px solid #ca7575; 
+     border: 1px solid #ca7575;
 }
 #tu-arrows button {
     padding: 15px;
@@ -67,4 +67,9 @@
     width: initial;
     opacity: 0.5;
     padding: 20px 16px;
+}
+
+#tablet-ui-toggle {
+    line-height: 2;
+    margin-top: 1rem;
 }

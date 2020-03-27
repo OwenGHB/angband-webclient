@@ -31,9 +31,9 @@ html
                      i.fas.fa-tablet-alt
                   a.hidden(href="#", title="tools", onclick="showTab('tab-tools',this)")
                      i.fas.fa-wrench
-                  a(href="#", title="settings", onclick="showTab('tab-settings',this)")
+                  a#btn-settings(href="#", title="settings", onclick="showTab('tab-settings',this)")
                      i.fas.fa-cog
-                  
+
                   a.float-right(href="/logout", title="logout")
                      i.fas.fa-sign-out-alt
                   a.float-right(href="/", target="_blank",title="news")
@@ -52,19 +52,19 @@ html
                            p#keystrokeinput
                   #tab-settings.tab.hidden
                      include tab_settings.pug
-					 
+
                .tab-buttons.isaf
                   a#link-chat.selected(href="#", title="chat", onclick="showTab('tab-chat',this)")
                      i.fas.fa-comments
-                  a(href="#", title="people", onclick="showTab('tab-people',this)")
+                  a#link-people(href="#", title="people", onclick="showTab('tab-people',this)")
                      i.fas.fa-users
-					 
+
                .tab-panels.isaf
                   #tab-chat.tab
                      include tab_chat.pug
                   #tab-people.tab.hidden
                      include tab_people.pug
-                  
+
       script.
          var username = "#{user.name}";
          console.log("user name:", username);
