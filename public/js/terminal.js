@@ -111,6 +111,7 @@ function closeGame(which){
 					$("#navigation ul").append(function(i) {
 						return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
 							applyTerminal("play", i, [], {rows:spyglass[i].rows,cols:spyglass[i].cols});
+							adjustFontSizeForSpectation({rows:spyglass[i].rows,cols:spyglass[i].cols});
 						});
 					}(i));
 				}
