@@ -99,7 +99,7 @@ function closeGame(which){
 	});
 	if(Object.keys(spyglass).length > 0) {
 		for(var i in spyglass) {
-			if (i!=which) {
+			if (i!='default' && i!=which) {
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
 						applyTerminal("spectate", i, [], matches[i].dimensions);
