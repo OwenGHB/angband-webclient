@@ -225,7 +225,7 @@ function isalive(user,game,version){
 //hacked for savefile header reading to avert Exo patch megahack. Un-hardcode this.
 function getcharinfo(user, game, version) {
 	var game_have_headers = ["angband","coffeeband"];
-	var version_have_headers = ["3.5.1","4.0.5","4.1.3","4.2.0","nightly"];
+	var version_have_headers = ["3.5.1","4.0.5","4.1.3","4.2.0","4.2.1","nightly"];
 	var charinfo = {};
 	if (game_have_headers.includes(game) && version_have_headers.includes(version)) {
 		var savefilepath = home+'/games/'+game+'/'+version+'/lib/save/'+user;
@@ -369,8 +369,12 @@ function handleDeleteRequest(user,request){
 function getgamelist(player) {
 	var gamelist = [];
 	for (var i in games){
-		var savexists=fs.existsSync(home+'/games/'+games[i].name+'/'+games[i].version+'/lib/save/'+player);
-		if (fs.existsSync(home+'/games/'+games[i].name+'/'+games[i].version+'/lib/save/1000.'+player)) savexists=true;
+		var savexists=[];
+		for (var j in games[i].versions){
+			var versionsavexists=fs.existsSync(home+'/games/'+games[i].name+'/'+games[i].versions[j]+'/lib/save/'+player);
+			if (fs.existsSync(home+'/games/'+games[i].name+'/'+games[i].versions[j]+'/lib/save/1000.'+player)) versionsavexists=true;
+			if (versionsavexists) savexists+=games[i].versions[j];
+		}
 		gamelist.push({
 			name:games[i].name,
 			longname:games[i].longname,
@@ -488,9 +492,6 @@ function newgame(user, msg) {
 						// The WebSocket is not open, ignore
 					}
 				}
-	/* 		if (typeof(matches[player].termcache)!='undefined') {
-				matches[player].termcache.write(data);
-			} */
 		});
 		term.on('close', function(data) {
 			closegame(user.name);
@@ -581,7 +582,7 @@ function updategame(user, msg) {
 							announce({eventtype:"systemannounce",content:msg.game+" has been updated"});
 						}
 						try {
-							metasockets[user.name].send(JSON.stringify({eventtype: 'updateover', content: []}));
+							metasockets[user.name].send(JSON.stringify({eventtype: 'updateover', content: 'default'}));
 						} 
 						catch (ex) {
 							// The WebSocket is not open, ignore
@@ -637,13 +638,26 @@ function closegame(player){
 				console.log( 'Process %s was not found, expect user exited cleanly.',player );
 			}
 			try {
-				metasockets[player].send(JSON.stringify({eventtype: 'gameover', content: []}));
+				metasockets[player].send(JSON.stringify({eventtype: 'gameover', content: 'default'}));
 				metasockets[player].send(JSON.stringify({eventtype: 'fileupdate', content: getfilelist(player)}));
 				metasockets[player].send(JSON.stringify({eventtype: 'gamelist', content: getgamelist(player)}));
 			} 
 			catch (ex) {
 				// The WebSocket is not open, ignore
 			}
+			if (typeof(matches[player])!='undefined') 
+				for (var i in matches[player].spectators) {
+					try {
+						metasockets[matches[player].spectators[i]].send(JSON.stringify({
+							eventtype: 'gameover',
+							content: player.toString()
+						}));
+						unsubscribe({name:matches[player].spectators[i]},{player:player});
+					} 
+					catch (ex) {
+						// The WebSocket is not open, ignore
+					}
+				}
 			// Clean things up
 			delete matches[player]; 
 			announce({eventtype: 'matchupdate', content: getmatchlist(matches)});
@@ -660,11 +674,6 @@ function subscribe(user, message) {
 			metasockets[player].send(JSON.stringify({eventtype: 'systemannounce', content: spectator + " is now watching"}));
 			matches[player].spectators.push(spectator);
 		}
-		/* try {
-			metasockets[spectator].send(JSON.stringify({eventtype: 'gameoutputcache', content: {player:player,term:matches[player].termcache}}));
-		} catch (ex) {
-			// The WebSocket is not open, ignore
-		} */
 	}
 }
 

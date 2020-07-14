@@ -52,6 +52,7 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + '</a></li>').click(function() {
 					applyTerminal("spectate", qualifier, [], d);
+					adjustFontSizeForSpectation(d);
 				});
 			});
 			spyglass[qualifier] = createTerminal(d);
@@ -83,7 +84,7 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 		spyglass['default'].open($terminal.get(0));
 	}
 	
-	// hide lobby and unhide terminal with fade
+	// hide lobby and unhide terminal
 	$("#games-lobby").addClass("hidden");
 	$("#terminal-pane").removeClass("hidden");
 }
@@ -102,6 +103,7 @@ function closeGame(){
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
 						applyTerminal("spectate", i, [], matches[i].dimensions);
+						adjustFontSizeForSpectation(matches[i].dimensions);
 					});
 				}(i));	
 			} else {
@@ -112,10 +114,6 @@ function closeGame(){
 	$("#terminal-pane").addClass("hidden");
 	$("#games-lobby").removeClass("hidden");
 	playing=false;
-}
-
-function adjustTerminalFontSize() {
-	console.warn("adjustTerminalFontSize is deprecated!");
 }
 
 function adjustFontSizeForSpectation(remote_game_dimensions) {

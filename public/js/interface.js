@@ -63,9 +63,14 @@ function listMatches(matches) {
 				var outputstring = buildMatchListEntry(players[i],matches[players[i]]);
 				return $(outputstring).click(function(){
 					if(players[i] === username)
+					{
 						applyTerminal("play", players[i], [], matches[players[i]].dimensions);
+					}
 					else
+					{
 						applyTerminal("spectate", players[i], [], matches[players[i]].dimensions);
+						adjustFontSizeForSpectation(matches[players[i]].dimensions);
+					}
 				});
 			}(i));			
 		}
@@ -94,20 +99,23 @@ function showTab(id, el) {
 		$("#link-chat").removeClass("flashing");
 }
 
-function closeGame(){
-	$("#navigation ul").html("");
-	$("#navigation ul").append(function() {
-		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
-			$("#terminal-pane").addClass("hidden");
-			$("#games-lobby").removeClass("hidden");
+function closeGame(which){
+	if (which=='default'){
+		$("#navigation ul").html("");
+		$("#navigation ul").append(function() {
+			return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
+				$("#terminal-pane").addClass("hidden");
+				$("#games-lobby").removeClass("hidden");
+			});
 		});
-	});
+	}
 	if(Object.keys(spyglass).length > 0) {
 		for(var i in spyglass) {
-			if (i!='default') {
+			if (i!=which) {
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
 						applyTerminal("spectate", i, [], matches[i].dimensions);
+						adjustFontSizeForSpectation(matches[i].dimensions);
 					});
 				}(i));	
 			} else {
@@ -115,9 +123,11 @@ function closeGame(){
 			}
 		}
 	}
-	$("#terminal-pane").addClass("hidden");
-	$("#games-lobby").removeClass("hidden");
-	playing=false;
+	if (which=='default'){
+		$("#terminal-pane").addClass("hidden");
+		$("#games-lobby").removeClass("hidden");
+		playing=false;
+	}
 }
 
 // does the same as listGameMatches?? 
@@ -146,6 +156,7 @@ function cleanSpyGlass(matches){
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#">' + i + '</a></li>').click(function() {
 						applyTerminal("spectate", i, [], matches[i].dimensions);
+						adjustFontSizeForSpectation(matches[i].dimensions);
 					});
 				}(i));	
 			} 

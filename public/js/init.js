@@ -39,7 +39,7 @@ function initChat() {
 				spyglass['default'].write(data.content); break;
 			case "gameover":
 			case "updateover":
-				closeGame(); break;
+				closeGame(data.content); break;
 			case "gameoutput":
 				if (typeof(spyglass[data.content.player])!='undefined') {
 					spyglass[data.content.player].write(data.content.data);
@@ -147,7 +147,7 @@ function initGameList(games) {
 				} else {
 					$("#updatebutton").addClass('hidden');
 				}
-				if (typeof(games[i].savexists) != 'undefined' && games[i].savexists) {
+				if (typeof(games[i].savexists) != 'undefined' && games[i].savexists && false) {
 					$("#deletebutton").removeClass('hidden');
 				} else {
 					$("#deletebutton").addClass('hidden');
