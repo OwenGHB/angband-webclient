@@ -107,7 +107,16 @@ function closeGame(which){
 					});
 				}(i));
 			} else {
-				delete spyglass[i];
+				if (i=='default'){
+					$("#navigation ul").append(function(i) {
+						return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
+							applyTerminal("play", i, [], {rows:spyglass[i].rows,cols:spyglass[i].cols});
+						});
+					}(i));
+				}
+				else {
+					delete spyglass[i];
+				}
 			}
 		}
 	}
