@@ -89,7 +89,7 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 	$("#terminal-pane").removeClass("hidden");
 }
 
-function closeGame(){
+function closeGame(which){
 	$("#navigation ul").html("");
 	$("#navigation ul").append(function() {
 		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
@@ -99,7 +99,7 @@ function closeGame(){
 	});
 	if(Object.keys(spyglass).length > 0) {
 		for(var i in spyglass) {
-			if (i!='default') {
+			if (i!=which) {
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
 						applyTerminal("spectate", i, [], matches[i].dimensions);
@@ -111,9 +111,11 @@ function closeGame(){
 			}
 		}
 	}
-	$("#terminal-pane").addClass("hidden");
-	$("#games-lobby").removeClass("hidden");
-	playing=false;
+	if (which=='default'){
+		$("#terminal-pane").addClass("hidden");
+		$("#games-lobby").removeClass("hidden");
+		playing=false;
+	}
 }
 
 function adjustFontSizeForSpectation(remote_game_dimensions) {
