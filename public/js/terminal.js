@@ -102,10 +102,10 @@ function closeGame(which){
 			if (i!='default' && i!=which) {
 				$("#navigation ul").append(function(i) {
 					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
-						applyTerminal("spectate", i, [], matches[i].dimensions);
-						adjustFontSizeForSpectation(matches[i].dimensions);
+						applyTerminal("spectate", i, [], {rows:spyglass[i].rows,cols:spyglass[i].cols});
+						adjustFontSizeForSpectation({rows:spyglass[i].rows,cols:spyglass[i].cols});
 					});
-				}(i));	
+				}(i));
 			} else {
 				delete spyglass[i];
 			}
