@@ -147,7 +147,7 @@ function initGameList(games) {
 				} else {
 					$("#updatebutton").addClass('hidden');
 				}
-				if (typeof(games[i].savexists) != 'undefined' && games[i].savexists && false) {
+				if (typeof(games[i].savexists) != 'undefined' && (games[i].savexists.length > 0)) {
 					$("#deletebutton").removeClass('hidden');
 				} else {
 					$("#deletebutton").addClass('hidden');
@@ -205,11 +205,12 @@ function initGameList(games) {
 	$("#deletebutton").click(function() {
 		if(!confirm('Are you sure you want to proceed?'+"\n"+'This will *delete* your savegame file for '+$("#gameselect :selected").text()+'!')) return;
 		var gamename = $("#gameselect").val();
+		var version = $("#versionselect").val();
 		requestDeletion('ownsave',gamename,version,false);
 		$(this).off('click');
 		$(this).addClass('hidden');
 		$(this).attr("target","_blank");
-		$(this).attr("href","/"+username+"/"+gamename+"/"+username);
+		$(this).attr("href","/"+username+"/"+gamename+"/"+version+"/"+username);
 	});
 	$("#updatebutton").click(function() {
 		var gamename = $("#gameselect").val();
