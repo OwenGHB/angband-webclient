@@ -20,7 +20,7 @@
     "jstransformer-markdown-it": "^2.1.0",
     "lowdb": "^1.0.0",
     "moment": "^2.22.2",
-    "mongoose": "^4.9.7",
+    "mongoose": "^5.8.6",
     "mongoose-integer": "^0.1.1",
     "morgan": "^1.9.1",
     "nedb-session-store": "^1.1.2",
