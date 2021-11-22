@@ -1,5 +1,5 @@
 var protocol = window.location.protocol === "https:" ? "wss" : "ws";
-var socketURL = protocol + '://' + window.location.hostname + ((window.location.port) ? (':' + window.location.port) : '') + '/meta';
+var socketURL = protocol + '://' + window.location.hostname + ((window.location.port) ? (':' + window.location.port) : '') + '/';
 var socket;
 
 //var username also available

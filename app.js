@@ -123,10 +123,10 @@ app.get("/forbidden", function(req, res) {
 // =============================================================================
 //  W E B S O C K E T   R O U T E S
 // =============================================================================
-app.ws('/meta', function (ws, req) {
-   if (typeof(req.user.name) !== 'undefined'){
-      awc.welcome(req.user, ws);
-   }
+app.ws('/', function (ws, req) {
+	if (typeof(req.user.name) !== 'undefined'){
+	  awc.welcome(req.user, ws);
+	}
 });
 
 
