@@ -11,9 +11,7 @@ Beyond this, several more modifications were made to Sil in order to have it beh
 
 You can find download links for variants known to work in the wiki
 
-As for the actual server, you need a mongodb service running in the background, but aside from that just npm install npm start and you should be good to go on port 3000 (subject to inevitable complications).
-
-
+As for the actual server, just npm install npm start and you should be good to go on port 3000 (subject to inevitable complications).
 
 ## database and sessions
 
