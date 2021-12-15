@@ -73,7 +73,7 @@ function saveGameOptions() {
 			subwindow_bottom: $("#subwindow-bottom").val(),
 			font: $("#extra-fonts").val(),
 			font_size: $("#games-font-size").val(),
-			version: $("#games-version").val()
+			version: $("#versionselect").val()
 		};
 		localStorage.setItem("aw_options_" + game, JSON.stringify(opts));
 	}
@@ -100,7 +100,7 @@ function loadGameOptions(game) {
 		}
 		if (typeof(opts.font)!='undefined') $("#extra-fonts").val(opts.font);
 		if (typeof(opts.font_size)!='undefined') $("#games-font-size").val(opts.font_size);
-		if (typeof(opts.version)!='undefined') $("#games-version").val(opts.version);
+		if (typeof(opts.version)!='undefined') $("#versionselect").val(opts.version);
 	}
 	else
 		loadDefaultGameOptions(game);
