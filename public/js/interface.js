@@ -150,6 +150,7 @@ function cleanSpyGlass(matches){
 						var d = { rows: $("#term-rows").val(), cols: $("#term-cols").val() };
 						var gamename = $("#gameselect").val();
 						applyTerminal("play", gamename, panels, matches[i].dimensions);
+						adjustFontSizeForSpectation(matches[i].dimensions);
 					});
 				}(i));
 			} 
