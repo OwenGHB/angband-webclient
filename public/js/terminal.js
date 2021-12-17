@@ -28,7 +28,7 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 			$("#navigation ul").append(function() {
 				return $('<li><a href="#"> - ' + qualifier + ' (your game)</a></li>').click(function() {
 					applyTerminal("play", qualifier, [], d);
-					adjustFontSizeForSpectation(matches[i].dimensions);
+					adjustFontSizeForSpectation(d);
 				});
 			});
 			socket.send(JSON.stringify({
