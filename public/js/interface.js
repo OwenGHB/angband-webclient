@@ -65,6 +65,7 @@ function listMatches(matches) {
 					if(players[i] === username)
 					{
 						applyTerminal("play", players[i], [], matches[players[i]].dimensions);
+						adjustFontSizeForSpectation(matches[players[i]].dimensions);
 					}
 					else
 					{
