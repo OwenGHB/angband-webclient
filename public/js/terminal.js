@@ -26,7 +26,7 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 			var version = gameversion[1];
 			spyglass['default'] = createTerminal(d);
 			$("#navigation ul").append(function() {
-				return $('<li><a href="#"> - ' + qualifier + ' (your game)</a></li>').click(function() {
+				return $('<li><a href="#"> - your game</a></li>').click(function() {
 					applyTerminal("play", qualifier, [], d);
 					adjustFontSizeForSpectation(d);
 				});
@@ -88,35 +88,6 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 	// hide lobby and unhide terminal
 	$("#games-lobby").addClass("hidden");
 	$("#terminal-pane").removeClass("hidden");
-}
-
-function closeGame(which){
-	$("#navigation ul").html("");
-	$("#navigation ul").append(function() {
-		return $('<li><a id="navigation-home" href="#"> - home</a></li>').click(function() {
-			$("#terminal-pane").addClass("hidden");
-			$("#games-lobby").removeClass("hidden");
-		});
-	});
-	if(Object.keys(spyglass).length > 0) {
-		for(var i in spyglass) {
-			if (i!='default' && i!=which) {
-				$("#navigation ul").append(function(i) {
-					return $('<li><a href="#"> - ' + i + '</a></li>').click(function() {
-						applyTerminal("spectate", i, [], {rows:spyglass[i].rows,cols:spyglass[i].cols});
-						adjustFontSizeForSpectation({rows:spyglass[i].rows,cols:spyglass[i].cols});
-					});
-				}(i));
-			} else {
-				delete spyglass[i];
-			}
-		}
-	}
-	if (which=='default'){
-		$("#terminal-pane").addClass("hidden");
-		$("#games-lobby").removeClass("hidden");
-		playing=false;
-	}
 }
 
 function adjustFontSizeForSpectation(remote_game_dimensions) {
