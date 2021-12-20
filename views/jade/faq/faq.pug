@@ -1,0 +1,34 @@
+doctype html
+html
+   head
+      meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
+      title FAQ
+      link(rel='icon', type='image/png', href='/favicon.png')
+      link(href='https://fonts.googleapis.com/css?family=Ubuntu+Mono', rel='stylesheet')
+      link(rel='stylesheet', href='/css/index.css')
+      script(type='text/javascript', src='/js/jquery-3.2.1.min.js')
+   
+
+   body
+      section
+         h1 FAQ
+         h2 How do I make an account?
+         div
+            Just type a username and password, if the username does not exist a new account will be created
+         h2 Why am I moving multiple steps when I use the arrow keys?
+         div
+            Preference files are set up so that you can use 'shiftrunning' using the numpad (with numlock turned on). The game allows for 8 movement directions so the arrow keys are not really an adequate control system. There is an alternative keyset you can find in the options called 'roguelike keyset' which uses the vim directional keys for movement, if you don't have a numpad. If you really want to use the arrow keys, you can remap them to walking ( ';' followed by a number indicating a direction) in the keymaps menu.
+         h2 Actually shiftrunning doesn't work in my variant
+         div
+            There is a pref file available for many versions and variants named 'runlock.prf' you can load to get shiftrunning working. Remember to save prefs for this to persist between sessions
+         h2 I'm on linux and I can't shiftrun northeast or southeast
+         div
+            You can load 'LinuxRun.prf' and turn numlock off, but you will have to hold shift or turn it back on to use the numpad in stores and menus. 'runlock.prf' will revert this if you happen not to like it.
+         h2 What are these subwindow settings?
+         div
+            Many variants have been adjusted to allow for flexible subwindow layouts. Rows top and rows bottom place a subwindow above or below the main play area, with as many rows as the user specifies. Right cols places a subwindow to the right, with the width being the number of columns specified. Right split will divide the right subwindow into two, with the top subwindow being the specified number of rows tall. A picture says a thousand words so here is a diagram
+         img(src="/img/subwindows.jpg")
+         h2 Which variant should I play?
+         div
+            Most variants change the game in significant ways and much could be written about each of them. The most popular variants are Angband itself which has seen major changes in recent years, Frogcomposband which adds huge swathes of extra content and new mechanics of all kinds, and Sil-Q which is a streamlined, challenging, lore friendly variant with fine tuned new game mechanics. All are in active development. There are many unmaintained variants with their own unique offerings, this author recommends Oangband, Kangband and Steamband to name a few.
+
