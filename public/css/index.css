@@ -30,14 +30,10 @@ html, body {
    height: 100%;
 }
 
-html,body,h1,h2,h3,h4,h5,h6,div,p {
+html,body,div,p {
    margin:  0;
    padding: 0;
    border:  0;
-}
-h1,h2,h3,h4,h5,h6 {
-   font-size: 1rem;
-   font-weight: 400;
 }
 
 html,body,input,button {

@@ -77,7 +77,6 @@ function applyTerminal(mode, qualifier, panelargs, d) {
 			}
 		}));
 		spyglass['default'].on('data', function(data) {
-			$("#keystrokeinput").html(JSON.stringify(data));
 			socket.send(JSON.stringify({eventtype: 'updateinput', content: data}));
 		});
 

@@ -104,6 +104,10 @@ app.get("/play", localdb.isUserLoggedIn, function(req, res) {
    return res.render("jade/play/play.pug", {user: req.user});
 });
 
+app.get("/faq", function(req, res) {
+   res.render('jade/faq/faq.pug')
+});
+
 app.get('/logout', function(req, res) {
    var user = req.user ? req.user.name : "unknown!!";
    console.log(`logging user ${user} out`);
